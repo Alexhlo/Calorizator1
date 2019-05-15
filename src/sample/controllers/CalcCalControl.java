@@ -169,7 +169,7 @@ public class CalcCalControl {
         });
 
         newProductWindows();
-        buttonIsPressed(btnBurgerKing);
+//        buttonIsPressed(btnBurgerKing);
 
     }
 
@@ -375,6 +375,7 @@ public class CalcCalControl {
 
     private void newProductWindows(){
         openNewProductWindow(Const.ALL_PRODUCT_WINDOW,btnSearchAll,"Все продукты");
+        openNewProductWindow(Const.ALL_PRODUCT_WINDOW,btnBurgerKing,"Burger King меню");
     }
 
     private void buttonIsPressed(Button btn){

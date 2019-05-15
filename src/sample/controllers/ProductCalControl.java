@@ -64,17 +64,18 @@ public class ProductCalControl implements Initializable {
             try {
                 SQLiteClient.connectDB();
                 SQLiteClient.resultSet = SQLiteClient.connection.createStatement().executeQuery(request);
-                while (SQLiteClient.resultSet.next()) {
-                    Product product = new Product();
-                    product.name.set(SQLiteClient.resultSet.getString(Const.TABLE_NAME));
-                    product.protein.set(SQLiteClient.resultSet.getDouble(Const.TABLE_PROTEIN));
-                    product.fats.set(SQLiteClient.resultSet.getDouble(Const.TABLE_FATS));
-                    product.carbs.set(SQLiteClient.resultSet.getDouble(Const.TABLE_CARBS));
-                    product.calories.set(SQLiteClient.resultSet.getInt(Const.TABLE_CALORIES));
-                    tableProductData.add(product);
-                }
-                tableViewProducts.setItems(tableProductData);
 
+                    while (SQLiteClient.resultSet.next()) {
+                        Product product = new Product();
+                        product.name.set(SQLiteClient.resultSet.getString(Const.TABLE_NAME));
+                        product.protein.set(SQLiteClient.resultSet.getDouble(Const.TABLE_PROTEIN));
+                        product.fats.set(SQLiteClient.resultSet.getDouble(Const.TABLE_FATS));
+                        product.carbs.set(SQLiteClient.resultSet.getDouble(Const.TABLE_CARBS));
+                        product.calories.set(SQLiteClient.resultSet.getInt(Const.TABLE_CALORIES));
+                        tableProductData.add(product);
+
+                    tableViewProducts.setItems(tableProductData);
+                }
             } catch (ClassNotFoundException | SQLException e) {
                 e.getStackTrace();
             }
