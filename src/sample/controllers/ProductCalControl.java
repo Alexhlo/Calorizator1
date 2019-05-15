@@ -77,8 +77,6 @@ public class ProductCalControl implements Initializable {
             } catch (ClassNotFoundException | SQLException e) {
                 e.getStackTrace();
             }
-
-
     }
 
     private void initProductTableDataListing(){

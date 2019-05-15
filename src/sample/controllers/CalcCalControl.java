@@ -171,7 +171,6 @@ public class CalcCalControl {
         newProductWindows();
         buttonIsPressed(btnBurgerKing);
 
-
     }
 
     private void setToggleGroupsRadioButton(){
