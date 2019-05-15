@@ -40,6 +40,9 @@ public class CalcCalControl {
     private final double WEIGHT_LOSS = 300;
     private final String EMPTY = "";
 
+//    public ProductCalControl pcc = new ProductCalControl();
+
+
     private ObservableList<TableIMB> tableImbData = FXCollections.observableArrayList();
 
     /**
@@ -368,6 +371,7 @@ public class CalcCalControl {
                     Stage stage = new Stage();
                     stage.setTitle(name);
                     stage.setScene(new Scene(root));
+
                     stage.showAndWait();
 
         });
@@ -375,28 +379,28 @@ public class CalcCalControl {
 
     private void newProductWindows(){
         openNewProductWindow(Const.ALL_PRODUCT_WINDOW,btnSearchAll,"Все продукты");
-        openNewProductWindow(Const.ALL_PRODUCT_WINDOW,btnBurgerKing,"Burger King меню");
+        openNewProductWindow(Const.BURGER_KING_WINDOW,btnBurgerKing,"Burger King меню");
     }
 
-    private void buttonIsPressed(Button btn){
-        Clipboard clipboard = Clipboard.getSystemClipboard();
-        String huy = "huy";
-        String plainText = clipboard.getString();
-        ClipboardContent content = new ClipboardContent();
-
-        btn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                content.putString(btn.getText());
-                clipboard.setContent(content);
-                System.out.println(huy);
-            }
-        });
-
-//        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-//            System.out.println("piiiiiiizda");
+//    private void buttonIsPressed(Button btn){
+//        Clipboard clipboard = Clipboard.getSystemClipboard();
+//        String huy = "huy";
+//        String plainText = clipboard.getString();
+//        ClipboardContent content = new ClipboardContent();
+//
+//        btn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                content.putString(btn.getText());
+//                clipboard.setContent(content);
+//                System.out.println(huy);
+//            }
 //        });
-
-    }
+//
+////        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+////            System.out.println("piiiiiiizda");
+////        });
+//
+//    }
 
 }

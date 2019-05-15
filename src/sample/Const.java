@@ -11,6 +11,7 @@ public class Const {
     public static final String TABLE_WEIGHT= "weight";
 
     public static final String ALL_PRODUCT_WINDOW = "/views/allprodwindow.fxml";
+    public static final String BURGER_KING_WINDOW = "/views/burgerkingwindow.fxml";
 
 
     public static final String ALCOHOL = "alcohol";

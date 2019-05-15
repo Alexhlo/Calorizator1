@@ -22,7 +22,7 @@ import sample.SQLiteClient;
 public class ProductCalControl implements Initializable {
 
     public ObservableList<Product> tableProductData = FXCollections.observableArrayList();
-    private CalcCalControl ccc = new CalcCalControl();
+    public CalcCalControl ccc = new CalcCalControl();
     private PopupMenu popupMenu = new PopupMenu();
 
 
@@ -75,13 +75,15 @@ public class ProductCalControl implements Initializable {
                         tableProductData.add(product);
 
                     tableViewProducts.setItems(tableProductData);
+
                 }
+                SQLiteClient.closeDB();
             } catch (ClassNotFoundException | SQLException e) {
                 e.getStackTrace();
             }
     }
 
-    private void initProductTableDataListing(){
+    public void initProductTableDataListing(){
 
         initProductTableData(Const.REQUEST_BURGER_KING,ccc.btnBurgerKing );
         initProductTableData(Const.REQUEST_KFC, ccc.btnKFC);
