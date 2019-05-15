@@ -17,7 +17,7 @@ public class SQLiteClient {
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection(HOST);
         statement = connection.createStatement();
-//        System.out.println("Database connection has been done.");
+        System.out.println("Database connection has been done.");
     }
 
     public static void closeDB() throws NullPointerException , SQLException {
