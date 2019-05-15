@@ -47,6 +47,7 @@ public class ProductCalControl implements Initializable {
 
         showButtonDialog(btnAdd);
         showButtonDialog(btnSearch);
+
         popupMenu.popupProductMenu(productPane);
     }
 
