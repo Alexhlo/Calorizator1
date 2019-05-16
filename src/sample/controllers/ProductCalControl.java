@@ -12,7 +12,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import pojo.Product;
 import sample.Const;
-import sample.PopupMenu;
 import sample.SQLiteClient;
 
 public class ProductCalControl implements Initializable {
@@ -30,7 +29,7 @@ public class ProductCalControl implements Initializable {
     @FXML private Button btnSearch;
     @FXML private TextField txtFldSearch;
 
-    public ObservableList<Product> tableProductData = FXCollections.observableArrayList();
+    private ObservableList<Product> tableProductData = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
