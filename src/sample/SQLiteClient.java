@@ -14,6 +14,7 @@ public class SQLiteClient {
     public static ResultSet resultSet;
 
     public static void connectDB() throws ClassNotFoundException ,SQLException{
+        connection = null;
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection(HOST);
         statement = connection.createStatement();
