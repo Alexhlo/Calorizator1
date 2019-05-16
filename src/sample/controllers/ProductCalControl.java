@@ -41,8 +41,8 @@ public class ProductCalControl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        setProductTableColumnValue();
-        initProductTableData(Const.REQUEST_BURGER_KING);
+//        setProductTableColumnValue();
+//        initProductTableData(Const.REQUEST_BURGER_KING);
 
     }
 

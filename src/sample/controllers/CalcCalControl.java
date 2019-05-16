@@ -30,21 +30,6 @@ import java.io.IOException;
 
 public class CalcCalControl {
 
-    private final ToggleGroup TOGGLE_GROUP_GENDER = new ToggleGroup();
-    private final ToggleGroup TOGGLE_GROUP_COA = new ToggleGroup();
-    private final String FORMULA_MIFFLIN = "Формула Миффлина-Сан Жеора (2005г)";
-    private final String FORMULA_HARRISON = "Формула Гарриса-Бенедикта (ВОО на основе общей массы тела)";
-    private final String FORMULA_KETCH = "Формула Кетча-МакАрдла (ВОО на основе мышечной массы тела)";
-    private double RESULT;
-    private final double MUSCLE_MASS = 500;
-    private final double WEIGHT_LOSS = 300;
-    private final String EMPTY = "";
-
-//    public ProductCalControl pcc = new ProductCalControl();
-
-
-    private ObservableList<TableIMB> tableImbData = FXCollections.observableArrayList();
-
     /**
      * Вкладка калоризатора
      */
@@ -123,6 +108,18 @@ public class CalcCalControl {
     @FXML public Button btnEggs;
     @FXML public Button btnJapanFood;
     @FXML public Button btnSearchAll;
+
+    private final ToggleGroup TOGGLE_GROUP_GENDER = new ToggleGroup();
+    private final ToggleGroup TOGGLE_GROUP_COA = new ToggleGroup();
+    private final String FORMULA_MIFFLIN = "Формула Миффлина-Сан Жеора (2005г)";
+    private final String FORMULA_HARRISON = "Формула Гарриса-Бенедикта (ВОО на основе общей массы тела)";
+    private final String FORMULA_KETCH = "Формула Кетча-МакАрдла (ВОО на основе мышечной массы тела)";
+    private double RESULT;
+    private final double MUSCLE_MASS = 500;
+    private final double WEIGHT_LOSS = 300;
+    private final String EMPTY = "";
+    public ProductCalControl pcc = new ProductCalControl();
+    private ObservableList<TableIMB> tableImbData = FXCollections.observableArrayList();
 
     @FXML
     void initialize() {
@@ -377,7 +374,7 @@ public class CalcCalControl {
     }
 
     private void newProductWindows(){
-        openNewProductWindow(Const.ALL_PRODUCT_WINDOW,btnSearchAll,"Все продукты");
+//        openNewProductWindow(Const.ALL_PRODUCT_WINDOW,btnSearchAll,"Все продукты");
         openNewProductWindow(Const.BURGER_KING_WINDOW,btnBurgerKing,"Burger King меню");
     }
 
