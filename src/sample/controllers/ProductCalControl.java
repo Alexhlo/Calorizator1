@@ -34,10 +34,19 @@ public class ProductCalControl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        try {
+            SQLiteClient.connectDB();
+        } catch (ClassNotFoundException  | SQLException e) {
+            e.printStackTrace();
+        }
+
+//        SQLiteClient.readDB(Const.REQUEST_ALL,tableViewProducts,tableProductData);
+//        SQLiteClient.readDB(Const.REQUEST_BURGER_KING,tableViewProducts,tableProductData);
+//        SQLiteClient.readDB(Const.REQUEST_KFC,tableViewProducts,tableProductData);
         initProductTableData(Const.REQUEST_BURGER_KING);
         initProductTableData(Const.REQUEST_KFC);
+//        initProductTableData(Const.REQUEST_ALL);
         setProductTableColumnValue();
-
     }
 
     public void setProductTableColumnValue() {
@@ -50,7 +59,6 @@ public class ProductCalControl implements Initializable {
 
     public void initProductTableData(String request) {
             try {
-                SQLiteClient.connectDB();
                 SQLiteClient.resultSet = SQLiteClient.connection.createStatement().executeQuery(request);
                     while (SQLiteClient.resultSet.next()) {
                         Product product = new Product();
@@ -59,12 +67,14 @@ public class ProductCalControl implements Initializable {
                         product.fats.set(SQLiteClient.resultSet.getDouble(Const.TABLE_FATS));
                         product.carbs.set(SQLiteClient.resultSet.getDouble(Const.TABLE_CARBS));
                         product.calories.set(SQLiteClient.resultSet.getInt(Const.TABLE_CALORIES));
-                tableProductData.add(product);
-                        tableViewProducts.setItems(tableProductData);
+                    tableProductData.add(product);
                 }
                 SQLiteClient.closeDB();
-            } catch (ClassNotFoundException | SQLException e) {
+                tableViewProducts.setItems(tableProductData);
+            } catch (SQLException e) {
                 e.getStackTrace();
             }
     }
+
+
 }

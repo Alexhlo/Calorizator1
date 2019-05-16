@@ -99,9 +99,5 @@ public class Const {
     public static final String VEGETABLE = "vegetable";
     public static final String REQUEST_VEGETABLE = "SELECT * FROM " + VEGETABLE;
 
-
-
-
-
-
+    public static final String REQUEST_ALL =  "SELECT * FROM " + ALCOHOL + ", " + BABY_FOOD + ", " + BAKERY + ", " + BERRIES;
 }

@@ -25,8 +25,11 @@ import pojo.TableIMB;
 import javafx.scene.control.TableColumn;
 import sample.Const;
 
+import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 
 public class CalcCalControl {
 
@@ -34,80 +37,144 @@ public class CalcCalControl {
      * Вкладка калоризатора
      */
 
-    @FXML private RadioButton rbCoA2;
-    @FXML private RadioButton rbCoA1;
-    @FXML private RadioButton rbFemale;
-    @FXML private RadioButton rbCoA4;
-    @FXML private RadioButton rbCoA3;
-    @FXML private ComboBox<String> menuFormula;
-    @FXML private RadioButton rbMale;
-    @FXML private TextField txtFldWL;
-    @FXML private Button btnCalc;
-    @FXML private TextField txtFldMM;
-    @FXML private RadioButton rbCoA5;
-    @FXML private TextField txtFldFat;
-    @FXML private TextField txtFldAge;
-    @FXML private TextField txtFldBMR;
-    @FXML private TextField txtFldHeight;
-    @FXML private Button btnCancel;
-    @FXML private TextField txtFldWeight;
-    @FXML private TextField txtFldBKA;
-    @FXML private AnchorPane apCalcKCal;
+    @FXML
+    private RadioButton rbCoA2;
+    @FXML
+    private RadioButton rbCoA1;
+    @FXML
+    private RadioButton rbFemale;
+    @FXML
+    private RadioButton rbCoA4;
+    @FXML
+    private RadioButton rbCoA3;
+    @FXML
+    private ComboBox<String> menuFormula;
+    @FXML
+    private RadioButton rbMale;
+    @FXML
+    private TextField txtFldWL;
+    @FXML
+    private Button btnCalc;
+    @FXML
+    private TextField txtFldMM;
+    @FXML
+    private RadioButton rbCoA5;
+    @FXML
+    private TextField txtFldFat;
+    @FXML
+    private TextField txtFldAge;
+    @FXML
+    private TextField txtFldBMR;
+    @FXML
+    private TextField txtFldHeight;
+    @FXML
+    private Button btnCancel;
+    @FXML
+    private TextField txtFldWeight;
+    @FXML
+    private TextField txtFldBKA;
+    @FXML
+    private AnchorPane apCalcKCal;
 
     /**
-      * Вкладка расчет индекса массы тела IMB
+     * Вкладка расчет индекса массы тела IMB
      */
 
-    @FXML private TableView<TableIMB> tableViewIMB;
-    @FXML private TableColumn<TableIMB, Integer> column1;
-    @FXML private TableColumn<TableIMB, Integer> column2;
-    @FXML private TableColumn<TableIMB, Integer> column3;
-    @FXML private TableColumn<TableIMB, Integer> column4;
-    @FXML private TableColumn<TableIMB, Integer> column5;
-    @FXML private TableColumn<TableIMB, Integer> column6;
-    @FXML private TableColumn<TableIMB, Integer> column7;
-    @FXML private TableColumn<TableIMB, Integer> column8;
-    @FXML private TableColumn<TableIMB, String> columnHeight;
-    @FXML private TableColumn<TableIMB, String> columnImb;
-    @FXML private Button btnCancelImb;
-    @FXML private Button btnCalcImb;
-    @FXML private TextField txtFldWeightImb;
-    @FXML private TextField txtFldHeightImb;
-    @FXML private TextField txtFldResultImb;
+    @FXML
+    private TableView<TableIMB> tableViewIMB;
+    @FXML
+    private TableColumn<TableIMB, Integer> column1;
+    @FXML
+    private TableColumn<TableIMB, Integer> column2;
+    @FXML
+    private TableColumn<TableIMB, Integer> column3;
+    @FXML
+    private TableColumn<TableIMB, Integer> column4;
+    @FXML
+    private TableColumn<TableIMB, Integer> column5;
+    @FXML
+    private TableColumn<TableIMB, Integer> column6;
+    @FXML
+    private TableColumn<TableIMB, Integer> column7;
+    @FXML
+    private TableColumn<TableIMB, Integer> column8;
+    @FXML
+    private TableColumn<TableIMB, String> columnHeight;
+    @FXML
+    private TableColumn<TableIMB, String> columnImb;
+    @FXML
+    private Button btnCancelImb;
+    @FXML
+    private Button btnCalcImb;
+    @FXML
+    private TextField txtFldWeightImb;
+    @FXML
+    private TextField txtFldHeightImb;
+    @FXML
+    private TextField txtFldResultImb;
 
     /**
      * Вкладка продукты
      */
 
-    @FXML public Button btnBurgerKing;
-    @FXML public Button btnKFC;
-    @FXML public Button btnMcDonalds;
-    @FXML public Button btnAlcohol;
-    @FXML public Button btnUnAlcohol;
-    @FXML public Button btnMushroom;
-    @FXML public Button btnBabyFood;
-    @FXML public Button btnSausages;
-    @FXML public Button btnCereals;
-    @FXML public Button btnOilFats;
-    @FXML public Button btnDairy;
-    @FXML public Button btnFlourProducts;
-    @FXML public Button btnMeatProducts;
-    @FXML public Button btnVegetable;
-    @FXML public Button btnNuts;
-    @FXML public Button btnFirstCourse;
-    @FXML public Button btnSeaFood;
-    @FXML public Button btnSalad;
-    @FXML public Button btnSweets;
-    @FXML public Button btnSnacks;
-    @FXML public Button btnJuice;
-    @FXML public Button btnSportNutrition;
-    @FXML public Button btnCondiments;
-    @FXML public Button btnFruits;
-    @FXML public Button btnBakery;
-    @FXML public Button btnBerriers;
-    @FXML public Button btnEggs;
-    @FXML public Button btnJapanFood;
-    @FXML public Button btnSearchAll;
+    @FXML
+    public Button btnBurgerKing;
+    @FXML
+    public Button btnKFC;
+    @FXML
+    public Button btnMcDonalds;
+    @FXML
+    public Button btnAlcohol;
+    @FXML
+    public Button btnUnAlcohol;
+    @FXML
+    public Button btnMushroom;
+    @FXML
+    public Button btnBabyFood;
+    @FXML
+    public Button btnSausages;
+    @FXML
+    public Button btnCereals;
+    @FXML
+    public Button btnOilFats;
+    @FXML
+    public Button btnDairy;
+    @FXML
+    public Button btnFlourProducts;
+    @FXML
+    public Button btnMeatProducts;
+    @FXML
+    public Button btnVegetable;
+    @FXML
+    public Button btnNuts;
+    @FXML
+    public Button btnFirstCourse;
+    @FXML
+    public Button btnSeaFood;
+    @FXML
+    public Button btnSalad;
+    @FXML
+    public Button btnSweets;
+    @FXML
+    public Button btnSnacks;
+    @FXML
+    public Button btnJuice;
+    @FXML
+    public Button btnSportNutrition;
+    @FXML
+    public Button btnCondiments;
+    @FXML
+    public Button btnFruits;
+    @FXML
+    public Button btnBakery;
+    @FXML
+    public Button btnBerriers;
+    @FXML
+    public Button btnEggs;
+    @FXML
+    public Button btnJapanFood;
+    @FXML
+    public Button btnSearchAll;
 
     private final ToggleGroup TOGGLE_GROUP_GENDER = new ToggleGroup();
     private final ToggleGroup TOGGLE_GROUP_COA = new ToggleGroup();
@@ -118,14 +185,17 @@ public class CalcCalControl {
     private final double MUSCLE_MASS = 500;
     private final double WEIGHT_LOSS = 300;
     private final String EMPTY = "";
-    private ProductCalControl pcc = new ProductCalControl();
+
     private ObservableList<TableIMB> tableImbData = FXCollections.observableArrayList();
 
     @FXML
     void initialize() {
+
         Platform.runLater(new Runnable() {
             @Override
-            public void run() { menuFormula.requestFocus(); }
+            public void run() {
+                menuFormula.requestFocus();
+            }
         });
 
         setToggleGroupsRadioButton();
@@ -150,7 +220,9 @@ public class CalcCalControl {
             }
         });
 
-        btnCancel.setOnAction(event -> { clearAllTextFields(); });
+        btnCancel.setOnAction(event -> {
+            clearAllTextFields();
+        });
         btnCalc.setOnAction(event -> {
             if (shakeTextFields()) ;
             else conditionMenuFormulaBMRCoA();
@@ -162,9 +234,11 @@ public class CalcCalControl {
         //заполняем таблицу данными
         tableViewIMB.setItems(tableImbData);
 
-        btnCancelImb.setOnAction(event -> { clearImbTextFields(); });
+        btnCancelImb.setOnAction(event -> {
+            clearImbTextFields();
+        });
         btnCalcImb.setOnAction(event -> {
-            if(shakeTextImbFields());
+            if (shakeTextImbFields()) ;
             else resultImb();
         });
 
@@ -172,7 +246,7 @@ public class CalcCalControl {
 
     }
 
-    private void setToggleGroupsRadioButton(){
+    private void setToggleGroupsRadioButton() {
         rbFemale.setToggleGroup(TOGGLE_GROUP_GENDER);
         rbMale.setToggleGroup(TOGGLE_GROUP_GENDER);
         rbCoA1.setToggleGroup(TOGGLE_GROUP_COA);
@@ -281,7 +355,7 @@ public class CalcCalControl {
         }
         if (txtFldFat.isDisable()) {
 
-        }else if (txtFldFat.getText() == null || txtFldFat.getText().trim().isEmpty()
+        } else if (txtFldFat.getText() == null || txtFldFat.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldFat.getText()) <= 0) {
             fldFat.playAnim();
             clearSupportTextFields();
@@ -289,37 +363,37 @@ public class CalcCalControl {
         return false;
     }
 
-    private void setTableIMBValueColumns(){
+    private void setTableIMBValueColumns() {
         //устанавливем тип и значение , которое должно хранится в колонке
-        columnHeight.setCellValueFactory(new PropertyValueFactory<TableIMB,String>("height"));
-        column1.setCellValueFactory(new PropertyValueFactory<TableIMB,Integer>("col_1"));
-        column2.setCellValueFactory(new PropertyValueFactory<TableIMB,Integer>("col_2"));
-        column3.setCellValueFactory(new PropertyValueFactory<TableIMB,Integer>("col_3"));
-        column4.setCellValueFactory(new PropertyValueFactory<TableIMB,Integer>("col_4"));
-        column5.setCellValueFactory(new PropertyValueFactory<TableIMB,Integer>("col_5"));
-        column6.setCellValueFactory(new PropertyValueFactory<TableIMB,Integer>("col_6"));
-        column7.setCellValueFactory(new PropertyValueFactory<TableIMB,Integer>("col_7"));
-        column8.setCellValueFactory(new PropertyValueFactory<TableIMB,Integer>("col_8"));
-        columnImb.setCellValueFactory(new PropertyValueFactory<TableIMB,String>("imb"));
+        columnHeight.setCellValueFactory(new PropertyValueFactory<TableIMB, String>("height"));
+        column1.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_1"));
+        column2.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_2"));
+        column3.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_3"));
+        column4.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_4"));
+        column5.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_5"));
+        column6.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_6"));
+        column7.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_7"));
+        column8.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_8"));
+        columnImb.setCellValueFactory(new PropertyValueFactory<TableIMB, String>("imb"));
     }
 
-    private void initTableIMBData(){
-        tableImbData.add(new TableIMB("Вес,кг",null,null,null,null,null,null,null,null,"ИМТ"));
-        tableImbData.add(new TableIMB("",40,43,46,49,52,55,58,62,"18"));
-        tableImbData.add(new TableIMB("",43,46,49,52,52,58,62,65,"19"));
-        tableImbData.add(new TableIMB("",45,48,51,54,52,61,65,68,"20"));
-        tableImbData.add(new TableIMB("",47,50,54,57,52,64,68,72,"21"));
-        tableImbData.add(new TableIMB("",50,53,56,60,52,67,71,75,"22"));
-        tableImbData.add(new TableIMB("",52,55,59,63,52,70,75,79,"23"));
-        tableImbData.add(new TableIMB("",54,57,61,65,52,73,78,82,"24"));
-        tableImbData.add(new TableIMB("",56,60,64,68,52,77,81,86,"25"));
-        tableImbData.add(new TableIMB("",63,67,72,76,52,86,91,96,"28"));
-        tableImbData.add(new TableIMB("",67,72,77,82,52,92,97,103,"30"));
-        tableImbData.add(new TableIMB("",80,84,90,95,52,107,113,120,"35"));
-        tableImbData.add(new TableIMB("",90,96,102,109,116,122,130,137,"40"));
+    private void initTableIMBData() {
+        tableImbData.add(new TableIMB("Вес,кг", null, null, null, null, null, null, null, null, "ИМТ"));
+        tableImbData.add(new TableIMB("", 40, 43, 46, 49, 52, 55, 58, 62, "18"));
+        tableImbData.add(new TableIMB("", 43, 46, 49, 52, 52, 58, 62, 65, "19"));
+        tableImbData.add(new TableIMB("", 45, 48, 51, 54, 52, 61, 65, 68, "20"));
+        tableImbData.add(new TableIMB("", 47, 50, 54, 57, 52, 64, 68, 72, "21"));
+        tableImbData.add(new TableIMB("", 50, 53, 56, 60, 52, 67, 71, 75, "22"));
+        tableImbData.add(new TableIMB("", 52, 55, 59, 63, 52, 70, 75, 79, "23"));
+        tableImbData.add(new TableIMB("", 54, 57, 61, 65, 52, 73, 78, 82, "24"));
+        tableImbData.add(new TableIMB("", 56, 60, 64, 68, 52, 77, 81, 86, "25"));
+        tableImbData.add(new TableIMB("", 63, 67, 72, 76, 52, 86, 91, 96, "28"));
+        tableImbData.add(new TableIMB("", 67, 72, 77, 82, 52, 92, 97, 103, "30"));
+        tableImbData.add(new TableIMB("", 80, 84, 90, 95, 52, 107, 113, 120, "35"));
+        tableImbData.add(new TableIMB("", 90, 96, 102, 109, 116, 122, 130, 137, "40"));
     }
 
-    private void clearImbTextFields(){
+    private void clearImbTextFields() {
         txtFldWeightImb.clear();
         txtFldHeightImb.clear();
         txtFldResultImb.clear();
@@ -330,53 +404,52 @@ public class CalcCalControl {
         Shaker fldHeight = new Shaker(txtFldHeightImb);
 
         if (txtFldWeightImb.getText() == null || txtFldWeightImb.getText().trim().isEmpty()
-                || Double.parseDouble(txtFldWeightImb.getText()) <= 0 ) {
+                || Double.parseDouble(txtFldWeightImb.getText()) <= 0) {
             txtFldWeightImb.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
             fldWeight.playAnim();
             txtFldResultImb.clear();
-        }else txtFldWeightImb.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
+        } else txtFldWeightImb.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
 
         if (txtFldHeightImb.getText() == null || txtFldHeightImb.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldHeightImb.getText()) <= 0) {
             txtFldHeightImb.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
             fldHeight.playAnim();
             txtFldResultImb.clear();
-        }else txtFldHeightImb.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
+        } else txtFldHeightImb.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
 
         return false;
     }
 
-    private void resultImb(){
+    private void resultImb() {
         double weight = Double.parseDouble(txtFldWeightImb.getText());
         double height = Double.parseDouble(txtFldHeightImb.getText());
-        double resultImb = weight / ((height/100)*(height/100));
+        double resultImb = weight / ((height / 100) * (height / 100));
         txtFldResultImb.setText(EMPTY + (Math.round(resultImb * 100d) / 100d));
     }
 
-    private void openNewProductWindow(String window, Button btn, String name){
+    private void openNewProductWindow(String window, Button btn, String name) {
         btn.setOnAction(event -> {
-                    btn.getScene().getWindow();
-                    FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(getClass().getResource(window));
-                    try {
-                        loader.load();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Parent root = loader.getRoot();
-                    Stage stage = new Stage();
-                    stage.setTitle(name);
-                    stage.setScene(new Scene(root));
+            btn.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource(window));
+            try {
+                loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Parent root = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle(name);
+            stage.setScene(new Scene(root));
             stage.showAndWait();
-
         });
     }
 
-    private void newProductWindows(){
-        openNewProductWindow(Const.ALL_PRODUCT_WINDOW,btnSearchAll,"Все продукты");
-        openNewProductWindow(Const.BURGER_KING_WINDOW,btnBurgerKing,"Burger King меню");
-        openNewProductWindow(Const.KFC_WINDOW,btnKFC,"KFC");
+    private void newProductWindows() {
+        openNewProductWindow(Const.ALL_PRODUCT_WINDOW, btnSearchAll, "Все продукты");
+        openNewProductWindow(Const.ALL_PRODUCT_WINDOW, btnBurgerKing, "Burger King");
+        openNewProductWindow(Const.ALL_PRODUCT_WINDOW, btnKFC, "KFC");
+//        openNewProductWindow(Const.BURGER_KING_WINDOW, btnBurgerKing, "Burger King меню");
+//        openNewProductWindow(Const.KFC_WINDOW, btnKFC, "KFC");
     }
-
-
 }
