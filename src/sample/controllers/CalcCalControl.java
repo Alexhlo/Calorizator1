@@ -375,6 +375,7 @@ public class CalcCalControl {
     private void newProductWindows(){
         openNewProductWindow(Const.ALL_PRODUCT_WINDOW,btnSearchAll,"Все продукты");
         openNewProductWindow(Const.BURGER_KING_WINDOW,btnBurgerKing,"Burger King меню");
+        openNewProductWindow(Const.KFC_WINDOW,btnKFC,"KFC");
     }
 
 

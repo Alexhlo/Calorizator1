@@ -30,16 +30,14 @@ public class ProductCalControl implements Initializable {
     @FXML private Button btnSearch;
     @FXML private TextField txtFldSearch;
 
-//    public CalcCalControl ccc = new CalcCalControl();
-    private PopupMenu popupMenu = new PopupMenu();
     public ObservableList<Product> tableProductData = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        setProductTableColumnValue();
         initProductTableData(Const.REQUEST_BURGER_KING);
-        initProductTableData(Const.REQUEST_ALCOHOL);
+        initProductTableData(Const.REQUEST_KFC);
+        setProductTableColumnValue();
 
     }
 
@@ -55,7 +53,6 @@ public class ProductCalControl implements Initializable {
             try {
                 SQLiteClient.connectDB();
                 SQLiteClient.resultSet = SQLiteClient.connection.createStatement().executeQuery(request);
-
                     while (SQLiteClient.resultSet.next()) {
                         Product product = new Product();
                         product.name.set(SQLiteClient.resultSet.getString(Const.TABLE_NAME));
@@ -63,8 +60,8 @@ public class ProductCalControl implements Initializable {
                         product.fats.set(SQLiteClient.resultSet.getDouble(Const.TABLE_FATS));
                         product.carbs.set(SQLiteClient.resultSet.getDouble(Const.TABLE_CARBS));
                         product.calories.set(SQLiteClient.resultSet.getInt(Const.TABLE_CALORIES));
-                        tableProductData.add(product);
-                    tableViewProducts.setItems(tableProductData);
+                tableProductData.add(product);
+                        tableViewProducts.setItems(tableProductData);
                 }
                 SQLiteClient.closeDB();
             } catch (ClassNotFoundException | SQLException e) {
