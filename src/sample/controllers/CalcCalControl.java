@@ -367,10 +367,7 @@ public class CalcCalControl {
                     Stage stage = new Stage();
                     stage.setTitle(name);
                     stage.setScene(new Scene(root));
-
             stage.showAndWait();
-
-
 
         });
     }
