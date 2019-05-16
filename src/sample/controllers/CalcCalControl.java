@@ -118,7 +118,7 @@ public class CalcCalControl {
     private final double MUSCLE_MASS = 500;
     private final double WEIGHT_LOSS = 300;
     private final String EMPTY = "";
-    public ProductCalControl pcc = new ProductCalControl();
+    private ProductCalControl pcc = new ProductCalControl();
     private ObservableList<TableIMB> tableImbData = FXCollections.observableArrayList();
 
     @FXML
@@ -368,13 +368,15 @@ public class CalcCalControl {
                     stage.setTitle(name);
                     stage.setScene(new Scene(root));
 
-                    stage.showAndWait();
+            stage.showAndWait();
+
+
 
         });
     }
 
     private void newProductWindows(){
-//        openNewProductWindow(Const.ALL_PRODUCT_WINDOW,btnSearchAll,"Все продукты");
+        openNewProductWindow(Const.ALL_PRODUCT_WINDOW,btnSearchAll,"Все продукты");
         openNewProductWindow(Const.BURGER_KING_WINDOW,btnBurgerKing,"Burger King меню");
     }
 
