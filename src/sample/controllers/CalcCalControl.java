@@ -172,7 +172,6 @@ public class CalcCalControl {
         });
 
         newProductWindows();
-//        buttonIsPressed(btnBurgerKing);
 
     }
 
@@ -382,25 +381,5 @@ public class CalcCalControl {
         openNewProductWindow(Const.BURGER_KING_WINDOW,btnBurgerKing,"Burger King меню");
     }
 
-//    private void buttonIsPressed(Button btn){
-//        Clipboard clipboard = Clipboard.getSystemClipboard();
-//        String huy = "huy";
-//        String plainText = clipboard.getString();
-//        ClipboardContent content = new ClipboardContent();
-//
-//        btn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                content.putString(btn.getText());
-//                clipboard.setContent(content);
-//                System.out.println(huy);
-//            }
-//        });
-//
-////        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-////            System.out.println("piiiiiiizda");
-////        });
-//
-//    }
 
 }
