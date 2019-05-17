@@ -25,35 +25,6 @@ public class SQLiteClient {
             System.out.println("---= Database RS,STMNT,CON is closed! =---");
         }
     }
-
-//    public static void addIntoDB() {
-//
-//    }
-//
-//    public static void deleteFromDB() {
-//
-//    }
-//
-//    public static void readDB(String request , TableView<Product> tableView, ObservableList<Product> observableList) {
-//        try {
-//           resultSet = connection.createStatement().executeQuery(request);
-//            while (resultSet.next()) {
-//                Product product = new Product();
-//                product.name.set(SQLiteClient.resultSet.getString(Const.TABLE_NAME));
-//                product.protein.set(SQLiteClient.resultSet.getDouble(Const.TABLE_PROTEIN));
-//                product.fats.set(SQLiteClient.resultSet.getDouble(Const.TABLE_FATS));
-//                product.carbs.set(SQLiteClient.resultSet.getDouble(Const.TABLE_CARBS));
-//                product.calories.set(SQLiteClient.resultSet.getInt(Const.TABLE_CALORIES));
-//                observableList.add(product);
-//                tableView.setItems(observableList);
-//            }
-//            System.out.println("-----------------=Таблица выведена=-----------------");
-//
-////            SQLiteClient.closeDB();
-//        } catch (SQLException e) {
-//            e.getStackTrace();
-//        }
-//    }
 }
 
 
