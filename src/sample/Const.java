@@ -10,9 +10,9 @@ public class Const {
     public static final String TABLE_CALORIES = "cal";
     public static final String TABLE_WEIGHT= "weight";
 
-    public static final String ALL_PRODUCT_WINDOW = "/views/allprodwindow.fxml";
-    public static final String BURGER_KING_WINDOW = "/views/burgerkingwindow.fxml";
-    public static final String KFC_WINDOW = "/views/kfcwindow.fxml";
+    public static final String ALL_PRODUCT_WINDOW = "/views/allProductWindow.fxml";
+    public static final String BURGER_KING_WINDOW = "/views/burgerKingWindow.fxml";
+    public static final String KFC_WINDOW = "/views/kfcWindow.fxml";
 
 
     private static final String ALCOHOL = "alcohol";

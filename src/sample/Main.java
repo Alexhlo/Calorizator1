@@ -13,7 +13,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage caloStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../views/calcwindow.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../views/calcWindow.fxml"));
         caloStage.setTitle("Калоризатор");
         Scene calorizator = new Scene(root);
         caloStage.setScene(calorizator);

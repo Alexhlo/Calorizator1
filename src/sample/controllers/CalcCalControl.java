@@ -6,6 +6,7 @@ import com.sun.javafx.tk.Toolkit;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -245,8 +246,34 @@ public class CalcCalControl {
             else resultImb();
         });
 
-        newProductWindows();
+//        openNewProductWindowBG();
+//        openNewProductWindowKFC();
 
+        btnBurgerKing.setOnAction(event -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(Const.BURGER_KING_WINDOW));
+                Parent root1 = fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setTitle("Burger King menu");
+                stage.setScene(new Scene(root1));
+                stage.show();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        });
+
+        btnKFC.setOnAction(event -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(Const.KFC_WINDOW));
+                Parent root1 = fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setTitle("Kentucky Fried Chicken menu");
+                stage.setScene(new Scene(root1));
+                stage.show();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        });
     }
 
     private void setToggleGroupsRadioButton() {
@@ -430,11 +457,11 @@ public class CalcCalControl {
         txtFldResultImb.setText(EMPTY + (Math.round(resultImb * 100d) / 100d));
     }
 
-    private void openNewProductWindow(String window, Button btn, String name) {
-        btn.setOnAction(event -> {
-            btn.getScene().getWindow();
+    private void openNewProductWindowBG() {
+        btnBurgerKing.setOnAction(event -> {
+            btnBurgerKing.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource(window));
+            loader.setLocation(getClass().getResource(Const.BURGER_KING_WINDOW));
             try {
                 loader.load();
             } catch (IOException e) {
@@ -442,19 +469,27 @@ public class CalcCalControl {
             }
             Parent root = loader.getRoot();
             Stage stage = new Stage();
-            stage.setTitle(name);
+            stage.setTitle("Burger King menu");
             stage.setScene(new Scene(root));
             stage.showAndWait();
-
-
         });
     }
 
-    private void newProductWindows() {
-//        openNewProductWindow(Const.ALL_PRODUCT_WINDOW, btnSearchAll, "Все продукты");
-        openNewProductWindow(Const.BURGER_KING_WINDOW, btnBurgerKing, "Burger King");
-        openNewProductWindow(Const.KFC_WINDOW, btnKFC, "KFC");
-//        openNewProductWindow(Const.BURGER_KING_WINDOW, btnBurgerKing, "Burger King меню");
-//        openNewProductWindow(Const.KFC_WINDOW, btnKFC, "KFC");
+    private void openNewProductWindowKFC() {
+        btnKFC.setOnAction(event -> {
+            btnKFC.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource(Const.KFC_WINDOW));
+            try {
+                loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Parent root = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Kentucky Fried Chicken FC menu");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        });
     }
 }
