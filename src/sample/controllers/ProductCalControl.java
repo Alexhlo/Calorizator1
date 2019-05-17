@@ -9,42 +9,43 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import pojo.Product;
 import sample.Const;
 import sample.SQLiteClient;
 
 public class ProductCalControl implements Initializable {
 
-    @FXML private ResourceBundle resources;
-    @FXML private URL location;
-    @FXML private AnchorPane productPane;
+//    @FXML private ResourceBundle resources;
+//    @FXML private URL location;
+//    @FXML private AnchorPane productPane;
+//    @FXML private Button btnAdd;
+//    @FXML private Button btnSearch;
+//    @FXML private TextField txtFldSearch;
     @FXML public TableColumn<Product, Integer> tableColCal;
     @FXML public TableColumn<Product, Double> tabColProtein;
     @FXML public TableColumn<Product, Double> tableColCarb;
     @FXML public TableColumn<Product, Double> tableColFat;
     @FXML public TableColumn<Product, String> tabColName;
     @FXML public  TableView<Product> tableViewProducts;
-    @FXML private Button btnAdd;
-    @FXML private Button btnSearch;
-    @FXML private TextField txtFldSearch;
 
-    public ObservableList<Product> tableProductData = FXCollections.observableArrayList();
+
+    private ObservableList<Product> tableProductData = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        requestQuery(Const.REQUEST_BURGER_KING);
+        requestQuery(Const.REQUEST_KFC);
 
         tabColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tabColProtein.setCellValueFactory(new PropertyValueFactory<>("protein"));
         tableColFat.setCellValueFactory(new PropertyValueFactory<>("fats"));
         tableColCarb.setCellValueFactory(new PropertyValueFactory<>("carbs"));
         tableColCal.setCellValueFactory(new PropertyValueFactory<>("calories"));
-
-        requestQuery(Const.REQUEST_BURGER_KING);
-        requestQuery(Const.REQUEST_KFC);
+        tableViewProducts.setItems(tableProductData);
     }
 
-    public void requestQuery(String query){
+    private void requestQuery(String query){
         try {
             SQLiteClient.connectDB();
             SQLiteClient.resultSet = SQLiteClient.connection.createStatement().executeQuery(query);
@@ -57,12 +58,10 @@ public class ProductCalControl implements Initializable {
                 product.calories.set(SQLiteClient.resultSet.getInt(Const.TABLE_CALORIES));
                 tableProductData.add(product);
             }
-            tableViewProducts.setItems(tableProductData);
             System.out.println("-----------------=Таблица выведена=-----------------");
             SQLiteClient.closeDB();
         } catch (SQLException | ClassNotFoundException e) {
             e.getStackTrace();
         }
-
     }
 }
