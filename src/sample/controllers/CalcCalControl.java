@@ -21,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import pojo.Product;
 import pojo.TableIMB;
 import javafx.scene.control.TableColumn;
 import sample.Const;
@@ -244,9 +245,8 @@ public class CalcCalControl {
             else resultImb();
         });
 
-//        newProductWindows();
-        openNewProductWindow(Const.BURGER_KING_WINDOW, btnBurgerKing, "Burger King");
-        openNewProductWindow(Const.KFC_WINDOW, btnKFC, "KFC");
+        newProductWindows();
+
     }
 
     private void setToggleGroupsRadioButton() {
@@ -445,11 +445,13 @@ public class CalcCalControl {
             stage.setTitle(name);
             stage.setScene(new Scene(root));
             stage.showAndWait();
+
+
         });
     }
 
     private void newProductWindows() {
-        openNewProductWindow(Const.ALL_PRODUCT_WINDOW, btnSearchAll, "Все продукты");
+//        openNewProductWindow(Const.ALL_PRODUCT_WINDOW, btnSearchAll, "Все продукты");
         openNewProductWindow(Const.BURGER_KING_WINDOW, btnBurgerKing, "Burger King");
         openNewProductWindow(Const.KFC_WINDOW, btnKFC, "KFC");
 //        openNewProductWindow(Const.BURGER_KING_WINDOW, btnBurgerKing, "Burger King меню");

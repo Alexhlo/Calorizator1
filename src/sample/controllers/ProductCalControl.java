@@ -29,69 +29,36 @@ public class ProductCalControl implements Initializable {
     @FXML private Button btnSearch;
     @FXML private TextField txtFldSearch;
 
-    private ObservableList<Product> tableProductData = FXCollections.observableArrayList();
+    public ObservableList<Product> tableProductData = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        try {
-            SQLiteClient.connectDB();
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-
-        setProductTableColumnValue();
-
-        initProductTableDataBK();
-        initProductTableDataKFC();
-
-    }
-
-    public void setProductTableColumnValue() {
         tabColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tabColProtein.setCellValueFactory(new PropertyValueFactory<>("protein"));
         tableColFat.setCellValueFactory(new PropertyValueFactory<>("fats"));
         tableColCarb.setCellValueFactory(new PropertyValueFactory<>("carbs"));
         tableColCal.setCellValueFactory(new PropertyValueFactory<>("calories"));
-    }
 
-    public void initProductTableDataBK() {
+
+        public void initProductTableData(){
             try {
                 SQLiteClient.resultSet = SQLiteClient.connection.createStatement().executeQuery(Const.REQUEST_BURGER_KING);
-                    while (SQLiteClient.resultSet.next()) {
-                        Product product = new Product();
-                        product.name.set(SQLiteClient.resultSet.getString(Const.TABLE_NAME));
-                        product.protein.set(SQLiteClient.resultSet.getDouble(Const.TABLE_PROTEIN));
-                        product.fats.set(SQLiteClient.resultSet.getDouble(Const.TABLE_FATS));
-                        product.carbs.set(SQLiteClient.resultSet.getDouble(Const.TABLE_CARBS));
-                        product.calories.set(SQLiteClient.resultSet.getInt(Const.TABLE_CALORIES));
-                        tableProductData.add(product);
-                    }
+                while (SQLiteClient.resultSet.next()) {
+                    Product product = new Product();
+                    product.name.set(SQLiteClient.resultSet.getString(Const.TABLE_NAME));
+                    product.protein.set(SQLiteClient.resultSet.getDouble(Const.TABLE_PROTEIN));
+                    product.fats.set(SQLiteClient.resultSet.getDouble(Const.TABLE_FATS));
+                    product.carbs.set(SQLiteClient.resultSet.getDouble(Const.TABLE_CARBS));
+                    product.calories.set(SQLiteClient.resultSet.getInt(Const.TABLE_CALORIES));
+                    tableProductData.add(product);
+                }
                 tableViewProducts.setItems(tableProductData);
                 System.out.println("-----------------=Таблица выведена=-----------------");
                 SQLiteClient.closeDB();
             } catch (SQLException e) {
                 e.getStackTrace();
             }
-    }
-
-    public void initProductTableDataKFC() {
-        try {
-            SQLiteClient.resultSet = SQLiteClient.connection.createStatement().executeQuery(Const.REQUEST_KFC);
-            while (SQLiteClient.resultSet.next()) {
-                Product product = new Product();
-                product.name.set(SQLiteClient.resultSet.getString(Const.TABLE_NAME));
-                product.protein.set(SQLiteClient.resultSet.getDouble(Const.TABLE_PROTEIN));
-                product.fats.set(SQLiteClient.resultSet.getDouble(Const.TABLE_FATS));
-                product.carbs.set(SQLiteClient.resultSet.getDouble(Const.TABLE_CARBS));
-                product.calories.set(SQLiteClient.resultSet.getInt(Const.TABLE_CALORIES));
-                tableProductData.add(product);
-            }
-            tableViewProducts.setItems(tableProductData);
-            System.out.println("-----------------=Таблица выведена=-----------------");
-            SQLiteClient.closeDB();
-        } catch (SQLException e) {
-            e.getStackTrace();
         }
     }
 }

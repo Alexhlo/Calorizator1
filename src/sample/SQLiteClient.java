@@ -9,9 +9,9 @@ import java.sql.*;
 
 public class SQLiteClient {
 
-    private static String HOST = "jdbc:sqlite:Calorifier.db";
+    public static String HOST = "jdbc:sqlite:Calorifier.db";
     public static Connection connection;
-    private static Statement statement;
+    public static Statement statement;
     public static ResultSet resultSet;
 
     public static void connectDB() throws ClassNotFoundException, SQLException {
