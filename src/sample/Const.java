@@ -57,7 +57,7 @@ public class Const {
     private static final String JUICE = "juice";
     public static final String REQUEST_JUICE = "SELECT * FROM " + JUICE;
 
-    private static final String KFC = "KFC";
+    private static final String KFC = "kfc";
     public static final String REQUEST_KFC = "SELECT * FROM " + KFC;
 
     private static final String MCDONALDS = "mcdonalds";

@@ -10,9 +10,9 @@ import java.sql.*;
 public class SQLiteClient {
 
     private static String HOST = "jdbc:sqlite:Calorifier.db";
-    private static Connection connection;
+    public static Connection connection;
     private static Statement statement;
-    private static ResultSet resultSet;
+    public static ResultSet resultSet;
 
     public static void connectDB() throws ClassNotFoundException, SQLException {
         connection = null;
@@ -31,6 +31,8 @@ public class SQLiteClient {
         }
         if (statement.isClosed()) {
             System.out.println("Database statement close");
+        }if (connection.isClosed()) {
+            System.out.println("Database Connection close");
         }
     }
 
@@ -55,8 +57,9 @@ public class SQLiteClient {
                 observableList.add(product);
                 tableView.setItems(observableList);
             }
+            System.out.println("-----------------=Таблица выведена=-----------------");
 
-            SQLiteClient.closeDB();
+//            SQLiteClient.closeDB();
         } catch (SQLException e) {
             e.getStackTrace();
         }

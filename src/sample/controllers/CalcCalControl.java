@@ -24,12 +24,14 @@ import javafx.stage.Stage;
 import pojo.TableIMB;
 import javafx.scene.control.TableColumn;
 import sample.Const;
+import sample.SQLiteClient;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class CalcCalControl {
 
@@ -242,14 +244,9 @@ public class CalcCalControl {
             else resultImb();
         });
 
-
-
-        newProductWindows();
-
-
+//        newProductWindows();
         openNewProductWindow(Const.BURGER_KING_WINDOW, btnBurgerKing, "Burger King");
         openNewProductWindow(Const.KFC_WINDOW, btnKFC, "KFC");
-
     }
 
     private void setToggleGroupsRadioButton() {
