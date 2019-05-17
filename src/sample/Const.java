@@ -61,10 +61,10 @@ public class Const {
     public static final String REQUEST_JUICE = "SELECT * FROM " + JUICE;
 
     private static final String KFC = "kfc";
-    public static final String REQUEST_KFC = "SELECT * FROM " + KFC;
+    public static final String REQUEST_KFC = "SELECT * FROM " + KFC ;
 
-    private static final String MCDONALDS = "mcdonalds";
-    public static final String REQUEST_MCDONALDS = "SELECT * FROM " + MCDONALDS;
+    private static final String MC_DONALDS = "mcdonalds";
+    public static final String REQUEST_MCDONALDS = "SELECT * FROM " + MC_DONALDS;
 
     private static final String MEAT_PRODUCTS = "meat_products";
     public static final String REQUEST_MEAT_PRODUCTS = "SELECT * FROM " + MEAT_PRODUCTS;

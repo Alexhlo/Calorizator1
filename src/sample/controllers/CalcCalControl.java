@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -32,10 +33,12 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class CalcCalControl {
+public class CalcCalControl implements Initializable {
 
     /**
      * Вкладка калоризатора
@@ -191,7 +194,7 @@ public class CalcCalControl {
     private ObservableList<TableIMB> tableImbData = FXCollections.observableArrayList();
 
     @FXML
-    void initialize() {
+    public void initialize(URL location, ResourceBundle resources) {
 
         Platform.runLater(new Runnable() {
             @Override

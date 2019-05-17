@@ -32,10 +32,7 @@ public class ProductCalControl implements Initializable {
     private ObservableList<Product> tableProductData = FXCollections.observableArrayList();
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-        requestQuery(Const.REQUEST_BURGER_KING);
-        requestQuery(Const.REQUEST_KFC);
+    public void initialize(URL location, ResourceBundle resources)  {
 
         tabColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tabColProtein.setCellValueFactory(new PropertyValueFactory<>("protein"));
@@ -43,6 +40,9 @@ public class ProductCalControl implements Initializable {
         tableColCarb.setCellValueFactory(new PropertyValueFactory<>("carbs"));
         tableColCal.setCellValueFactory(new PropertyValueFactory<>("calories"));
         tableViewProducts.setItems(tableProductData);
+
+        requestQuery(Const.REQUEST_BURGER_KING);
+        requestQuery(Const.REQUEST_KFC);
     }
 
     private void requestQuery(String query){
@@ -59,7 +59,6 @@ public class ProductCalControl implements Initializable {
                 tableProductData.add(product);
             }
             System.out.println("-----------------=Таблица выведена=-----------------");
-            SQLiteClient.closeDB();
         } catch (SQLException | ClassNotFoundException e) {
             e.getStackTrace();
         }
