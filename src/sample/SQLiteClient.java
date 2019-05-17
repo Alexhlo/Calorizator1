@@ -9,11 +9,10 @@ import java.sql.*;
 
 public class SQLiteClient {
 
-    public static String HOST = "jdbc:sqlite:Calorifier.db";
-
-    public static Connection connection;
-    public static Statement statement;
-    public static ResultSet resultSet;
+    private static String HOST = "jdbc:sqlite:Calorifier.db";
+    private static Connection connection;
+    private static Statement statement;
+    private static ResultSet resultSet;
 
     public static void connectDB() throws ClassNotFoundException, SQLException {
         connection = null;
@@ -24,28 +23,26 @@ public class SQLiteClient {
     }
 
     public static void closeDB() throws NullPointerException, SQLException {
-        resultSet.close();
         statement.close();
+        resultSet.close();
         connection.close();
-
         if(resultSet.isClosed()){
             System.out.println("Database result set close.");
-        }if (statement.isClosed()) {
+        }
+        if (statement.isClosed()) {
             System.out.println("Database statement close");
-        }if (connection.isClosed()){
-            System.out.println("Database connection has been closed");
         }
     }
 
-    public static void addIntoDB(String request) {
+    public static void addIntoDB() {
 
     }
 
-    public static void deleteFromDB(String request) {
+    public static void deleteFromDB() {
 
     }
 
-    public static void readDB(String request , TableView<Product> tb, ObservableList<Product> ol) {
+    public static void readDB(String request , TableView<Product> tableView, ObservableList<Product> observableList) {
         try {
            resultSet = connection.createStatement().executeQuery(request);
             while (resultSet.next()) {
@@ -55,9 +52,10 @@ public class SQLiteClient {
                 product.fats.set(SQLiteClient.resultSet.getDouble(Const.TABLE_FATS));
                 product.carbs.set(SQLiteClient.resultSet.getDouble(Const.TABLE_CARBS));
                 product.calories.set(SQLiteClient.resultSet.getInt(Const.TABLE_CALORIES));
-                ol.add(product);
-                tb.setItems(ol);
+                observableList.add(product);
+                tableView.setItems(observableList);
             }
+
             SQLiteClient.closeDB();
         } catch (SQLException e) {
             e.getStackTrace();

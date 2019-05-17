@@ -242,7 +242,13 @@ public class CalcCalControl {
             else resultImb();
         });
 
+
+
         newProductWindows();
+
+
+        openNewProductWindow(Const.BURGER_KING_WINDOW, btnBurgerKing, "Burger King");
+        openNewProductWindow(Const.KFC_WINDOW, btnKFC, "KFC");
 
     }
 
@@ -365,16 +371,16 @@ public class CalcCalControl {
 
     private void setTableIMBValueColumns() {
         //устанавливем тип и значение , которое должно хранится в колонке
-        columnHeight.setCellValueFactory(new PropertyValueFactory<TableIMB, String>("height"));
-        column1.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_1"));
-        column2.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_2"));
-        column3.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_3"));
-        column4.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_4"));
-        column5.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_5"));
-        column6.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_6"));
-        column7.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_7"));
-        column8.setCellValueFactory(new PropertyValueFactory<TableIMB, Integer>("col_8"));
-        columnImb.setCellValueFactory(new PropertyValueFactory<TableIMB, String>("imb"));
+        columnHeight.setCellValueFactory(new PropertyValueFactory<>("height"));
+        column1.setCellValueFactory(new PropertyValueFactory<>("col_1"));
+        column2.setCellValueFactory(new PropertyValueFactory<>("col_2"));
+        column3.setCellValueFactory(new PropertyValueFactory<>("col_3"));
+        column4.setCellValueFactory(new PropertyValueFactory<>("col_4"));
+        column5.setCellValueFactory(new PropertyValueFactory<>("col_5"));
+        column6.setCellValueFactory(new PropertyValueFactory<>("col_6"));
+        column7.setCellValueFactory(new PropertyValueFactory<>("col_7"));
+        column8.setCellValueFactory(new PropertyValueFactory<>("col_8"));
+        columnImb.setCellValueFactory(new PropertyValueFactory<>("imb"));
     }
 
     private void initTableIMBData() {
@@ -447,8 +453,8 @@ public class CalcCalControl {
 
     private void newProductWindows() {
         openNewProductWindow(Const.ALL_PRODUCT_WINDOW, btnSearchAll, "Все продукты");
-        openNewProductWindow(Const.ALL_PRODUCT_WINDOW, btnBurgerKing, "Burger King");
-        openNewProductWindow(Const.ALL_PRODUCT_WINDOW, btnKFC, "KFC");
+        openNewProductWindow(Const.BURGER_KING_WINDOW, btnBurgerKing, "Burger King");
+        openNewProductWindow(Const.KFC_WINDOW, btnKFC, "KFC");
 //        openNewProductWindow(Const.BURGER_KING_WINDOW, btnBurgerKing, "Burger King меню");
 //        openNewProductWindow(Const.KFC_WINDOW, btnKFC, "KFC");
     }
