@@ -248,8 +248,7 @@ public class CalcCalControl implements Initializable {
         });
 
         openNewProductWindow(btnBurgerKing,Const.BURGER_KING_WINDOW,"Burger King menu");
-        openNewProductWindow(btnKFC,Const.KFC_WINDOW,"Kentucky Fried Chicken");
-
+        openNewProductWindow(btnKFC,Const.KFC_WINDOW,"Kentucky Fried Chicken ,menu");
     }
 
     private void setToggleGroupsRadioButton() {

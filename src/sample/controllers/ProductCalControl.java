@@ -59,6 +59,7 @@ public class ProductCalControl implements Initializable {
                 tableProductData.add(product);
             }
             System.out.println("-----------------=Таблица выведена=-----------------");
+            SQLiteClient.closeDB();
         } catch (SQLException | ClassNotFoundException e) {
             e.getStackTrace();
         }
