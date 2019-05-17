@@ -2,6 +2,9 @@ package sample;
 
 public class Const {
 
+    public static final double MUSCLE_MASS = 500;
+    public static final double WEIGHT_LOSS = 300;
+
     public static final String TABLE_ID = "id";
     public static final String TABLE_NAME = "name";
     public static final String TABLE_PROTEIN = "protein";

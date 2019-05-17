@@ -186,8 +186,6 @@ public class CalcCalControl {
     private final String FORMULA_HARRISON = "Формула Гарриса-Бенедикта (ВОО на основе общей массы тела)";
     private final String FORMULA_KETCH = "Формула Кетча-МакАрдла (ВОО на основе мышечной массы тела)";
     private double RESULT;
-    private final double MUSCLE_MASS = 500;
-    private final double WEIGHT_LOSS = 300;
     private final String EMPTY = "";
 
     private ObservableList<TableIMB> tableImbData = FXCollections.observableArrayList();
@@ -246,34 +244,9 @@ public class CalcCalControl {
             else resultImb();
         });
 
-//        openNewProductWindowBG();
-//        openNewProductWindowKFC();
+        openNewProductWindow(btnBurgerKing,Const.BURGER_KING_WINDOW,"Burger King menu");
+        openNewProductWindow(btnKFC,Const.KFC_WINDOW,"Kentucky Fried Chicken");
 
-        btnBurgerKing.setOnAction(event -> {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(Const.BURGER_KING_WINDOW));
-                Parent root1 = fxmlLoader.load();
-                Stage stage = new Stage();
-                stage.setTitle("Burger King menu");
-                stage.setScene(new Scene(root1));
-                stage.show();
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        });
-
-        btnKFC.setOnAction(event -> {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(Const.KFC_WINDOW));
-                Parent root1 = fxmlLoader.load();
-                Stage stage = new Stage();
-                stage.setTitle("Kentucky Fried Chicken menu");
-                stage.setScene(new Scene(root1));
-                stage.show();
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        });
     }
 
     private void setToggleGroupsRadioButton() {
@@ -305,16 +278,16 @@ public class CalcCalControl {
                 txtFldBMR.setText(EMPTY + Math.rint(RESULT));
                 conditionCoA();
                 txtFldBKA.setText(EMPTY + Math.rint(RESULT));
-                txtFldMM.setText(EMPTY + (Math.rint(RESULT) + MUSCLE_MASS));
-                txtFldWL.setText(EMPTY + (Math.rint(RESULT) - WEIGHT_LOSS));
+                txtFldMM.setText(EMPTY + (Math.rint(RESULT) + Const.MUSCLE_MASS));
+                txtFldWL.setText(EMPTY + (Math.rint(RESULT) - Const.WEIGHT_LOSS));
             }
             if (rbFemale.isSelected()) {
                 RESULT = 10 * weight + 6.25 * height - 5 * age - 161;
                 txtFldBMR.setText(EMPTY + Math.rint(RESULT));
                 conditionCoA();
                 txtFldBKA.setText(EMPTY + Math.rint(RESULT));
-                txtFldMM.setText(EMPTY + (Math.rint(RESULT) + MUSCLE_MASS));
-                txtFldWL.setText(EMPTY + (Math.rint(RESULT) - WEIGHT_LOSS));
+                txtFldMM.setText(EMPTY + (Math.rint(RESULT) + Const.MUSCLE_MASS));
+                txtFldWL.setText(EMPTY + (Math.rint(RESULT) - Const.WEIGHT_LOSS));
             }
         }
         if (menuFormula.getValue().equals(FORMULA_HARRISON)) {
@@ -323,15 +296,15 @@ public class CalcCalControl {
                 txtFldBMR.setText(EMPTY + Math.rint(RESULT));
                 conditionCoA();
                 txtFldBKA.setText(EMPTY + Math.rint(RESULT));
-                txtFldMM.setText(EMPTY + (Math.rint(RESULT) + MUSCLE_MASS));
-                txtFldWL.setText(EMPTY + (Math.rint(RESULT) - WEIGHT_LOSS));
+                txtFldMM.setText(EMPTY + (Math.rint(RESULT) + Const.MUSCLE_MASS));
+                txtFldWL.setText(EMPTY + (Math.rint(RESULT) - Const.WEIGHT_LOSS));
             } else {
                 RESULT = 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
                 txtFldBMR.setText(EMPTY + Math.rint(RESULT));
                 conditionCoA();
                 txtFldBKA.setText(EMPTY + Math.rint(RESULT));
-                txtFldMM.setText(EMPTY + (Math.rint(RESULT) + MUSCLE_MASS));
-                txtFldWL.setText(EMPTY + (Math.rint(RESULT) - WEIGHT_LOSS));
+                txtFldMM.setText(EMPTY + (Math.rint(RESULT) + Const.MUSCLE_MASS));
+                txtFldWL.setText(EMPTY + (Math.rint(RESULT) - Const.WEIGHT_LOSS));
             }
         }
         if (menuFormula.getValue().equals(FORMULA_KETCH)) {
@@ -340,8 +313,8 @@ public class CalcCalControl {
             txtFldBMR.setText(EMPTY + Math.rint(RESULT));
             conditionCoA();
             txtFldBKA.setText(EMPTY + Math.rint(RESULT));
-            txtFldMM.setText(EMPTY + (Math.rint(RESULT) + MUSCLE_MASS));
-            txtFldWL.setText(EMPTY + (Math.rint(RESULT) - WEIGHT_LOSS));
+            txtFldMM.setText(EMPTY + (Math.rint(RESULT) + Const.MUSCLE_MASS));
+            txtFldWL.setText(EMPTY + (Math.rint(RESULT) - Const.WEIGHT_LOSS));
         }
     }
 
@@ -457,11 +430,10 @@ public class CalcCalControl {
         txtFldResultImb.setText(EMPTY + (Math.round(resultImb * 100d) / 100d));
     }
 
-    private void openNewProductWindowBG() {
-        btnBurgerKing.setOnAction(event -> {
-            btnBurgerKing.getScene().getWindow();
+    private void openNewProductWindow(Button btn, String productWindow, String windowTitle) {
+        btn.setOnAction(event -> {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource(Const.BURGER_KING_WINDOW));
+            loader.setLocation(getClass().getResource(productWindow));
             try {
                 loader.load();
             } catch (IOException e) {
@@ -469,25 +441,7 @@ public class CalcCalControl {
             }
             Parent root = loader.getRoot();
             Stage stage = new Stage();
-            stage.setTitle("Burger King menu");
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-        });
-    }
-
-    private void openNewProductWindowKFC() {
-        btnKFC.setOnAction(event -> {
-            btnKFC.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource(Const.KFC_WINDOW));
-            try {
-                loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Parent root = loader.getRoot();
-            Stage stage = new Stage();
-            stage.setTitle("Kentucky Fried Chicken FC menu");
+            stage.setTitle(windowTitle);
             stage.setScene(new Scene(root));
             stage.showAndWait();
         });
