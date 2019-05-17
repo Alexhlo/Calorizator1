@@ -40,9 +40,8 @@ public class ProductCalControl implements Initializable {
         tableColCarb.setCellValueFactory(new PropertyValueFactory<>("carbs"));
         tableColCal.setCellValueFactory(new PropertyValueFactory<>("calories"));
 
-
-        public void initProductTableData(){
             try {
+                SQLiteClient.connectDB();
                 SQLiteClient.resultSet = SQLiteClient.connection.createStatement().executeQuery(Const.REQUEST_BURGER_KING);
                 while (SQLiteClient.resultSet.next()) {
                     Product product = new Product();
@@ -56,9 +55,9 @@ public class ProductCalControl implements Initializable {
                 tableViewProducts.setItems(tableProductData);
                 System.out.println("-----------------=Таблица выведена=-----------------");
                 SQLiteClient.closeDB();
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 e.getStackTrace();
             }
-        }
+
     }
 }
