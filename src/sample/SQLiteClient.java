@@ -3,14 +3,13 @@ package sample;
 import javafx.collections.ObservableList;
 import pojo.Product;
 
-import javax.swing.text.TableView;
 import java.sql.*;
 
 public class SQLiteClient {
 
-    public static Connection connection;
+    private static Connection connection;
     private static Statement statement;
-    public static ResultSet resultSet = null;
+    private static ResultSet resultSet = null;
 
     public static void connectDB() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
@@ -20,7 +19,7 @@ public class SQLiteClient {
         System.out.println("Database connection has been done.");
     }
 
-    public static void closeDB() throws NullPointerException, SQLException {
+    private static void closeDB() throws NullPointerException, SQLException {
         statement.close();
         resultSet.close();
         connection.close();
