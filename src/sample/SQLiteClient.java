@@ -11,7 +11,7 @@ public class SQLiteClient {
     private static Statement statement = null;
     private static ResultSet resultSet = null;
 
-    public static void connectDB() throws ClassNotFoundException, SQLException {
+    private static void connectDB() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
         String host = "jdbc:sqlite:Calorifier.db";
         connection = DriverManager.getConnection(host);
