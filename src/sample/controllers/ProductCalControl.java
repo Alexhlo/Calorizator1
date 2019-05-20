@@ -1,7 +1,6 @@
 package sample.controllers;
 
 import java.net.URL;
-import java.sql.*;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +27,6 @@ public class ProductCalControl implements Initializable {
     @FXML public TableColumn<Product, String> tabColName;
     @FXML public  TableView<Product> tableViewProducts;
 
-
     private ObservableList<Product> tableProductData = FXCollections.observableArrayList();
 
     @Override
@@ -41,37 +39,8 @@ public class ProductCalControl implements Initializable {
         tableColCal.setCellValueFactory(new PropertyValueFactory<>("calories"));
         tableViewProducts.setItems(tableProductData);
 
-        try {
-            SQLiteClient.connectDB();
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-
         SQLiteClient.executeDB(Const.REQUEST_BURGER_KING,tableProductData);
         SQLiteClient.executeDB(Const.REQUEST_KFC,tableProductData);
 
-
-//        requestQuery(Const.REQUEST_BURGER_KING);
-//        requestQuery(Const.REQUEST_KFC);
     }
-
-//    private void requestQuery(String query){
-//        try {
-//            SQLiteClient.connectDB();
-//            SQLiteClient.resultSet = SQLiteClient.connection.createStatement().executeQuery(query);
-//            while (SQLiteClient.resultSet.next()) {
-//                Product product = new Product();
-//                product.name.set(SQLiteClient.resultSet.getString(Const.TABLE_NAME));
-//                product.protein.set(SQLiteClient.resultSet.getDouble(Const.TABLE_PROTEIN));
-//                product.fats.set(SQLiteClient.resultSet.getDouble(Const.TABLE_FATS));
-//                product.carbs.set(SQLiteClient.resultSet.getDouble(Const.TABLE_CARBS));
-//                product.calories.set(SQLiteClient.resultSet.getInt(Const.TABLE_CALORIES));
-//                tableProductData.add(product);
-//            }
-//            System.out.println("-----------------=Таблица выведена=-----------------");
-//            SQLiteClient.closeDB();
-//        } catch (SQLException | ClassNotFoundException e) {
-//            e.getStackTrace();
-//        }
-//    }
 }

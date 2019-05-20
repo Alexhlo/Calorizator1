@@ -7,8 +7,8 @@ import java.sql.*;
 
 public class SQLiteClient {
 
-    private static Connection connection;
-    private static Statement statement;
+    private static Connection connection = null;
+    private static Statement statement = null;
     private static ResultSet resultSet = null;
 
     public static void connectDB() throws ClassNotFoundException, SQLException {
@@ -30,6 +30,7 @@ public class SQLiteClient {
 
     public static void executeDB(String query, ObservableList<Product> obsList){
         try {
+            connectDB();
             resultSet = connection.createStatement().executeQuery(query);
             while (resultSet.next()){
                 Product product = new Product();
@@ -42,7 +43,7 @@ public class SQLiteClient {
             }
             System.out.println("-----------------=Таблица выведена=-----------------");
             closeDB();
-        }catch (SQLException e){
+        }catch (SQLException | ClassNotFoundException e){
             e.getStackTrace();
         }
     }
