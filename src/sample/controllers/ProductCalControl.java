@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -18,8 +20,7 @@ public class ProductCalControl implements Initializable {
 //    @FXML private URL location;
 //    @FXML private AnchorPane productPane;
 //    @FXML private Button btnAdd;
-//    @FXML private Button btnSearch;
-//    @FXML private TextField txtFldSearch;
+    @FXML private TextField txtFldSearch;
     @FXML public TableColumn<Product, Integer> tableColCal;
     @FXML public TableColumn<Product, Double> tabColProtein;
     @FXML public TableColumn<Product, Double> tableColCarb;
@@ -31,7 +32,6 @@ public class ProductCalControl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources)  {
-
         tabColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tabColProtein.setCellValueFactory(new PropertyValueFactory<>("protein"));
         tableColFat.setCellValueFactory(new PropertyValueFactory<>("fats"));
@@ -42,5 +42,26 @@ public class ProductCalControl implements Initializable {
         SQLiteClient.executeDB(Const.REQUEST_BURGER_KING,tableProductData);
         SQLiteClient.executeDB(Const.REQUEST_KFC,tableProductData);
 
+        searchData();
+    }
+
+    private void searchData(){
+        FilteredList<Product> filteredData = new FilteredList<>(tableProductData, p -> true);
+        SortedList<Product> sortedData = new SortedList<>(filteredData);
+        txtFldSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(product -> {
+                if(newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                    String lowerCaseFilter = newValue.toLowerCase();
+                if(String.valueOf(product.getName()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+        });
+        sortedData.comparatorProperty().bind(tableViewProducts.comparatorProperty());
+        tableViewProducts.setItems(sortedData);
     }
 }
+
