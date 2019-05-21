@@ -312,33 +312,36 @@ public class CalcCalControl implements Initializable {
         Shaker fldHeight = new Shaker(txtFldHeight);
         Shaker fldAge = new Shaker(txtFldAge);
         Shaker fldFat = new Shaker(txtFldFat);
-        if (txtFldWeight.getText() == null || txtFldWeight.getText().trim().isEmpty()
+        if (txtFldWeight.getText() == null
+                || txtFldWeight.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldWeight.getText()) <= 0) {
             txtFldWeight.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
             fldWeight.playAnim();
             clearSupportTextFields();
         }else txtFldWeight.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
-        if (txtFldHeight.getText() == null || txtFldHeight.getText().trim().isEmpty()
+        if (txtFldHeight.getText() == null
+                || txtFldHeight.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldHeight.getText()) <= 0) {
             txtFldHeight.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
             fldHeight.playAnim();
             clearSupportTextFields();
         }else txtFldHeight.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
-        if (txtFldAge.getText() == null || txtFldAge.getText().trim().isEmpty()
+        if (txtFldAge.getText() == null
+                || txtFldAge.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldAge.getText()) <= 0) {
             txtFldAge.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
             fldAge.playAnim();
             clearSupportTextFields();
         }else txtFldAge.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
         if(menuFormula.getValue().equals(FORMULA_KETCH)){
-            if (txtFldFat.getText() == null || txtFldFat.getText().trim().isEmpty()
+            if (txtFldFat.getText() == null
+                    || txtFldFat.getText().trim().isEmpty()
                     || Double.parseDouble(txtFldFat.getText()) <= 0) {
                 txtFldFat.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
                 fldFat.playAnim();
                 clearSupportTextFields();
             }else txtFldFat.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
         }
-
         return false;
     }
 

@@ -47,12 +47,24 @@ public class SQLiteClient {
         }
     }
 
-    public static void addLineToTableDB(){
-//        resultSet=connection.createStatement().addBatch();
+    public static void addLineToTableDB(String table, String name, double protein, double fat, double carb, int cal){
+        String z = ",";
+        try {
+            statement.addBatch(
+                    "INSERT INTO " + table +" (name, protein, fat, carb, cal, weight) VALUES (" + name + z + protein + z + fat + z + carb + z + cal +", 100)");
+            statement.executeBatch();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void removeLineFromTableDB () {
-
+    public static void removeLineFromTableDB (String table, int id) {
+        try {
+            PreparedStatement prepStatement = connection.prepareStatement("DELETE FROM " + table + " WHERE id = " + id );
+            prepStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
 

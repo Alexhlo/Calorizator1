@@ -9,7 +9,7 @@
 
 <AnchorPane fx:id="productPane" maxHeight="1.7976931348623157E308" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controllers.ProductCalControl">
    <children>
-      <TableView fx:id="tableViewProducts" layoutX="200.0" layoutY="131.0" prefHeight="484.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <TableView fx:id="tableViewProducts" editable="true" layoutX="200.0" layoutY="131.0" prefHeight="484.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
         <columns>
           <TableColumn fx:id="tabColName" prefWidth="270.0" text="Наименование" />
             <TableColumn fx:id="tabColProtein" prefWidth="75.0" text="Белки, г" />
