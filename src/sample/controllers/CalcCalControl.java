@@ -180,7 +180,6 @@ public class CalcCalControl implements Initializable {
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-
         Platform.runLater(() -> menuFormula.requestFocus());
 
         setToggleGroupsRadioButton();
@@ -199,27 +198,23 @@ public class CalcCalControl implements Initializable {
             }
             if (menuFormula.getValue().equals(FORMULA_KETCH)) {
                 txtFldFat.setDisable(false);
-            }
-        });
+            }});
+
+        initTableIMBData();
+        setTableIMBValueColumns();
+        //заполняем таблицу данными
+        tableViewIMB.setItems(tableImbData);
 
         btnCancel.setOnAction(event ->  clearAllTextFields());
         btnCalc.setOnAction(event -> {
             try {
-                if (shakeTextFields());
-                else conditionMenuFormulaBMRCoA();
-            }catch (NumberFormatException e){} });
-
-        initTableIMBData();
-        setTableIMBValueColumns();
-
-        //заполняем таблицу данными
-        tableViewIMB.setItems(tableImbData);
-
+                if (!shakeTextFields()) conditionMenuFormulaBMRCoA();
+            }catch (NumberFormatException ignored){} });
         btnCancelImb.setOnAction(event -> clearImbTextFields());
         btnCalcImb.setOnAction(event -> {
-            if (shakeTextImbFields()) ;
-            else resultImb();
-        });
+            try {
+                if (!shakeTextImbFields()) resultImb();
+            }catch (NumberFormatException ignored){} });
 
         openNewProductWindow(btnBurgerKing,Const.BURGER_KING_WINDOW,"Burger King menu");
         openNewProductWindow(btnKFC,Const.KFC_WINDOW,"Kentucky Fried Chicken ,menu");
