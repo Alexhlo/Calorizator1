@@ -2,12 +2,9 @@ package sample.controllers;
 
 import animations.Shaker;
 
-import com.sun.javafx.tk.Toolkit;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,25 +14,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
-import pojo.Product;
 import pojo.TableIMB;
 import javafx.scene.control.TableColumn;
 import sample.Const;
-import sample.SQLiteClient;
-
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CalcCalControl implements Initializable {
@@ -196,42 +181,33 @@ public class CalcCalControl implements Initializable {
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                menuFormula.requestFocus();
-            }
-        });
+        Platform.runLater(() -> menuFormula.requestFocus());
 
         setToggleGroupsRadioButton();
 
         menuFormula.getItems().addAll(FORMULA_MIFFLIN, FORMULA_HARRISON, FORMULA_KETCH);
         menuFormula.setValue(FORMULA_MIFFLIN);
 
-        apCalcKCal.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (menuFormula.getValue().equals(FORMULA_MIFFLIN)) {
-                    txtFldFat.clear();
-                    txtFldFat.setDisable(true);
-                }
-                if (menuFormula.getValue().equals(FORMULA_HARRISON)) {
-                    txtFldFat.clear();
-                    txtFldFat.setDisable(true);
-                }
-                if (menuFormula.getValue().equals(FORMULA_KETCH)) {
-                    txtFldFat.setDisable(false);
-                }
+        apCalcKCal.setOnMouseEntered(event -> {
+            if (menuFormula.getValue().equals(FORMULA_MIFFLIN)) {
+                txtFldFat.clear();
+                txtFldFat.setDisable(true);
+            }
+            if (menuFormula.getValue().equals(FORMULA_HARRISON)) {
+                txtFldFat.clear();
+                txtFldFat.setDisable(true);
+            }
+            if (menuFormula.getValue().equals(FORMULA_KETCH)) {
+                txtFldFat.setDisable(false);
             }
         });
 
-        btnCancel.setOnAction(event -> {
-            clearAllTextFields();
-        });
+        btnCancel.setOnAction(event ->  clearAllTextFields());
         btnCalc.setOnAction(event -> {
-            if (shakeTextFields()) ;
-            else conditionMenuFormulaBMRCoA();
-        });
+            try {
+                if (shakeTextFields());
+                else conditionMenuFormulaBMRCoA();
+            }catch (NumberFormatException e){} });
 
         initTableIMBData();
         setTableIMBValueColumns();
@@ -239,9 +215,7 @@ public class CalcCalControl implements Initializable {
         //заполняем таблицу данными
         tableViewIMB.setItems(tableImbData);
 
-        btnCancelImb.setOnAction(event -> {
-            clearImbTextFields();
-        });
+        btnCancelImb.setOnAction(event -> clearImbTextFields());
         btnCalcImb.setOnAction(event -> {
             if (shakeTextImbFields()) ;
             else resultImb();
@@ -345,26 +319,31 @@ public class CalcCalControl implements Initializable {
         Shaker fldFat = new Shaker(txtFldFat);
         if (txtFldWeight.getText() == null || txtFldWeight.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldWeight.getText()) <= 0) {
+            txtFldWeight.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
             fldWeight.playAnim();
             clearSupportTextFields();
-        }
+        }else txtFldWeight.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
         if (txtFldHeight.getText() == null || txtFldHeight.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldHeight.getText()) <= 0) {
+            txtFldHeight.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
             fldHeight.playAnim();
             clearSupportTextFields();
-        }
+        }else txtFldHeight.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
         if (txtFldAge.getText() == null || txtFldAge.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldAge.getText()) <= 0) {
+            txtFldAge.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
             fldAge.playAnim();
             clearSupportTextFields();
+        }else txtFldAge.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
+        if(menuFormula.getValue().equals(FORMULA_KETCH)){
+            if (txtFldFat.getText() == null || txtFldFat.getText().trim().isEmpty()
+                    || Double.parseDouble(txtFldFat.getText()) <= 0) {
+                txtFldFat.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
+                fldFat.playAnim();
+                clearSupportTextFields();
+            }else txtFldFat.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
         }
-        if (txtFldFat.isDisable()) {
 
-        } else if (txtFldFat.getText() == null || txtFldFat.getText().trim().isEmpty()
-                || Double.parseDouble(txtFldFat.getText()) <= 0) {
-            fldFat.playAnim();
-            clearSupportTextFields();
-        }
         return false;
     }
 
@@ -407,7 +386,6 @@ public class CalcCalControl implements Initializable {
     private boolean shakeTextImbFields() {
         Shaker fldWeight = new Shaker(txtFldWeightImb);
         Shaker fldHeight = new Shaker(txtFldHeightImb);
-
         if (txtFldWeightImb.getText() == null || txtFldWeightImb.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldWeightImb.getText()) <= 0) {
             txtFldWeightImb.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
@@ -421,7 +399,6 @@ public class CalcCalControl implements Initializable {
             fldHeight.playAnim();
             txtFldResultImb.clear();
         } else txtFldHeightImb.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
-
         return false;
     }
 

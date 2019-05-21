@@ -28,10 +28,10 @@ public class SQLiteClient {
         }
     }
 
-    public static void executeDB(String query, ObservableList<Product> obsList){
+    public static void executeTableFromDB (String table,  ObservableList<Product> obsList){
         try {
             connectDB();
-            resultSet = connection.createStatement().executeQuery(query);
+            resultSet = connection.createStatement().executeQuery("SELECT * FROM " + table);
             while (resultSet.next()){
                 Product product = new Product();
                 product.name.set(resultSet.getString(Const.TABLE_NAME));
@@ -42,10 +42,17 @@ public class SQLiteClient {
                 obsList.add(product);
             }
             System.out.println("-----------------=Таблица выведена=-----------------");
-            closeDB();
         }catch (SQLException | ClassNotFoundException e){
             e.getStackTrace();
         }
+    }
+
+    public static void addLineToTableDB(){
+//        resultSet=connection.createStatement().addBatch();
+    }
+
+    public static void removeLineFromTableDB () {
+
     }
 }
 

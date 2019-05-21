@@ -39,8 +39,8 @@ public class ProductCalControl implements Initializable {
         tableColCal.setCellValueFactory(new PropertyValueFactory<>("calories"));
         tableViewProducts.setItems(tableProductData);
 
-        SQLiteClient.executeDB(Const.REQUEST_BURGER_KING,tableProductData);
-        SQLiteClient.executeDB(Const.REQUEST_KFC,tableProductData);
+        SQLiteClient.executeTableFromDB(Const.BURGER_KING,tableProductData);
+        SQLiteClient.executeTableFromDB(Const.KFC,tableProductData);
 
         searchData();
     }
@@ -48,18 +48,13 @@ public class ProductCalControl implements Initializable {
     private void searchData(){
         FilteredList<Product> filteredData = new FilteredList<>(tableProductData, p -> true);
         SortedList<Product> sortedData = new SortedList<>(filteredData);
-        txtFldSearch.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(product -> {
-                if(newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                    String lowerCaseFilter = newValue.toLowerCase();
-                if(String.valueOf(product.getName()).toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
-        });
+        txtFldSearch.textProperty().addListener((observable, oldValue, newValue) -> filteredData.setPredicate(product -> {
+            if(newValue == null || newValue.isEmpty()) {
+                return true;
+            }
+                String lowerCaseFilter = newValue.toLowerCase();
+            return String.valueOf(product.getName()).toLowerCase().contains(lowerCaseFilter);
+        }));
         sortedData.comparatorProperty().bind(tableViewProducts.comparatorProperty());
         tableViewProducts.setItems(sortedData);
     }
