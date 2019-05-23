@@ -19,8 +19,11 @@ import javafx.stage.Stage;
 import pojo.TableIMB;
 import javafx.scene.control.TableColumn;
 import sample.Const;
+import sample.SQLiteClient;
+
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CalcCalControl implements Initializable {

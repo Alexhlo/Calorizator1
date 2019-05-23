@@ -25,8 +25,8 @@ public class Const {
     private static int weight;
 
     public static final String ALL_PRODUCT_WINDOW = "/views/allProductWindow.fxml";
-    public static final String BURGER_KING_WINDOW = "/views/burgerKingWindow.fxml";
-    public static final String KFC_WINDOW = "/views/kfcWindow.fxml";
+    public static final String BURGER_KING_WINDOW = "/views/products/burgerKingWindow.fxml";
+    public static final String KFC_WINDOW = "/views/products/kfcWindow.fxml";
 
     public static final String ALCOHOL = "alcohol";
     public static final String BABY_FOOD = "baby_food";

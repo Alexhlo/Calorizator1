@@ -1,6 +1,8 @@
 package sample;
 
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import pojo.Product;
 
@@ -20,7 +22,7 @@ public class SQLiteClient {
         System.out.println("Database connection has been done.");
     }
 
-    private static void closeDB() throws NullPointerException, SQLException {
+    public static void closeDB() throws NullPointerException, SQLException {
         statement.close();
         resultSet.close();
         connection.close();
@@ -48,29 +50,33 @@ public class SQLiteClient {
         }
     }
 
-    public static void addLineToTableDB(String table, TextField name, TextField protein, TextField fat, TextField carb, TextField cal){
+    public static void addLineToTableDB(Button btn, String table, TextField name, TextField protein, TextField fat, TextField carb, TextField cal){
         String z = ",";
-        try {
-            statement.addBatch(
-                    "INSERT INTO " + table +" (name, protein, fat, carb, cal, weight) VALUES (" + name.getText() + z + protein.getText() + z + fat.getText() + z + carb.getText()+ z + cal.getText() + ", 100)");
-            statement.executeBatch();
-            name.clear();
-            protein.clear();
-            fat.clear();
-            carb.clear();
-            cal.clear();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        btn.setOnAction(event -> {
+            try {
+                statement.addBatch(
+                        "INSERT INTO " + table +" (name, protein, fat, carb, cal, weight) VALUES (" + name.getText() + z + protein.getText() + z + fat.getText() + z + carb.getText()+ z + cal.getText() + ", 100)");
+                statement.executeBatch();
+                name.clear();
+                protein.clear();
+                fat.clear();
+                carb.clear();
+                cal.clear();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }});
     }
 
-    public static void removeLineFromTableDB (String table, int id) {
-        try {
-            PreparedStatement prepStatement = connection.prepareStatement("DELETE FROM " + table + " WHERE id = " + id );
-            prepStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public static void removeLineFromTableDB (MenuItem delete, String table, TextField name) {
+        delete.setOnAction(event -> {
+            try {
+                PreparedStatement prepStatement = connection.prepareStatement("DELETE FROM " + table + " WHERE name = " + name.getText() );
+                prepStatement.executeUpdate();
+                name.clear();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }});
+
     }
 
     public static void editLineFromTableDB (String table, String name, double protein, double fat, double carb, int cal, int weight){
