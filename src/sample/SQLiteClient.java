@@ -79,8 +79,14 @@ public class SQLiteClient {
 
     }
 
-    public static void editLineFromTableDB (String table, String name, double protein, double fat, double carb, int cal, int weight){
-
+    public static void editLineFromTableDB (MenuItem edit ,String table, String name, double protein, double fat, double carb, int cal, int weight){
+        edit.setOnAction(event -> {
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + table + " WHERE ");
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        });
     }
 }
 

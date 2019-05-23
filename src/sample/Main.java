@@ -10,9 +10,7 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
-
 //    https://o7planning.org/ru/10973/java-basic
-
     @Override
     public void start(Stage caloStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../views/calcWindow.fxml"));
@@ -21,12 +19,7 @@ public class Main extends Application {
         caloStage.setScene(calorizator);
         caloStage.setResizable(false);
         caloStage.show();
-
-        caloStage.setOnCloseRequest(event -> {
-            Platform.exit();
-            System.exit(0);
-
-        });
+        caloStage.setOnCloseRequest(event -> { Platform.exit();System.exit(0);});
     }
 
     public static void main(String[] args) {
