@@ -6,7 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -23,6 +22,11 @@ public class ProductCalControl implements Initializable {
 //    @FXML private AnchorPane productPane;
     @FXML private Button btnAdd;
     @FXML private TextField txtFldSearch;
+    @FXML private TextField txtFldAddName;
+    @FXML private TextField txtFldAddProtein;
+    @FXML private TextField txtFldAddFat;
+    @FXML private TextField txtFldAddCarb;
+    @FXML private TextField txtFldAddCal;
     @FXML public TableColumn<Product, Integer> tableColCal;
     @FXML public TableColumn<Product, Double> tabColProtein;
     @FXML public TableColumn<Product, Double> tableColCarb;
@@ -38,6 +42,10 @@ public class ProductCalControl implements Initializable {
     public void initialize(URL location, ResourceBundle resources)  {
 
         tabColName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tabColName.setCellFactory(TextFieldTableCell.forTableColumn());
+        tabColName.setOnEditCommit((TableColumn.CellEditEvent<Product, String> event) ->
+                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setName(event.getNewValue()));
+
         tabColProtein.setCellValueFactory(new PropertyValueFactory<>("protein"));
         tableColFat.setCellValueFactory(new PropertyValueFactory<>("fats"));
         tableColCarb.setCellValueFactory(new PropertyValueFactory<>("carbs"));
@@ -45,11 +53,10 @@ public class ProductCalControl implements Initializable {
         tableViewProducts.setItems(tableProductData);
 
         SQLiteClient.executeTableFromDB(Const.BURGER_KING,tableProductData);
-//        SQLiteClient.executeTableFromDB(Const.KFC,tableProductData);
+
 
         btnAdd.setOnAction(event -> {
-            SQLiteClient.addLineToTableDB(Const.BURGER_KING,"'govno4'",5,5,5,5);
-            SQLiteClient.removeLineFromTableDB(Const.BURGER_KING,38);
+            SQLiteClient.addLineToTableDB(Const.BURGER_KING,txtFldAddName,txtFldAddProtein, txtFldAddFat, txtFldAddCarb, txtFldAddCal);
         });
 
         searchData();
@@ -68,5 +75,7 @@ public class ProductCalControl implements Initializable {
         sortedData.comparatorProperty().bind(tableViewProducts.comparatorProperty());
         tableViewProducts.setItems(sortedData);
     }
+
+
 }
 

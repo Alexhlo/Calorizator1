@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.collections.ObservableList;
+import javafx.scene.control.TextField;
 import pojo.Product;
 
 import java.sql.*;
@@ -47,12 +48,17 @@ public class SQLiteClient {
         }
     }
 
-    public static void addLineToTableDB(String table, String name, double protein, double fat, double carb, int cal){
+    public static void addLineToTableDB(String table, TextField name, TextField protein, TextField fat, TextField carb, TextField cal){
         String z = ",";
         try {
             statement.addBatch(
-                    "INSERT INTO " + table +" (name, protein, fat, carb, cal, weight) VALUES (" + name + z + protein + z + fat + z + carb + z + cal +", 100)");
+                    "INSERT INTO " + table +" (name, protein, fat, carb, cal, weight) VALUES (" + name.getText() + z + protein.getText() + z + fat.getText() + z + carb.getText()+ z + cal.getText() + ", 100)");
             statement.executeBatch();
+            name.clear();
+            protein.clear();
+            fat.clear();
+            carb.clear();
+            cal.clear();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -65,6 +71,10 @@ public class SQLiteClient {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void editLineFromTableDB (String table, String name, double protein, double fat, double carb, int cal, int weight){
+
     }
 }
 
