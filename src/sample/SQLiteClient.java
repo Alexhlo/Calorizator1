@@ -72,7 +72,7 @@ public class SQLiteClient {
                 try {
                     TablePosition tabPos = tableView.getFocusModel().getFocusedCell();
                     PreparedStatement ps = connection.prepareStatement(
-                            "DELETE FROM " + table + " WHERE id = " + tabPos.getRow() + 1 );
+                            "DELETE FROM " + table + " WHERE id = " + tabPos.getRow());
                     ps.executeUpdate();
                     System.out.println(tabPos.getRow() + 1);
                 } catch (SQLException e) {

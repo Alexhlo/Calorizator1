@@ -43,13 +43,18 @@ public class ProductCalControl implements Initializable {
 //    https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/table-view.htm#CJAGAAEE%23CJAGAAEE
 //    http://qaru.site/questions/1548323/javafx-table-cell-editing
 //    https://code.makery.ch/ru/library/javafx-tutorial/
+//    http://qaru.site/questions/13757619/right-click-event-and-double-click-event-on-tableview-javafx
 
     @Override
     public void initialize(URL location, ResourceBundle resources)  {
+        tableViewProducts.getSelectionModel().setCellSelectionEnabled(true);
+        tableViewProducts.setEditable(true);
         tabColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tabColName.setCellFactory(TextFieldTableCell.forTableColumn());
         tabColName.setOnEditCommit((TableColumn.CellEditEvent<Product, String> event) ->
                 (event.getTableView().getItems().get(event.getTablePosition().getRow())).setName(event.getNewValue()));
+
+
         tabColProtein.setCellValueFactory(new PropertyValueFactory<>("protein"));
         tableColFat.setCellValueFactory(new PropertyValueFactory<>("fats"));
         tableColCarb.setCellValueFactory(new PropertyValueFactory<>("carbs"));
