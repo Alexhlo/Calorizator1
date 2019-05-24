@@ -6,13 +6,13 @@ public class Const {
     public static final double WEIGHT_LOSS = 300;
 
     public static final String TABLE_ID = "id";
-    static final String TABLE_NAME = "name";
-    static final String TABLE_PROTEIN = "protein";
-    static final String TABLE_FATS = "fat";
-    static final String TABLE_CARBS = "carb";
-    static final String TABLE_CALORIES = "cal";
+    public static final String TABLE_NAME = "name";
+    public static final String TABLE_PROTEIN = "protein";
+    public static final String TABLE_FATS = "fat";
+    public static final String TABLE_CARBS = "carb";
+    public static final String TABLE_CALORIES = "cal";
     public static final String TABLE_WEIGHT = "weight";
-    public static final String FULL_TABLE_VALUES =" (name,protein,fat,carb,cal,weight) ";
+    public static final String FULL_TABLE_VALUES =" (name,protein,fat,carb,cal) ";
 
     private static final String comma = ", ";
     private static String table;

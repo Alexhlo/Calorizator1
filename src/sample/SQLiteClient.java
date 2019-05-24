@@ -1,9 +1,9 @@
 package sample;
 
 import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.Cursor;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import pojo.Product;
 
 import java.sql.*;
@@ -14,7 +14,7 @@ public class SQLiteClient {
     private static Statement statement = null;
     private static ResultSet resultSet = null;
 
-    private static void connectDB() throws ClassNotFoundException, SQLException {
+    public static void connectDB() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
         String host = "jdbc:sqlite:Calorifier.db";
         connection = DriverManager.getConnection(host);
@@ -55,7 +55,7 @@ public class SQLiteClient {
         btn.setOnAction(event -> {
             try {
                 statement.addBatch(
-                        "INSERT INTO " + table +" (name, protein, fat, carb, cal, weight) VALUES (" + name.getText() + z + protein.getText() + z + fat.getText() + z + carb.getText()+ z + cal.getText() + ", 100)");
+                        "INSERT INTO " + table + " (name, protein, fat, carb, cal, weight) VALUES (" + name.getText() + z + protein.getText() + z + fat.getText() + z + carb.getText()+ z + cal.getText() + ", 100)");
                 statement.executeBatch();
                 name.clear();
                 protein.clear();
@@ -67,22 +67,26 @@ public class SQLiteClient {
             }});
     }
 
-    public static void removeLineFromTableDB (MenuItem delete, String table, TextField name) {
+    public static void removeLineFromTableDB (MenuItem delete,TableView tableView ,String table) {
         delete.setOnAction(event -> {
-            try {
-                PreparedStatement prepStatement = connection.prepareStatement("DELETE FROM " + table + " WHERE name = " + name.getText() );
-                prepStatement.executeUpdate();
-                name.clear();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }});
-
+                try {
+                    TablePosition tabPos = tableView.getFocusModel().getFocusedCell();
+                    PreparedStatement ps = connection.prepareStatement(
+                            "DELETE FROM " + table + " WHERE id = " + tabPos.getRow() + 1 );
+                    ps.executeUpdate();
+                    System.out.println(tabPos.getRow() + 1);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } });
     }
 
-    public static void editLineFromTableDB (MenuItem edit ,String table, String name, double protein, double fat, double carb, int cal, int weight){
+    public static void editLineFromTableDB (MenuItem edit ,String table, TableColumn tabColName, TextField tablEditeName){
         edit.setOnAction(event -> {
+            String z = ",";
             try {
-                PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + table + " WHERE ");
+                PreparedStatement ps = connection.prepareStatement(
+                        "UPDATE " + table + " SET name = " + tablEditeName  + " WHERE name = " + tabColName.getText());
+                ps.executeUpdate();
             }catch (SQLException e){
                 e.printStackTrace();
             }

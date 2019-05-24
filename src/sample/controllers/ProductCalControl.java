@@ -39,8 +39,10 @@ public class ProductCalControl implements Initializable {
     @FXML public  TableView<Product> tableViewProducts;
 
     private ObservableList<Product> tableProductData = FXCollections.observableArrayList();
+
 //    https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/table-view.htm#CJAGAAEE%23CJAGAAEE
 //    http://qaru.site/questions/1548323/javafx-table-cell-editing
+//    https://code.makery.ch/ru/library/javafx-tutorial/
 
     @Override
     public void initialize(URL location, ResourceBundle resources)  {
@@ -48,7 +50,6 @@ public class ProductCalControl implements Initializable {
         tabColName.setCellFactory(TextFieldTableCell.forTableColumn());
         tabColName.setOnEditCommit((TableColumn.CellEditEvent<Product, String> event) ->
                 (event.getTableView().getItems().get(event.getTablePosition().getRow())).setName(event.getNewValue()));
-
         tabColProtein.setCellValueFactory(new PropertyValueFactory<>("protein"));
         tableColFat.setCellValueFactory(new PropertyValueFactory<>("fats"));
         tableColCarb.setCellValueFactory(new PropertyValueFactory<>("carbs"));
@@ -57,7 +58,6 @@ public class ProductCalControl implements Initializable {
 
         SQLiteClient.executeTableFromDB(Const.BURGER_KING,tableProductData);
         SQLiteClient.addLineToTableDB(btnAdd,Const.BURGER_KING,txtFldAddName,txtFldAddProtein,txtFldAddFat,txtFldAddCarb,txtFldAddCal);
-
         searchData();
         popupAction();
     }
@@ -79,7 +79,17 @@ public class ProductCalControl implements Initializable {
     private void popupAction (){
         PopupMenu popupMenu = new PopupMenu();
         popupMenu.popupProductMenu(tableViewProducts);
-        SQLiteClient.removeLineFromTableDB(popupMenu.delRow ,Const.BURGER_KING,txtFldAddName);
+        SQLiteClient.removeLineFromTableDB(popupMenu.delRow ,tableViewProducts ,Const.BURGER_KING);
+        SQLiteClient.editLineFromTableDB(popupMenu.editRow,Const.BURGER_KING, tabColName, txtFldAddName);
+        popupMenu.refresh.setOnAction(event -> {
+            System.out.println(tabColName.getText());
+            refreshTable();
+        });
+    }
+
+    private void refreshTable(){
+        tableProductData.clear();
+        SQLiteClient.executeTableFromDB(Const.BURGER_KING,tableProductData);
     }
 }
 
