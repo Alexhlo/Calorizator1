@@ -70,11 +70,12 @@ public class SQLiteClient {
     public static void removeLineFromTableDB (MenuItem delete,TableView tableView ,String table) {
         delete.setOnAction(event -> {
                 try {
-                    TablePosition tabPos = tableView.getFocusModel().getFocusedCell();
+//                    TablePosition tabPos = tableView.getFocusModel().getFocusedCell();
+                    int tabPos = tableView.getSelectionModel().getFocusedIndex();
                     PreparedStatement ps = connection.prepareStatement(
-                            "DELETE FROM " + table + " WHERE id = " + tabPos.getRow());
+                            "DELETE FROM " + table + " WHERE id = " + tabPos);
                     ps.executeUpdate();
-                    System.out.println(tabPos.getRow() + 1);
+                    System.out.println(tabPos + (tabPos * 2));
                 } catch (SQLException e) {
                     e.printStackTrace();
                 } });
