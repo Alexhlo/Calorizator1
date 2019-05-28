@@ -1,9 +1,7 @@
 package sample;
 
 import javafx.collections.ObservableList;
-import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import pojo.Product;
 
 import java.sql.*;
@@ -37,6 +35,7 @@ public class SQLiteClient {
             resultSet = connection.createStatement().executeQuery("SELECT * FROM " + table);
             while (resultSet.next()){
                 Product product = new Product();
+                product.id.set(resultSet.getInt(Const.TABLE_ID));
                 product.name.set(resultSet.getString(Const.TABLE_NAME));
                 product.protein.set(resultSet.getDouble(Const.TABLE_PROTEIN));
                 product.fats.set(resultSet.getDouble(Const.TABLE_FATS));
@@ -50,12 +49,12 @@ public class SQLiteClient {
         }
     }
 
-    public static void addLineToTableDB(Button btn, String table, TextField name, TextField protein, TextField fat, TextField carb, TextField cal){
+    public static void addLineToTableDB(String table, TextField name, TextField protein, TextField fat, TextField carb, TextField cal){
         String z = ",";
-        btn.setOnAction(event -> {
             try {
                 statement.addBatch(
-                        "INSERT INTO " + table + " (name, protein, fat, carb, cal, weight) VALUES (" + name.getText() + z + protein.getText() + z + fat.getText() + z + carb.getText()+ z + cal.getText() + ", 100)");
+                        "INSERT INTO " + table + " (name, protein, fat, carb, cal, weight) VALUES ("
+                                + name.getText() + z + protein.getText() + z + fat.getText() + z + carb.getText()+ z + cal.getText() + ", 100)");
                 statement.executeBatch();
                 name.clear();
                 protein.clear();
@@ -64,34 +63,29 @@ public class SQLiteClient {
                 cal.clear();
             } catch (SQLException e) {
                 e.printStackTrace();
-            }});
-    }
-
-    public static void removeLineFromTableDB (MenuItem delete,TableView tableView ,String table) {
-        delete.setOnAction(event -> {
-                try {
-//                    TablePosition tabPos = tableView.getFocusModel().getFocusedCell();
-                    int tabPos = tableView.getSelectionModel().getFocusedIndex();
-                    PreparedStatement ps = connection.prepareStatement(
-                            "DELETE FROM " + table + " WHERE id = " + tabPos);
-                    ps.executeUpdate();
-                    System.out.println(tabPos + (tabPos * 2));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } });
-    }
-
-    public static void editLineFromTableDB (MenuItem edit ,String table, TableColumn tabColName, TextField tablEditeName){
-        edit.setOnAction(event -> {
-            String z = ",";
-            try {
-                PreparedStatement ps = connection.prepareStatement(
-                        "UPDATE " + table + " SET name = " + tablEditeName  + " WHERE name = " + tabColName.getText());
-                ps.executeUpdate();
-            }catch (SQLException e){
-                e.printStackTrace();
             }
-        });
+    }
+
+    public static void removeLineFromTableDB (TableView<Product> tableView ,String table) {
+        try {
+            int selectedIndex = tableView.getSelectionModel().getSelectedItem().getId();
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM " + table + " WHERE id = " + selectedIndex );
+            ps.executeUpdate();
+        } catch (Exception e) {
+                    e.printStackTrace();
+        }
+    }
+
+    public static void editLineFromTableDB (String table, TableView<Product> tableView, TableColumn<Product, String> tableColumnName){
+        try {
+            String selectedName = tableView.getSelectionModel().getSelectedItem().getName();
+            PreparedStatement ps = connection.prepareStatement(
+                    "UPDATE " + table + " SET name = " + tableColumnName.getOnEditCommit()  + " WHERE name = " + selectedName);
+            ps.executeUpdate();
+            System.out.println(selectedName + " # изменено ");
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 }
 

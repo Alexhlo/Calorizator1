@@ -7,12 +7,16 @@ import javafx.beans.property.SimpleStringProperty;
 import java.sql.DriverManager;
 
 public class Product {
-
+    public SimpleIntegerProperty id = new SimpleIntegerProperty();
     public SimpleStringProperty name = new SimpleStringProperty();
     public SimpleDoubleProperty protein = new SimpleDoubleProperty();
     public SimpleDoubleProperty fats = new SimpleDoubleProperty();
     public SimpleDoubleProperty carbs = new SimpleDoubleProperty();
     public SimpleIntegerProperty calories = new SimpleIntegerProperty();
+
+    public int getId() { return id.get(); }
+    public SimpleIntegerProperty idProperty() { return id; }
+    public void setId(int id) { this.calories.set(id); }
 
     public String getName() { return name.get(); }
     public SimpleStringProperty nameProperty() { return name; }

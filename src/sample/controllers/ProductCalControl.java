@@ -33,6 +33,7 @@ public class ProductCalControl implements Initializable {
     @FXML private TextField txtFldAddCarb;
     @FXML private TextField txtFldAddCal;
     @FXML public TableColumn<Product, Integer> tableColCal;
+    @FXML public TableColumn<Product, Integer> tableColId;
     @FXML public TableColumn<Product, Double> tabColProtein;
     @FXML public TableColumn<Product, Double> tableColCarb;
     @FXML public TableColumn<Product, Double> tableColFat;
@@ -48,8 +49,22 @@ public class ProductCalControl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources)  {
+        setUpTableColumns();
+        SQLiteClient.executeTableFromDB(Const.BURGER_KING,tableProductData);
+
+        searchData();
+        allActions();
+    }
+
+    private void setUpTableColumns(){
         tableViewProducts.getSelectionModel().setCellSelectionEnabled(true);
         tableViewProducts.setEditable(true);
+
+        tableColId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tableColId.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        tableColId.setOnEditCommit((TableColumn.CellEditEvent<Product, Integer> event) ->
+                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setId(event.getNewValue()));
+        tableColId.setEditable(true);
 
         tabColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tabColName.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -82,11 +97,6 @@ public class ProductCalControl implements Initializable {
         tableColCal.setEditable(true);
 
         tableViewProducts.setItems(tableProductData);
-
-        SQLiteClient.executeTableFromDB(Const.BURGER_KING,tableProductData);
-        SQLiteClient.addLineToTableDB(btnAdd,Const.BURGER_KING,txtFldAddName,txtFldAddProtein,txtFldAddFat,txtFldAddCarb,txtFldAddCal);
-        searchData();
-        popupAction();
     }
 
     private void searchData(){
@@ -103,10 +113,20 @@ public class ProductCalControl implements Initializable {
         tableViewProducts.setItems(sortedData);
     }
 
-    private void popupAction (){
+    private void allActions(){
         PopupMenu popupMenu = new PopupMenu();
         popupMenu.popupProductMenu(tableViewProducts);
-        SQLiteClient.removeLineFromTableDB(popupMenu.delRow ,tableViewProducts ,Const.BURGER_KING);
+        btnAdd.setOnAction(event -> {
+            SQLiteClient.addLineToTableDB(Const.BURGER_KING,txtFldAddName,txtFldAddProtein,txtFldAddFat,txtFldAddCarb,txtFldAddCal);
+            refreshTable();
+        });
+        popupMenu.delRow.setOnAction(event -> {
+            SQLiteClient.removeLineFromTableDB(tableViewProducts ,Const.BURGER_KING);
+            refreshTable();
+        });
+        popupMenu.editRow.setOnAction(event -> {
+            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, tabColName);
+        });
         popupMenu.refresh.setOnAction(event -> refreshTable());
     }
 

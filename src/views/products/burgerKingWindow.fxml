@@ -11,7 +11,8 @@
    <children>
       <TableView fx:id="tableViewProducts" editable="true" layoutX="200.0" layoutY="131.0" prefHeight="520.0" prefWidth="600.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
         <columns>
-          <TableColumn fx:id="tabColName" maxWidth="350.0" minWidth="100.0" prefWidth="270.0" text="Наименование" />
+            <TableColumn fx:id="tableColId" prefWidth="24.0" text="Id" />
+          <TableColumn fx:id="tabColName" maxWidth="350.0" minWidth="100.0" prefWidth="321.0" text="Наименование" />
             <TableColumn fx:id="tabColProtein" maxWidth="150.0" minWidth="50.0" prefWidth="-1.0" text="Белки, г" />
             <TableColumn fx:id="tableColFat" maxWidth="150.0" minWidth="50.0" prefWidth="-1.0" text="Жиры, г" />
             <TableColumn fx:id="tableColCarb" maxWidth="150.0" minWidth="50.0" prefWidth="-1.0" text="Углеводы, г" />
