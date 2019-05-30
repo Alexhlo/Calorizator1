@@ -67,7 +67,7 @@ public class ProductCalControl implements Initializable {
         tabColName.setOnEditCommit(event -> {
             Product product = event.getRowValue();
             product.setName(event.getNewValue());
-            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
+            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue(), event.getNewValue(),event.getNewValue(), event.getNewValue(), event.getNewValue());
             refreshTable();
         });
 

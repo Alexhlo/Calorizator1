@@ -80,15 +80,19 @@ public class SQLiteClient {
         }
     }
 
-    public static void editLineFromTableDB (String table, TableView<Product> tableView, String newValue){
+    public static void editLineFromTableDB (String table, TableView<Product> tableView, String newNameValue, double newProtValue, double newFatValue, double newCarbValue, int newCalValue){
         try {
             int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "UPDATE " + table + " SET name = ? WHERE id = " + selectedCell);
+                    "UPDATE " + table + " SET name = ?, protein = ?, fat = ?, carb = ?, cal = ?  WHERE id = " + selectedCell);
 
-            preparedStatement.setString(1,newValue);
+            preparedStatement.setString(1,newNameValue);
+            preparedStatement.setDouble(2,newProtValue);
+            preparedStatement.setDouble(3,newFatValue);
+            preparedStatement.setDouble(4,newCarbValue);
+            preparedStatement.setInt(5,newCalValue);
             preparedStatement.executeUpdate();
-            System.out.println("id = " + selectedCell + " изменено на " + newValue);
+            System.out.println("id = " + selectedCell + " изменено на " + newNameValue);
         }catch (SQLException e){
             System.out.println("Error");
             e.printStackTrace(System.err);
