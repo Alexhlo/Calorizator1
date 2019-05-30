@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import pojo.Product;
 
@@ -50,41 +51,47 @@ public class SQLiteClient {
     }
 
     public static void addLineToTableDB(String table, TextField name, TextField protein, TextField fat, TextField carb, TextField cal){
-        String z = ",";
-            try {
-                statement.addBatch(
-                        "INSERT INTO " + table + " (name, protein, fat, carb, cal, weight) VALUES ("
-                                + name.getText() + z + protein.getText() + z + fat.getText() + z + carb.getText()+ z + cal.getText() + ", 100)");
-                statement.executeBatch();
-                name.clear();
-                protein.clear();
-                fat.clear();
-                carb.clear();
-                cal.clear();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "INSERT INTO " + table + " (name,protein,fat,carb,cal,weight) VALUES (?, ?, ?, ?, ?, 100)");
+            preparedStatement.setString(1,name.getText());
+            preparedStatement.setString(2,protein.getText());
+            preparedStatement.setString(3,fat.getText());
+            preparedStatement.setString(4,carb.getText());
+            preparedStatement.setString(5,cal.getText());
+            preparedStatement.executeUpdate();
+            name.clear();
+            protein.clear();
+            fat.clear();
+            carb.clear();
+            cal.clear();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void removeLineFromTableDB (TableView<Product> tableView ,String table) {
         try {
             int selectedIndex = tableView.getSelectionModel().getSelectedItem().getId();
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM " + table + " WHERE id = " + selectedIndex );
-            ps.executeUpdate();
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + table + " WHERE id = " + selectedIndex );
+            preparedStatement.executeUpdate();
         } catch (Exception e) {
                     e.printStackTrace();
         }
     }
 
-    public static void editLineFromTableDB (String table, TableView<Product> tableView, TableColumn<Product, String> tableColumnName){
+    public static void editLineFromTableDB (String table, TableView<Product> tableView, String newValue){
         try {
-            String selectedName = tableView.getSelectionModel().getSelectedItem().getName();
-            PreparedStatement ps = connection.prepareStatement(
-                    "UPDATE " + table + " SET name = " + tableColumnName.getOnEditCommit()  + " WHERE name = " + selectedName);
-            ps.executeUpdate();
-            System.out.println(selectedName + " # изменено ");
+            int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE " + table + " SET name = ? WHERE id = " + selectedCell);
+
+            preparedStatement.setString(1,newValue);
+            preparedStatement.executeUpdate();
+            System.out.println("id = " + selectedCell + " изменено на " + newValue);
         }catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Error");
+            e.printStackTrace(System.err);
         }
     }
 }

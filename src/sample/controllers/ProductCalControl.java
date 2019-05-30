@@ -61,40 +61,60 @@ public class ProductCalControl implements Initializable {
         tableViewProducts.setEditable(true);
 
         tableColId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tableColId.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        tableColId.setOnEditCommit((TableColumn.CellEditEvent<Product, Integer> event) ->
-                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setId(event.getNewValue()));
-        tableColId.setEditable(true);
 
         tabColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tabColName.setCellFactory(TextFieldTableCell.forTableColumn());
-        tabColName.setOnEditCommit((TableColumn.CellEditEvent<Product, String> event) ->
-                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setName(event.getNewValue()));
-        tabColName.setEditable(true);
+        tabColName.setOnEditCommit(event -> {
+            Product product = event.getRowValue();
+            product.setName(event.getNewValue());
+            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
+            refreshTable();
+        });
+
 
         tabColProtein.setCellValueFactory(new PropertyValueFactory<>("protein"));
         tabColProtein.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        tabColProtein.setOnEditCommit((TableColumn.CellEditEvent<Product, Double> event) ->
-                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setProtein(event.getNewValue()));
-        tabColProtein.setEditable(true);
+//        tabColProtein.setOnEditCommit((TableColumn.CellEditEvent<Product, Double> event) ->
+//                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setProtein(event.getNewValue()));
+//        tabColProtein.setOnEditCommit(event -> {
+//            Product product = event.getRowValue();
+//            product.setName(event.getNewValue());
+//            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
+//            refreshTable();
+//        });
 
         tableColFat.setCellValueFactory(new PropertyValueFactory<>("fats"));
         tableColFat.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        tableColFat.setOnEditCommit((TableColumn.CellEditEvent<Product, Double> event) ->
-                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setFats(event.getNewValue()));
-        tabColName.setEditable(true);
+//        tableColFat.setOnEditCommit((TableColumn.CellEditEvent<Product, Double> event) ->
+//                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setFats(event.getNewValue()));
+//        tableColFat.setOnEditCommit(event -> {
+//            Product product = event.getRowValue();
+//            product.setName(event.getNewValue());
+//            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
+//            refreshTable();
+//        });
 
         tableColCarb.setCellValueFactory(new PropertyValueFactory<>("carbs"));
         tableColCarb.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        tableColCarb.setOnEditCommit((TableColumn.CellEditEvent<Product, Double> event) ->
-                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setCarbs(event.getNewValue()));
-        tableColCarb.setEditable(true);
+//        tableColCarb.setOnEditCommit((TableColumn.CellEditEvent<Product, Double> event) ->
+//                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setCarbs(event.getNewValue()));
+//        tableColCarb.setOnEditCommit(event -> {
+//            Product product = event.getRowValue();
+//            product.setName(event.getNewValue());
+//            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
+//            refreshTable();
+//        });
 
         tableColCal.setCellValueFactory(new PropertyValueFactory<>("calories"));
         tableColCal.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        tableColCal.setOnEditCommit((TableColumn.CellEditEvent<Product, Integer> event) ->
-                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setCalories(event.getNewValue()));
-        tableColCal.setEditable(true);
+//        tableColCal.setOnEditCommit((TableColumn.CellEditEvent<Product, Integer> event) ->
+//                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setCalories(event.getNewValue()));
+//        tableColCal.setOnEditCommit(event -> {
+//            Product product = event.getRowValue();
+//            product.setName(event.getNewValue());
+//            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
+//            refreshTable();
+//        });
 
         tableViewProducts.setItems(tableProductData);
     }
@@ -124,9 +144,7 @@ public class ProductCalControl implements Initializable {
             SQLiteClient.removeLineFromTableDB(tableViewProducts ,Const.BURGER_KING);
             refreshTable();
         });
-        popupMenu.editRow.setOnAction(event -> {
-            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, tabColName);
-        });
+
         popupMenu.refresh.setOnAction(event -> refreshTable());
     }
 
