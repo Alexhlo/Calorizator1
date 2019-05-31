@@ -1,7 +1,9 @@
 package sample.controllers.productControllers;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import animations.Shaker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -13,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import pojo.Product;
@@ -24,7 +27,7 @@ public class BurgerKingController implements Initializable {
 
 //    @FXML private ResourceBundle resources;
 //    @FXML private URL location;
-//    @FXML private AnchorPane productPane;
+    @FXML private AnchorPane productPane;
     @FXML private Button btnAdd;
     @FXML private TextField txtFldSearch;
     @FXML private TextField txtFldAddName;
@@ -45,8 +48,8 @@ public class BurgerKingController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources)  {
         setUpTableColumns();
-        SQLiteClient.executeTableFromDB(Const.BURGER_KING,tableProductData);
 
+        SQLiteClient.executeTableFromDB(Const.BURGER_KING,tableProductData);
         searchData();
         allActions();
     }
@@ -120,25 +123,53 @@ public class BurgerKingController implements Initializable {
         tableViewProducts.setItems(sortedData);
     }
 
-    private void allActions(){
+    private void allActions() {
         PopupMenu popupMenu = new PopupMenu();
         popupMenu.popupProductMenu(tableViewProducts);
         btnAdd.setOnAction(event -> {
-            SQLiteClient.addLineToTableDB(Const.BURGER_KING,txtFldAddName,txtFldAddProtein,txtFldAddFat,txtFldAddCarb,txtFldAddCal);
-            refreshTable();
-        });
+                if (!shakeAddTextFields()) {
+                    if(txtFldAddName.getText().isEmpty() || txtFldAddProtein.getText().isEmpty() || txtFldAddFat.getText().isEmpty() || txtFldAddCarb.getText().isEmpty() || txtFldAddCal.getText().isEmpty()){
+                        if(txtFldAddName.getText().trim().isEmpty() || txtFldAddProtein.getText().trim().isEmpty() || txtFldAddFat.getText().trim().isEmpty() || txtFldAddCarb.getText().trim().isEmpty() || txtFldAddCal.getText().trim().isEmpty()){
+                            System.out.println("Ячейка абсолютно пуста!");
+                        }
+                    }else {
+                        SQLiteClient.addLineToTableDB(Const.BURGER_KING, txtFldAddName, txtFldAddProtein, txtFldAddFat, txtFldAddCarb, txtFldAddCal);
+                        refreshTable();
+                    }
+                }});
 
         popupMenu.delRow.setOnAction(event -> {
-            SQLiteClient.removeLineFromTableDB(tableViewProducts ,Const.BURGER_KING);
-            refreshTable();
+            Alert alert = new Alert(
+                    Alert.AlertType.WARNING, "Удалить содержимое ячейки?", ButtonType.YES, ButtonType.NO);
+            alert.setTitle("Внимание!");
+            alert.setHeaderText("Если вы удалите содержимое ячейки, вернуть обратно уже будет нельзя!");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.orElse(null) == ButtonType.YES){
+                SQLiteClient.removeLineFromTableDB(tableViewProducts ,Const.BURGER_KING);
+                refreshTable();
+            }else {
+                alert.close();
+            }
         });
 
         popupMenu.editTabView.setOnAction(event -> {
-            tableViewProducts.setEditable(true);
-            refreshTable();
+            if(popupMenu.editTabView.isSelected()){
+                tableViewProducts.setEditable(true);
+                refreshTable();
+            }else{
+                tableViewProducts.setEditable(false);
+                refreshTable();
+            }
         });
 
         popupMenu.showIdCol.setOnAction(event -> {
+            if(popupMenu.showIdCol.isSelected()){
+                tableColId.setVisible(true);
+                refreshTable();
+            }else{
+                tableColId.setVisible(false);
+                refreshTable();
+            }
 
         });
 
@@ -148,6 +179,46 @@ public class BurgerKingController implements Initializable {
     private void refreshTable(){
         tableProductData.clear();
         SQLiteClient.executeTableFromDB(Const.BURGER_KING,tableProductData);
+    }
+
+    private boolean shakeAddTextFields() {
+        Shaker fldName = new Shaker(txtFldAddName);
+        Shaker fldProt = new Shaker(txtFldAddProtein);
+        Shaker fldFat = new Shaker(txtFldAddFat);
+        Shaker fldCarb = new Shaker(txtFldAddCarb);
+        Shaker fldCal = new Shaker(txtFldAddCal);
+        String redStyle = "-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;";
+        String silverStyle = "-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;";
+        if (txtFldAddName.getText() == null || txtFldAddName.getText().trim().isEmpty()
+                || Double.parseDouble(txtFldAddName.getText()) <= 0) {
+            txtFldAddName.setStyle(redStyle);
+            fldName.playAnim();
+        } else txtFldAddName.setStyle(silverStyle);
+
+        if (txtFldAddProtein.getText() == null || txtFldAddProtein.getText().trim().isEmpty()
+                || Double.parseDouble(txtFldAddProtein.getText()) <= 0) {
+            txtFldAddProtein.setStyle(redStyle);
+            fldProt.playAnim();
+        } else txtFldAddProtein.setStyle(silverStyle);
+
+        if (txtFldAddFat.getText() == null || txtFldAddFat.getText().trim().isEmpty()
+                || Double.parseDouble(txtFldAddFat.getText()) <= 0) {
+            txtFldAddFat.setStyle(redStyle);
+            fldFat.playAnim();
+        } else txtFldAddFat.setStyle(silverStyle);
+
+        if (txtFldAddCarb.getText() == null || txtFldAddCarb.getText().trim().isEmpty()
+                || Double.parseDouble(txtFldAddCarb.getText()) <= 0) {
+            txtFldAddCarb.setStyle(redStyle);
+            fldCarb.playAnim();
+        } else txtFldAddCarb.setStyle(silverStyle);
+
+        if (txtFldAddCal.getText() == null || txtFldAddCal.getText().trim().isEmpty()
+                || Double.parseDouble(txtFldAddCal.getText()) <= 0) {
+            txtFldAddCal.setStyle(redStyle);
+            fldCal.playAnim();
+        } else txtFldAddCal.setStyle(silverStyle);
+        return false;
     }
 }
 

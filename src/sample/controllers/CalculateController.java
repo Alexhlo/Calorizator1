@@ -15,12 +15,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import pojo.TableIMB;
 import javafx.scene.control.TableColumn;
 import sample.Const;
+import sample.SQLiteClient;
+
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CalculateController implements Initializable {
@@ -311,35 +315,37 @@ public class CalculateController implements Initializable {
         Shaker fldHeight = new Shaker(txtFldHeight);
         Shaker fldAge = new Shaker(txtFldAge);
         Shaker fldFat = new Shaker(txtFldFat);
+        String redStyle = "-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;";
+        String silverStyle ="-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;";
         if (txtFldWeight.getText() == null
                 || txtFldWeight.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldWeight.getText()) <= 0) {
-            txtFldWeight.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
+            txtFldWeight.setStyle(redStyle);
             fldWeight.playAnim();
             clearSupportTextFields();
-        }else txtFldWeight.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
+        }else txtFldWeight.setStyle(silverStyle);
         if (txtFldHeight.getText() == null
                 || txtFldHeight.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldHeight.getText()) <= 0) {
-            txtFldHeight.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
+            txtFldHeight.setStyle(redStyle);
             fldHeight.playAnim();
             clearSupportTextFields();
-        }else txtFldHeight.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
+        }else txtFldHeight.setStyle(silverStyle);
         if (txtFldAge.getText() == null
                 || txtFldAge.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldAge.getText()) <= 0) {
-            txtFldAge.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
+            txtFldAge.setStyle(redStyle);
             fldAge.playAnim();
             clearSupportTextFields();
-        }else txtFldAge.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
+        }else txtFldAge.setStyle(silverStyle);
         if(menuFormula.getValue().equals(FORMULA_KETCH)){
             if (txtFldFat.getText() == null
                     || txtFldFat.getText().trim().isEmpty()
                     || Double.parseDouble(txtFldFat.getText()) <= 0) {
-                txtFldFat.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
+                txtFldFat.setStyle(redStyle);
                 fldFat.playAnim();
                 clearSupportTextFields();
-            }else txtFldFat.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
+            }else txtFldFat.setStyle(silverStyle);
         }
         return false;
     }
@@ -383,19 +389,21 @@ public class CalculateController implements Initializable {
     private boolean shakeTextImbFields() {
         Shaker fldWeight = new Shaker(txtFldWeightImb);
         Shaker fldHeight = new Shaker(txtFldHeightImb);
+        String redStyle = "-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;";
+        String silverStyle ="-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;";
         if (txtFldWeightImb.getText() == null || txtFldWeightImb.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldWeightImb.getText()) <= 0) {
-            txtFldWeightImb.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
+            txtFldWeightImb.setStyle(redStyle);
             fldWeight.playAnim();
             txtFldResultImb.clear();
-        } else txtFldWeightImb.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
+        } else txtFldWeightImb.setStyle(silverStyle);
 
         if (txtFldHeightImb.getText() == null || txtFldHeightImb.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldHeightImb.getText()) <= 0) {
-            txtFldHeightImb.setStyle("-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;");
+            txtFldHeightImb.setStyle(redStyle);
             fldHeight.playAnim();
             txtFldResultImb.clear();
-        } else txtFldHeightImb.setStyle("-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;");
+        } else txtFldHeightImb.setStyle(silverStyle);
         return false;
     }
 
@@ -417,6 +425,7 @@ public class CalculateController implements Initializable {
             }
             Parent root = loader.getRoot();
             Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle(windowTitle);
             stage.setScene(new Scene(root));
             stage.showAndWait();

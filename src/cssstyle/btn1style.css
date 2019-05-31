@@ -1,6 +1,6 @@
 .button:hover {
     -fx-background-color: orange;
-    -fx-opacity: 0.9
+    -fx-opacity: 0.9;
 }
 
 .button:pressed {
