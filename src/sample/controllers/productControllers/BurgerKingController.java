@@ -1,4 +1,4 @@
-package sample.controllers;
+package sample.controllers.productControllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,7 +20,7 @@ import sample.Const;
 import sample.PopupMenu;
 import sample.SQLiteClient;
 
-public class ProductCalControl implements Initializable {
+public class BurgerKingController implements Initializable {
 
 //    @FXML private ResourceBundle resources;
 //    @FXML private URL location;
@@ -42,11 +42,6 @@ public class ProductCalControl implements Initializable {
 
     private ObservableList<Product> tableProductData = FXCollections.observableArrayList();
 
-//    https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/table-view.htm#CJAGAAEE%23CJAGAAEE
-//    http://qaru.site/questions/1548323/javafx-table-cell-editing
-//    https://code.makery.ch/ru/library/javafx-tutorial/
-//    http://qaru.site/questions/13757619/right-click-event-and-double-click-event-on-tableview-javafx
-
     @Override
     public void initialize(URL location, ResourceBundle resources)  {
         setUpTableColumns();
@@ -58,8 +53,9 @@ public class ProductCalControl implements Initializable {
 
     private void setUpTableColumns(){
         tableViewProducts.getSelectionModel().setCellSelectionEnabled(true);
-        tableViewProducts.setEditable(true);
+        tableViewProducts.setEditable(false);
 
+        tableColId.setVisible(false);
         tableColId.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         tabColName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -67,54 +63,45 @@ public class ProductCalControl implements Initializable {
         tabColName.setOnEditCommit(event -> {
             Product product = event.getRowValue();
             product.setName(event.getNewValue());
-            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue(), event.getNewValue(),event.getNewValue(), event.getNewValue(), event.getNewValue());
+            SQLiteClient.editNameFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
             refreshTable();
         });
 
-
         tabColProtein.setCellValueFactory(new PropertyValueFactory<>("protein"));
         tabColProtein.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-//        tabColProtein.setOnEditCommit((TableColumn.CellEditEvent<Product, Double> event) ->
-//                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setProtein(event.getNewValue()));
-//        tabColProtein.setOnEditCommit(event -> {
-//            Product product = event.getRowValue();
-//            product.setName(event.getNewValue());
-//            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
-//            refreshTable();
-//        });
+        tabColProtein.setOnEditCommit(event -> {
+            Product product = event.getRowValue();
+            product.setProtein(event.getNewValue());
+            SQLiteClient.editProteinFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
+            refreshTable();
+        });
 
         tableColFat.setCellValueFactory(new PropertyValueFactory<>("fats"));
         tableColFat.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-//        tableColFat.setOnEditCommit((TableColumn.CellEditEvent<Product, Double> event) ->
-//                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setFats(event.getNewValue()));
-//        tableColFat.setOnEditCommit(event -> {
-//            Product product = event.getRowValue();
-//            product.setName(event.getNewValue());
-//            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
-//            refreshTable();
-//        });
+        tableColFat.setOnEditCommit(event -> {
+            Product product = event.getRowValue();
+            product.setFats(event.getNewValue());
+            SQLiteClient.editFatsFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
+            refreshTable();
+        });
 
         tableColCarb.setCellValueFactory(new PropertyValueFactory<>("carbs"));
         tableColCarb.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-//        tableColCarb.setOnEditCommit((TableColumn.CellEditEvent<Product, Double> event) ->
-//                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setCarbs(event.getNewValue()));
-//        tableColCarb.setOnEditCommit(event -> {
-//            Product product = event.getRowValue();
-//            product.setName(event.getNewValue());
-//            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
-//            refreshTable();
-//        });
+        tableColCarb.setOnEditCommit(event -> {
+            Product product = event.getRowValue();
+            product.setCarbs(event.getNewValue());
+            SQLiteClient.editCarbFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
+            refreshTable();
+        });
 
         tableColCal.setCellValueFactory(new PropertyValueFactory<>("calories"));
         tableColCal.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-//        tableColCal.setOnEditCommit((TableColumn.CellEditEvent<Product, Integer> event) ->
-//                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setCalories(event.getNewValue()));
-//        tableColCal.setOnEditCommit(event -> {
-//            Product product = event.getRowValue();
-//            product.setName(event.getNewValue());
-//            SQLiteClient.editLineFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
-//            refreshTable();
-//        });
+        tableColCal.setOnEditCommit(event -> {
+            Product product = event.getRowValue();
+            product.setCalories(event.getNewValue());
+            SQLiteClient.editCalFromTableDB(Const.BURGER_KING, tableViewProducts, event.getNewValue());
+            refreshTable();
+        });
 
         tableViewProducts.setItems(tableProductData);
     }
@@ -140,9 +127,19 @@ public class ProductCalControl implements Initializable {
             SQLiteClient.addLineToTableDB(Const.BURGER_KING,txtFldAddName,txtFldAddProtein,txtFldAddFat,txtFldAddCarb,txtFldAddCal);
             refreshTable();
         });
+
         popupMenu.delRow.setOnAction(event -> {
             SQLiteClient.removeLineFromTableDB(tableViewProducts ,Const.BURGER_KING);
             refreshTable();
+        });
+
+        popupMenu.editTabView.setOnAction(event -> {
+            tableViewProducts.setEditable(true);
+            refreshTable();
+        });
+
+        popupMenu.showIdCol.setOnAction(event -> {
+
         });
 
         popupMenu.refresh.setOnAction(event -> refreshTable());

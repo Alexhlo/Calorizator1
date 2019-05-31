@@ -1,10 +1,8 @@
 package sample;
 
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import pojo.Product;
-
 import java.sql.*;
 
 public class SQLiteClient {
@@ -80,17 +78,12 @@ public class SQLiteClient {
         }
     }
 
-    public static void editLineFromTableDB (String table, TableView<Product> tableView, String newNameValue, double newProtValue, double newFatValue, double newCarbValue, int newCalValue){
+    public static void editNameFromTableDB(String table, TableView<Product> tableView, String newNameValue){
         try {
             int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "UPDATE " + table + " SET name = ?, protein = ?, fat = ?, carb = ?, cal = ?  WHERE id = " + selectedCell);
-
+                    "UPDATE " + table + " SET name = ? WHERE id = " + selectedCell);
             preparedStatement.setString(1,newNameValue);
-            preparedStatement.setDouble(2,newProtValue);
-            preparedStatement.setDouble(3,newFatValue);
-            preparedStatement.setDouble(4,newCarbValue);
-            preparedStatement.setInt(5,newCalValue);
             preparedStatement.executeUpdate();
             System.out.println("id = " + selectedCell + " изменено на " + newNameValue);
         }catch (SQLException e){
@@ -98,6 +91,59 @@ public class SQLiteClient {
             e.printStackTrace(System.err);
         }
     }
+    public static void editProteinFromTableDB(String table, TableView<Product> tableView, double newProtValue){
+        try {
+            int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE " + table + " SET protein = ? WHERE id = " + selectedCell);
+            preparedStatement.setDouble(1,newProtValue);
+            preparedStatement.executeUpdate();
+            System.out.println("id = " + selectedCell + " изменено на " + newProtValue);
+        }catch (SQLException e){
+            System.out.println("Error");
+            e.printStackTrace(System.err);
+        }
+    }
+    public static void editFatsFromTableDB(String table, TableView<Product> tableView, double newFatValue){
+        try {
+            int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE " + table + " SET fat = ? WHERE id = " + selectedCell);
+            preparedStatement.setDouble(1,newFatValue);
+            preparedStatement.executeUpdate();
+            System.out.println("id = " + selectedCell + " изменено на " + newFatValue);
+        }catch (SQLException e){
+            System.out.println("Error");
+            e.printStackTrace(System.err);
+        }
+    }
+    public static void editCarbFromTableDB(String table, TableView<Product> tableView, double newCarbValue){
+        try {
+            int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE " + table + " SET carb = ? WHERE id = " + selectedCell);
+            preparedStatement.setDouble(1,newCarbValue);
+            preparedStatement.executeUpdate();
+            System.out.println("id = " + selectedCell + " изменено на " + newCarbValue);
+        }catch (SQLException e){
+            System.out.println("Error");
+            e.printStackTrace(System.err);
+        }
+    }
+    public static void editCalFromTableDB(String table, TableView<Product> tableView, double newCalValue){
+        try {
+            int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE " + table + " SET cal = ? WHERE id = " + selectedCell);
+            preparedStatement.setDouble(1,newCalValue);
+            preparedStatement.executeUpdate();
+            System.out.println("id = " + selectedCell + " изменено на " + newCalValue);
+        }catch (SQLException e){
+            System.out.println("Error");
+            e.printStackTrace(System.err);
+        }
+    }
+
 }
 
 

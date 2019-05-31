@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CalcCalControl implements Initializable {
+public class CalculateController implements Initializable {
 
     /**
      * Вкладка калоризатора
