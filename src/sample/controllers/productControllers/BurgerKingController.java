@@ -48,7 +48,6 @@ public class BurgerKingController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources)  {
         setUpTableColumns();
-
         SQLiteClient.executeTableFromDB(Const.BURGER_KING,tableProductData);
         searchData();
         allActions();

@@ -20,11 +20,8 @@ import javafx.stage.Stage;
 import pojo.TableIMB;
 import javafx.scene.control.TableColumn;
 import sample.Const;
-import sample.SQLiteClient;
-
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CalculateController implements Initializable {
@@ -174,9 +171,6 @@ public class CalculateController implements Initializable {
 
     private final ToggleGroup TOGGLE_GROUP_GENDER = new ToggleGroup();
     private final ToggleGroup TOGGLE_GROUP_COA = new ToggleGroup();
-    private final String FORMULA_MIFFLIN = "Формула Миффлина-Сан Жеора (2005г)";
-    private final String FORMULA_HARRISON = "Формула Гарриса-Бенедикта (ВОО на основе общей массы тела)";
-    private final String FORMULA_KETCH = "Формула Кетча-МакАрдла (ВОО на основе мышечной массы тела)";
     private double RESULT;
     private final String EMPTY = "";
 
@@ -188,19 +182,19 @@ public class CalculateController implements Initializable {
 
         setToggleGroupsRadioButton();
 
-        menuFormula.getItems().addAll(FORMULA_MIFFLIN, FORMULA_HARRISON, FORMULA_KETCH);
-        menuFormula.setValue(FORMULA_MIFFLIN);
+        menuFormula.getItems().addAll(Const.FORMULA_MIFFLIN, Const.FORMULA_HARRISON, Const.FORMULA_KETCH);
+        menuFormula.setValue(Const.FORMULA_MIFFLIN);
 
         apCalcKCal.setOnMouseEntered(event -> {
-            if (menuFormula.getValue().equals(FORMULA_MIFFLIN)) {
+            if (menuFormula.getValue().equals(Const.FORMULA_MIFFLIN)) {
                 txtFldFat.clear();
                 txtFldFat.setDisable(true);
             }
-            if (menuFormula.getValue().equals(FORMULA_HARRISON)) {
+            if (menuFormula.getValue().equals(Const.FORMULA_HARRISON)) {
                 txtFldFat.clear();
                 txtFldFat.setDisable(true);
             }
-            if (menuFormula.getValue().equals(FORMULA_KETCH)) {
+            if (menuFormula.getValue().equals(Const.FORMULA_KETCH)) {
                 txtFldFat.setDisable(false);
             }});
 
@@ -246,7 +240,7 @@ public class CalculateController implements Initializable {
         double weight = Double.parseDouble(txtFldWeight.getText());
         int height = Integer.parseInt(txtFldHeight.getText());
         int age = Integer.parseInt(txtFldAge.getText());
-        if (menuFormula.getValue().equals(FORMULA_MIFFLIN)) {
+        if (menuFormula.getValue().equals(Const.FORMULA_MIFFLIN)) {
             if (rbMale.isSelected()) {
                 RESULT = 10 * weight + 6.25 * height - 5 * age + 5;
                 txtFldBMR.setText(EMPTY + Math.rint(RESULT));
@@ -264,7 +258,7 @@ public class CalculateController implements Initializable {
                 txtFldWL.setText(EMPTY + (Math.rint(RESULT) - Const.WEIGHT_LOSS));
             }
         }
-        if (menuFormula.getValue().equals(FORMULA_HARRISON)) {
+        if (menuFormula.getValue().equals(Const.FORMULA_HARRISON)) {
             if (rbMale.isSelected()) {
                 RESULT = 66 + (13.7 * weight) + (5 * height) - (6.8 * age);
                 txtFldBMR.setText(EMPTY + Math.rint(RESULT));
@@ -281,7 +275,7 @@ public class CalculateController implements Initializable {
                 txtFldWL.setText(EMPTY + (Math.rint(RESULT) - Const.WEIGHT_LOSS));
             }
         }
-        if (menuFormula.getValue().equals(FORMULA_KETCH)) {
+        if (menuFormula.getValue().equals(Const.FORMULA_KETCH)) {
             double fat = Double.parseDouble(txtFldFat.getText());
             RESULT = 370 + (21.6 * (weight - (weight * fat / 100)));
             txtFldBMR.setText(EMPTY + Math.rint(RESULT));
@@ -338,7 +332,7 @@ public class CalculateController implements Initializable {
             fldAge.playAnim();
             clearSupportTextFields();
         }else txtFldAge.setStyle(silverStyle);
-        if(menuFormula.getValue().equals(FORMULA_KETCH)){
+        if(menuFormula.getValue().equals(Const.FORMULA_KETCH)){
             if (txtFldFat.getText() == null
                     || txtFldFat.getText().trim().isEmpty()
                     || Double.parseDouble(txtFldFat.getText()) <= 0) {

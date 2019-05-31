@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -9,15 +8,15 @@
       <TableView fx:id="tableViewProducts" editable="true" layoutX="200.0" layoutY="131.0" prefHeight="520.0" prefWidth="600.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
         <columns>
             <TableColumn fx:id="tableColId" prefWidth="24.0" text="Id" />
-          <TableColumn fx:id="tabColName" maxWidth="350.0" minWidth="100.0" prefWidth="321.0" text="Наименование" />
-            <TableColumn fx:id="tabColProtein" maxWidth="150.0" minWidth="50.0" prefWidth="-1.0" text="Белки, г" />
-            <TableColumn fx:id="tableColFat" maxWidth="150.0" minWidth="50.0" prefWidth="-1.0" text="Жиры, г" />
-            <TableColumn fx:id="tableColCarb" maxWidth="150.0" minWidth="50.0" prefWidth="-1.0" text="Углеводы, г" />
-            <TableColumn fx:id="tableColCal" maxWidth="150.0" minWidth="70.0" prefWidth="100.0" text="Калории, ккал" />
+          <TableColumn fx:id="tabColName" maxWidth="350.0" minWidth="100.0" prefWidth="299.0" text="Наименование" />
+            <TableColumn fx:id="tabColProtein" maxWidth="150.0" minWidth="47.0" prefWidth="55.0" resizable="false" text="Белки, г" />
+            <TableColumn fx:id="tableColFat" maxWidth="150.0" minWidth="30.0" prefWidth="55.0" resizable="false" text="Жиры, г" />
+            <TableColumn fx:id="tableColCarb" maxWidth="150.0" minWidth="25.0" prefWidth="77.0" resizable="false" text="Углеводы, г" />
+            <TableColumn fx:id="tableColCal" maxWidth="150.0" minWidth="46.0" prefWidth="89.0" resizable="false" text="Калории, ккал" />
         </columns>
       </TableView>
       <Button fx:id="btnAdd" layoutX="505.0" layoutY="574.0" mnemonicParsing="false" stylesheets="@../../cssstyle/btn1style.css" text="Добавить" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="565.0" />
-      <TextField fx:id="txtFldSearch" layoutX="22.0" layoutY="14.0" prefHeight="25.0" prefWidth="311.0" promptText="Введите название продукта" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="10.0" />
+      <TextField fx:id="txtFldSearch" alignment="TOP_CENTER" layoutX="22.0" layoutY="14.0" prefHeight="25.0" prefWidth="311.0" promptText="Введите название продукта" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0" />
       <TextField fx:id="txtFldAddName" alignment="TOP_CENTER" layoutX="15.0" layoutY="565.0" prefHeight="25.0" prefWidth="150.0" promptText="Имя" AnchorPane.leftAnchor="15.0" />
       <TextField fx:id="txtFldAddProtein" alignment="TOP_CENTER" layoutX="171.0" layoutY="565.0" prefHeight="25.0" prefWidth="75.0" promptText="Белки" AnchorPane.leftAnchor="180.0" />
       <TextField fx:id="txtFldAddFat" alignment="TOP_CENTER" layoutX="251.0" layoutY="565.0" prefHeight="25.0" prefWidth="75.0" promptText="Жиры" AnchorPane.leftAnchor="260.0" />

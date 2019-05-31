@@ -2,6 +2,9 @@ package sample;
 
 public class Const {
 
+    public static final String FORMULA_MIFFLIN = "Формула Миффлина-Сан Жеора (2005г)";
+    public static final String FORMULA_HARRISON = "Формула Гарриса-Бенедикта (ВОО на основе общей массы тела)";
+    public static final String FORMULA_KETCH = "Формула Кетча-МакАрдла (ВОО на основе мышечной массы тела)";
     public static final double MUSCLE_MASS = 500;
     public static final double WEIGHT_LOSS = 300;
 
@@ -11,20 +14,7 @@ public class Const {
     public static final String TABLE_FATS = "fat";
     public static final String TABLE_CARBS = "carb";
     public static final String TABLE_CALORIES = "cal";
-    public static final String TABLE_WEIGHT = "weight";
-    public static final String FULL_TABLE_VALUES =" (name,protein,fat,carb,cal) ";
 
-    private static final String comma = ", ";
-    private static String table;
-    private static int id;
-    private static String name;
-    private static Double protein;
-    private static Double fat;
-    private static Double carb;
-    private static int cal;
-    private static int weight;
-
-    public static final String ALL_PRODUCT_WINDOW = "/views/allProductWindow.fxml";
     public static final String BURGER_KING_WINDOW = "/views/products/burgerKingWindow.fxml";
     public static final String KFC_WINDOW = "/views/products/kfcWindow.fxml";
 
