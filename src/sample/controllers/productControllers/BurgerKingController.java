@@ -125,6 +125,7 @@ public class BurgerKingController implements Initializable {
     private void allActions() {
         PopupMenu popupMenu = new PopupMenu();
         popupMenu.popupProductMenu(tableViewProducts);
+
         btnAdd.setOnAction(event -> {
                 if (!shakeAddTextFields()) {
                     if(txtFldAddName.getText().isEmpty() || txtFldAddProtein.getText().isEmpty() || txtFldAddFat.getText().isEmpty() || txtFldAddCarb.getText().isEmpty() || txtFldAddCal.getText().isEmpty()){
@@ -173,6 +174,10 @@ public class BurgerKingController implements Initializable {
         });
 
         popupMenu.refresh.setOnAction(event -> refreshTable());
+
+        popupMenu.addRation.setOnAction(event -> {
+
+        });
     }
 
     private void refreshTable(){

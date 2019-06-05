@@ -15,11 +15,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import pojo.TableIMB;
 import javafx.scene.control.TableColumn;
 import sample.Const;
+import sample.PopupMenu;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -169,12 +172,27 @@ public class CalculateController implements Initializable {
     @FXML
     public Button btnSearchAll;
 
+    /**
+     * Вкладка рацион
+     */
+
+    @FXML
+    public VBox rationVBox;
+
     private final ToggleGroup TOGGLE_GROUP_GENDER = new ToggleGroup();
     private final ToggleGroup TOGGLE_GROUP_COA = new ToggleGroup();
     private double RESULT;
     private final String EMPTY = "";
 
     private ObservableList<TableIMB> tableImbData = FXCollections.observableArrayList();
+    public ObservableList<TableView> tableViewList = FXCollections.observableArrayList();
+
+    public TableView meal1 = new TableView();
+    public TableView meal2 = new TableView();
+    public TableView meal3 = new TableView();
+    public TableView meal4 = new TableView();
+    public TableView meal5 = new TableView();
+
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
@@ -187,6 +205,22 @@ public class CalculateController implements Initializable {
         allActions();
 
         openNewProductWindow(btnBurgerKing,Const.BURGER_KING_WINDOW,"Burger King menu");
+
+        PopupMenu popupMenu = new PopupMenu();
+        popupMenu.popupTableViewMenu(rationVBox);
+
+
+        popupMenu.addTable.setOnAction(event -> {
+
+            tableViewList.add(meal1);
+            tableViewList.add(meal2);
+            tableViewList.add(meal3);
+            tableViewList.add(meal4);
+            tableViewList.add(meal5);
+            rationVBox.getChildren().addAll(tableViewList);
+
+        });
+
     }
 
     private void allActions (){
