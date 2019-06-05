@@ -451,9 +451,9 @@
       </Tab>
       <Tab text="Рацион">
         <content>
-          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="571.0" prefWidth="600.0">
+          <AnchorPane fx:id="rationAnchorPane" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="571.0" prefWidth="600.0">
                <children>
-                  <VBox fx:id="rationVBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <VBox fx:id="rationVBox" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="571.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children></AnchorPane>
         </content>
       </Tab>

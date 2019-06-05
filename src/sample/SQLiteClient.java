@@ -144,6 +144,40 @@ public class SQLiteClient {
         }
     }
 
+
+
+
+    public static void createNewTable(String tableName){
+        try {
+            connectDB();
+            statement = connection.createStatement();
+            String createTable = "" +
+                    "CREATE TABLE if not exists " + tableName + " ('id' INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "'name' STRING, 'protein' DOUBLE, 'fat' DOUBLE, 'carb' DOUBLE, 'cal' INTEGER, 'weight' INTEGER);";
+            statement.execute(createTable);
+        }catch (SQLException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void insertDataInTableFromTable (TableView<Product> tableView ,String newTab, String oldTab){
+        try {
+            int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
+            String insertion = "INSERT INTO " + newTab + " (name,protein,fat,carb,cal,weight) SELECT name,protein, fat, carb, cal, weight FROM " + oldTab + " WHERE id = " + selectedCell;
+            PreparedStatement preparedStatement = connection.prepareStatement(insertion);
+        preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteTableFromDB (String tabName){
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("DROP TABLE " + tabName);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 }
 
 

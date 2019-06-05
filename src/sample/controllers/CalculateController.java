@@ -16,15 +16,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
+import pojo.Product;
 import pojo.TableIMB;
 import javafx.scene.control.TableColumn;
 import sample.Const;
 import sample.PopupMenu;
+import sample.SQLiteClient;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CalculateController implements Initializable {
@@ -33,81 +35,51 @@ public class CalculateController implements Initializable {
      * Вкладка калоризатора
      */
 
-    @FXML
-    private RadioButton rbCoA2;
-    @FXML
-    private RadioButton rbCoA1;
-    @FXML
-    private RadioButton rbFemale;
-    @FXML
-    private RadioButton rbCoA4;
-    @FXML
-    private RadioButton rbCoA3;
-    @FXML
-    private ComboBox<String> menuFormula;
-    @FXML
-    private RadioButton rbMale;
-    @FXML
-    private TextField txtFldWL;
-    @FXML
-    private Button btnCalc;
-    @FXML
-    private TextField txtFldMM;
-    @FXML
-    private RadioButton rbCoA5;
-    @FXML
-    private TextField txtFldFat;
-    @FXML
-    private TextField txtFldAge;
-    @FXML
-    private TextField txtFldBMR;
-    @FXML
-    private TextField txtFldHeight;
-    @FXML
-    private Button btnCancel;
-    @FXML
-    private TextField txtFldWeight;
-    @FXML
-    private TextField txtFldBKA;
-    @FXML
-    private AnchorPane apCalcKCal;
+    @FXML private RadioButton rbCoA2;
+    @FXML private RadioButton rbCoA1;
+    @FXML private RadioButton rbFemale;
+    @FXML private RadioButton rbCoA4;
+    @FXML private RadioButton rbCoA3;
+    @FXML private ComboBox<String> menuFormula;
+    @FXML private RadioButton rbMale;
+    @FXML private TextField txtFldWL;
+    @FXML private Button btnCalc;
+    @FXML private TextField txtFldMM;
+    @FXML private RadioButton rbCoA5;
+    @FXML private TextField txtFldFat;
+    @FXML private TextField txtFldAge;
+    @FXML private TextField txtFldBMR;
+    @FXML private TextField txtFldHeight;
+    @FXML private Button btnCancel;
+    @FXML private TextField txtFldWeight;
+    @FXML private TextField txtFldBKA;
+    @FXML private AnchorPane apCalcKCal;
+    private final ToggleGroup TOGGLE_GROUP_GENDER = new ToggleGroup();
+    private final ToggleGroup TOGGLE_GROUP_COA = new ToggleGroup();
+    private double RESULT;
+    private final String EMPTY = "";
 
     /**
      * Вкладка расчет индекса массы тела IMB
      */
 
-    @FXML
-    private TableView<TableIMB> tableViewIMB;
-    @FXML
-    private TableColumn<TableIMB, Integer> column1;
-    @FXML
-    private TableColumn<TableIMB, Integer> column2;
-    @FXML
-    private TableColumn<TableIMB, Integer> column3;
-    @FXML
-    private TableColumn<TableIMB, Integer> column4;
-    @FXML
-    private TableColumn<TableIMB, Integer> column5;
-    @FXML
-    private TableColumn<TableIMB, Integer> column6;
-    @FXML
-    private TableColumn<TableIMB, Integer> column7;
-    @FXML
-    private TableColumn<TableIMB, Integer> column8;
-    @FXML
-    private TableColumn<TableIMB, String> columnHeight;
-    @FXML
-    private TableColumn<TableIMB, String> columnImb;
-    @FXML
-    private Button btnCancelImb;
-    @FXML
-    private Button btnCalcImb;
-    @FXML
-    private TextField txtFldWeightImb;
-    @FXML
-    private TextField txtFldHeightImb;
-    @FXML
-    private TextField txtFldResultImb;
+    @FXML private TableView<TableIMB> tableViewIMB;
+    @FXML private TableColumn<TableIMB, Integer> column1;
+    @FXML private TableColumn<TableIMB, Integer> column2;
+    @FXML private TableColumn<TableIMB, Integer> column3;
+    @FXML private TableColumn<TableIMB, Integer> column4;
+    @FXML private TableColumn<TableIMB, Integer> column5;
+    @FXML private TableColumn<TableIMB, Integer> column6;
+    @FXML private TableColumn<TableIMB, Integer> column7;
+    @FXML private TableColumn<TableIMB, Integer> column8;
+    @FXML private TableColumn<TableIMB, String> columnHeight;
+    @FXML private TableColumn<TableIMB, String> columnImb;
+    @FXML private Button btnCancelImb;
+    @FXML private Button btnCalcImb;
+    @FXML private TextField txtFldWeightImb;
+    @FXML private TextField txtFldHeightImb;
+    @FXML private TextField txtFldResultImb;
+    private ObservableList<TableIMB> tableImbData = FXCollections.observableArrayList();
 
     /**
      * Вкладка продукты
@@ -176,50 +148,53 @@ public class CalculateController implements Initializable {
      * Вкладка рацион
      */
 
-    @FXML
-    public VBox rationVBox;
-
-    private final ToggleGroup TOGGLE_GROUP_GENDER = new ToggleGroup();
-    private final ToggleGroup TOGGLE_GROUP_COA = new ToggleGroup();
-    private double RESULT;
-    private final String EMPTY = "";
-
-    private ObservableList<TableIMB> tableImbData = FXCollections.observableArrayList();
+    @FXML public VBox rationVBox;
+    @FXML public AnchorPane rationAnchorPane;
+    private PopupMenu popupMenu = new PopupMenu();
     public ObservableList<TableView> tableViewList = FXCollections.observableArrayList();
+    public ObservableList<Product> tableMealData1 = FXCollections.observableArrayList();
+    private TableColumn<Product, Integer> tableColId = new TableColumn<Product, Integer>("id");
+    private TableColumn<Product, Integer> tableColCal = new TableColumn<Product, Integer>("Калории");
+    private TableColumn<Product, Integer> tableColWeight = new TableColumn<Product, Integer>("Вес");
+    private TableColumn<Product, Double> tabColProtein = new TableColumn<Product, Double>("Белки, г");
+    private TableColumn<Product, Double> tableColCarb = new TableColumn<Product, Double>("Углеводы, г");
+    private TableColumn<Product, Double> tableColFat = new TableColumn<Product, Double>("Жиры, г");
+    private TableColumn<Product, String> tabColName = new TableColumn<Product, String>("Наименование");
 
-    public TableView meal1 = new TableView();
-    public TableView meal2 = new TableView();
-    public TableView meal3 = new TableView();
-    public TableView meal4 = new TableView();
-    public TableView meal5 = new TableView();
+    public TableView<Product> meal1 = new TableView<Product>();
+    public TableView<Product> meal2 = new TableView<Product>();
+    public TableView<Product> meal3 = new TableView<Product>();
+    public TableView<Product> meal4 = new TableView<Product>();
+    public TableView<Product> meal5 = new TableView<Product>();
 
-
-    @FXML
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> menuFormula.requestFocus());
         menuFormula.getItems().addAll(Const.FORMULA_MIFFLIN, Const.FORMULA_HARRISON, Const.FORMULA_KETCH);
         menuFormula.setValue(Const.FORMULA_MIFFLIN);
 
         setToggleGroupsRadioButton();
         setupImbTable();
+        popupAction();
         allActions();
-
         openNewProductWindow(btnBurgerKing,Const.BURGER_KING_WINDOW,"Burger King menu");
+        setupTableMealColumns();
+    }
 
-        PopupMenu popupMenu = new PopupMenu();
-        popupMenu.popupTableViewMenu(rationVBox);
+    private void setupTableMealColumns(){
+        meal1.getSelectionModel().setCellSelectionEnabled(true);
+        meal1.setEditable(true);
 
+        meal1.getColumns().addAll(tableColId,tabColName,tabColProtein,tableColFat,tableColCarb,tableColCal, tableColWeight);
 
-        popupMenu.addTable.setOnAction(event -> {
+        tableColId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tabColName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tabColProtein.setCellValueFactory(new PropertyValueFactory<>("protein"));
+        tableColFat.setCellValueFactory(new PropertyValueFactory<>("fats"));
+        tableColCarb.setCellValueFactory(new PropertyValueFactory<>("carbs"));
+        tableColCal.setCellValueFactory(new PropertyValueFactory<>("calories"));
+        tableColWeight.setCellValueFactory(new PropertyValueFactory<>("weight"));
 
-            tableViewList.add(meal1);
-            tableViewList.add(meal2);
-            tableViewList.add(meal3);
-            tableViewList.add(meal4);
-            tableViewList.add(meal5);
-            rationVBox.getChildren().addAll(tableViewList);
-
-        });
+        meal1.setItems(tableMealData1);
 
     }
 
@@ -246,6 +221,34 @@ public class CalculateController implements Initializable {
             try {
                 if (!shakeTextImbFields()) resultImb();
             }catch (NumberFormatException ignored){} });
+    }
+
+    private void popupAction(){
+        popupMenu.popupTableAction(rationVBox);
+        popupMenu.createTable.setOnAction(event -> {
+            tableViewList.add(meal1);
+            rationVBox.getChildren().addAll(tableViewList);
+            SQLiteClient.createNewTable("Meal_1");
+            SQLiteClient.executeTableFromDB("Meal_1",tableMealData1);
+        });
+        popupMenu.deleteTable.setOnAction(event -> {
+            Alert alert = new Alert(
+                    Alert.AlertType.WARNING, "Удалить таблицу?", ButtonType.YES, ButtonType.NO);
+            alert.setTitle("Внимание!");
+            alert.setHeaderText("Если вы удалите таблицу, вернуть её обратно уже будет нельзя!");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.orElse(null) == ButtonType.YES){
+                SQLiteClient.deleteTableFromDB("Meal_1");
+                refreshTable();
+            }else {
+                alert.close();
+            }
+        });
+    }
+
+    private void refreshTable(){
+        tableMealData1.clear();
+        SQLiteClient.executeTableFromDB(Const.BURGER_KING,tableMealData1);
     }
 
     private void setToggleGroupsRadioButton() {
@@ -449,7 +452,7 @@ public class CalculateController implements Initializable {
             }
             Parent root = loader.getRoot();
             Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
+//            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle(windowTitle);
             stage.setScene(new Scene(root));
             stage.showAndWait();

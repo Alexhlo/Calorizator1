@@ -15,7 +15,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.AnchorPane;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import pojo.Product;
@@ -25,9 +24,6 @@ import sample.SQLiteClient;
 
 public class BurgerKingController implements Initializable {
 
-//    @FXML private ResourceBundle resources;
-//    @FXML private URL location;
-    @FXML private AnchorPane productPane;
     @FXML private Button btnAdd;
     @FXML private TextField txtFldSearch;
     @FXML private TextField txtFldAddName;
@@ -35,13 +31,13 @@ public class BurgerKingController implements Initializable {
     @FXML private TextField txtFldAddFat;
     @FXML private TextField txtFldAddCarb;
     @FXML private TextField txtFldAddCal;
-    @FXML public TableColumn<Product, Integer> tableColCal;
-    @FXML public TableColumn<Product, Integer> tableColId;
-    @FXML public TableColumn<Product, Double> tabColProtein;
-    @FXML public TableColumn<Product, Double> tableColCarb;
-    @FXML public TableColumn<Product, Double> tableColFat;
-    @FXML public TableColumn<Product, String> tabColName;
-    @FXML public  TableView<Product> tableViewProducts;
+    @FXML private TableColumn<Product, Integer> tableColCal;
+    @FXML private TableColumn<Product, Integer> tableColId;
+    @FXML private TableColumn<Product, Double> tabColProtein;
+    @FXML private TableColumn<Product, Double> tableColCarb;
+    @FXML private TableColumn<Product, Double> tableColFat;
+    @FXML private TableColumn<Product, String> tabColName;
+    @FXML private TableView<Product> tableViewProducts;
 
     private ObservableList<Product> tableProductData = FXCollections.observableArrayList();
 
@@ -128,8 +124,12 @@ public class BurgerKingController implements Initializable {
 
         btnAdd.setOnAction(event -> {
                 if (!shakeAddTextFields()) {
-                    if(txtFldAddName.getText().isEmpty() || txtFldAddProtein.getText().isEmpty() || txtFldAddFat.getText().isEmpty() || txtFldAddCarb.getText().isEmpty() || txtFldAddCal.getText().isEmpty()){
-                        if(txtFldAddName.getText().trim().isEmpty() || txtFldAddProtein.getText().trim().isEmpty() || txtFldAddFat.getText().trim().isEmpty() || txtFldAddCarb.getText().trim().isEmpty() || txtFldAddCal.getText().trim().isEmpty()){
+                    if(txtFldAddName.getText().isEmpty() || txtFldAddProtein.getText().isEmpty() ||
+                            txtFldAddFat.getText().isEmpty() || txtFldAddCarb.getText().isEmpty() ||
+                            txtFldAddCal.getText().isEmpty()){
+                        if(txtFldAddName.getText().trim().isEmpty() || txtFldAddProtein.getText().trim().isEmpty() ||
+                                txtFldAddFat.getText().trim().isEmpty() || txtFldAddCarb.getText().trim().isEmpty() ||
+                                txtFldAddCal.getText().trim().isEmpty()){
                             System.out.println("Ячейка абсолютно пуста!");
                         }
                     }else {
@@ -175,8 +175,8 @@ public class BurgerKingController implements Initializable {
 
         popupMenu.refresh.setOnAction(event -> refreshTable());
 
-        popupMenu.addRation.setOnAction(event -> {
-
+        popupMenu.mealMenuItem1.setOnAction(event -> {
+            SQLiteClient.insertDataInTableFromTable(tableViewProducts, "Meal_1", Const.BURGER_KING );
         });
     }
 
