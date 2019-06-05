@@ -179,12 +179,17 @@ public class CalculateController implements Initializable {
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> menuFormula.requestFocus());
-
-        setToggleGroupsRadioButton();
-
         menuFormula.getItems().addAll(Const.FORMULA_MIFFLIN, Const.FORMULA_HARRISON, Const.FORMULA_KETCH);
         menuFormula.setValue(Const.FORMULA_MIFFLIN);
 
+        setToggleGroupsRadioButton();
+        setupImbTable();
+        allActions();
+
+        openNewProductWindow(btnBurgerKing,Const.BURGER_KING_WINDOW,"Burger King menu");
+    }
+
+    private void allActions (){
         apCalcKCal.setOnMouseEntered(event -> {
             if (menuFormula.getValue().equals(Const.FORMULA_MIFFLIN)) {
                 txtFldFat.clear();
@@ -197,12 +202,6 @@ public class CalculateController implements Initializable {
             if (menuFormula.getValue().equals(Const.FORMULA_KETCH)) {
                 txtFldFat.setDisable(false);
             }});
-
-        initTableIMBData();
-        setTableIMBValueColumns();
-        //заполняем таблицу данными
-        tableViewIMB.setItems(tableImbData);
-
         btnCancel.setOnAction(event ->  clearAllTextFields());
         btnCalc.setOnAction(event -> {
             try {
@@ -213,8 +212,6 @@ public class CalculateController implements Initializable {
             try {
                 if (!shakeTextImbFields()) resultImb();
             }catch (NumberFormatException ignored){} });
-
-        openNewProductWindow(btnBurgerKing,Const.BURGER_KING_WINDOW,"Burger King menu");
     }
 
     private void setToggleGroupsRadioButton() {
@@ -344,8 +341,7 @@ public class CalculateController implements Initializable {
         return false;
     }
 
-    private void setTableIMBValueColumns() {
-        //устанавливем тип и значение , которое должно хранится в колонке
+    private void setupImbTable() {
         columnHeight.setCellValueFactory(new PropertyValueFactory<>("height"));
         column1.setCellValueFactory(new PropertyValueFactory<>("col_1"));
         column2.setCellValueFactory(new PropertyValueFactory<>("col_2"));
@@ -356,9 +352,7 @@ public class CalculateController implements Initializable {
         column7.setCellValueFactory(new PropertyValueFactory<>("col_7"));
         column8.setCellValueFactory(new PropertyValueFactory<>("col_8"));
         columnImb.setCellValueFactory(new PropertyValueFactory<>("imb"));
-    }
 
-    private void initTableIMBData() {
         tableImbData.add(new TableIMB("Вес,кг", null, null, null, null, null, null, null, null, "ИМТ"));
         tableImbData.add(new TableIMB("", 40, 43, 46, 49, 52, 55, 58, 62, "18"));
         tableImbData.add(new TableIMB("", 43, 46, 49, 52, 52, 58, 62, 65, "19"));
@@ -372,6 +366,8 @@ public class CalculateController implements Initializable {
         tableImbData.add(new TableIMB("", 67, 72, 77, 82, 52, 92, 97, 103, "30"));
         tableImbData.add(new TableIMB("", 80, 84, 90, 95, 52, 107, 113, 120, "35"));
         tableImbData.add(new TableIMB("", 90, 96, 102, 109, 116, 122, 130, 137, "40"));
+
+        tableViewIMB.setItems(tableImbData);
     }
 
     private void clearImbTextFields() {
