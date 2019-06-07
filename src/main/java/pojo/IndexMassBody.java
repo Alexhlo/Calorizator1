@@ -1,6 +1,6 @@
-package pojo;
+package main.java.pojo;
 
-public class TableIMB {
+public class IndexMassBody {
 
     private String height;
     private Integer col_1;
@@ -13,7 +13,7 @@ public class TableIMB {
     private Integer col_8;
     private String imb;
 
-    public TableIMB(String height, Integer col_1, Integer col_2, Integer col_3, Integer col_4, Integer col_5, Integer col_6, Integer col_7, Integer col_8, String imb) {
+    public IndexMassBody(String height, Integer col_1, Integer col_2, Integer col_3, Integer col_4, Integer col_5, Integer col_6, Integer col_7, Integer col_8, String imb) {
         this.height = height;
         this.col_1 = col_1;
         this.col_2 = col_2;
