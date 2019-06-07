@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
+    //dfg
     @Override
     public void start(Stage caloStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../views/calcWindow.fxml"));
