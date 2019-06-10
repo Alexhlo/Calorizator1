@@ -15,7 +15,7 @@
             <TableColumn fx:id="tableColCal" maxWidth="150.0" minWidth="46.0" prefWidth="89.0" resizable="false" text="Калории, ккал" />
         </columns>
       </TableView>
-      <Button fx:id="btnAdd" layoutX="505.0" layoutY="574.0" mnemonicParsing="false" stylesheets="@../../cssstyle/btn1style.css" text="Добавить" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="565.0" />
+      <Button fx:id="btnAdd" layoutX="505.0" layoutY="574.0" mnemonicParsing="false" stylesheets="@../../btn1style.css" text="Добавить" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="565.0" />
       <TextField fx:id="txtFldSearch" alignment="TOP_CENTER" layoutX="22.0" layoutY="14.0" prefHeight="25.0" prefWidth="311.0" promptText="Введите название продукта" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0" />
       <TextField fx:id="txtFldAddName" alignment="TOP_CENTER" layoutX="15.0" layoutY="565.0" prefHeight="25.0" prefWidth="150.0" promptText="Имя" AnchorPane.leftAnchor="15.0" />
       <TextField fx:id="txtFldAddProtein" alignment="TOP_CENTER" layoutX="171.0" layoutY="565.0" prefHeight="25.0" prefWidth="75.0" promptText="Белки" AnchorPane.leftAnchor="180.0" />

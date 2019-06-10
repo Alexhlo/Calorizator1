@@ -8,10 +8,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
     @Override
     public void start(Stage caloStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../views/calcWindow.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/calcWindow.fxml"));
         caloStage.setTitle("Калоризатор");
         Scene calorizator = new Scene(root);
         caloStage.setScene(calorizator);
