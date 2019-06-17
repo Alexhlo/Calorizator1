@@ -145,8 +145,6 @@ public class SQLiteClient {
     }
 
 
-
-
     public static void createNewTable(String tableName){
         try {
             connectDB();
