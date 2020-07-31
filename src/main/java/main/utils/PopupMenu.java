@@ -1,9 +1,10 @@
-package main.java.sample;
+package main.utils;
 
 import javafx.scene.control.*;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import main.entity.Product;
 
 public class PopupMenu {
 
@@ -29,7 +30,8 @@ public class PopupMenu {
     public CheckMenuItem showIdCol = new CheckMenuItem("Показать колонку ID");
 
 
-    public void popupProductMenu(TableView tableView){
+    public void popupProductMenu(TableView<Product> tableView) {
+
         addRation.getItems().addAll(mealMenuItem1,mealMenuItem2,mealMenuItem3,mealMenuItem4,mealMenuItem5);
         tableView.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, event ->
                 contextMenu.show(tableView, event.getScreenX(), event.getScreenY()));
@@ -38,7 +40,8 @@ public class PopupMenu {
         contextMenu.getItems().addAll(addRation, sep2, delRow, sep3, refresh, sep4, editTabView, sep5, showIdCol);
     }
 
-    public void popupTableAction(VBox vBox){
+    public void popupTableAction(VBox vBox) {
+
         vBox.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, event ->
                 contextMenu.show(vBox, event.getScreenX(), event.getScreenY()));
 
@@ -46,7 +49,8 @@ public class PopupMenu {
         contextMenu.getItems().addAll(createTable, sep6, deleteTable);
     }
 
-    public void popupRationMenu(TableView tableView){
+    public void popupRationMenu(TableView<Product> tableView) {
+
         addRation.getItems().addAll(mealMenuItem1,mealMenuItem2,mealMenuItem3,mealMenuItem4,mealMenuItem5);
         tableView.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, event ->
                 contextMenu.show(tableView, event.getScreenX(), event.getScreenY()));

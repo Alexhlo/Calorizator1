@@ -1,4 +1,4 @@
-package main.java.sample;
+package main;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -8,15 +8,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
     @Override
-    public void start(Stage caloStage) throws Exception{
+    public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/calcWindow.fxml"));
-        caloStage.setTitle("Калоризатор");
-        Scene calorizator = new Scene(root);
-        caloStage.setScene(calorizator);
-        caloStage.setResizable(false);
-        caloStage.show();
-        caloStage.setOnCloseRequest(event -> { Platform.exit();System.exit(0);});
+        stage.setTitle("Калоризатор");
+        Scene cal = new Scene(root);
+        stage.setScene(cal);
+        stage.setResizable(false);
+        stage.show();
+        stage.setOnCloseRequest(event -> { Platform.exit();System.exit(0);});
     }
 
     public static void main(String[] args) {

@@ -1,8 +1,10 @@
-package main.java.sample;
+package main.utils;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
-import main.java.pojo.Product;
+import main.entity.Product;
+import main.entity.enums.ProductColumnName;
+
 import java.sql.*;
 
 public class SQLiteClient {
@@ -23,32 +25,33 @@ public class SQLiteClient {
         statement.close();
         resultSet.close();
         connection.close();
-        if(resultSet.isClosed() && statement.isClosed() && connection.isClosed()){
+        if (resultSet.isClosed() && statement.isClosed() && connection.isClosed()) {
             System.out.println("---= Database RS,STMNT,CON is closed! =---");
         }
     }
 
-    public static void executeTableFromDB (String table,  ObservableList<Product> obsList){
+    public static void executeTableFromDB (String table,  ObservableList<Product> obsList) {
+        //TODO ПЕРЕИМЕНОВАТЬ ПОД ЕДИНЫЙ СТАНДАРТ НАИМЕНОВАНИЯ КОЛОНОК
         try {
             connectDB();
             resultSet = connection.createStatement().executeQuery("SELECT * FROM " + table);
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 Product product = new Product();
-                product.id.set(resultSet.getInt(Const.TABLE_ID));
-                product.name.set(resultSet.getString(Const.TABLE_NAME));
-                product.protein.set(resultSet.getDouble(Const.TABLE_PROTEIN));
-                product.fats.set(resultSet.getDouble(Const.TABLE_FATS));
-                product.carbs.set(resultSet.getDouble(Const.TABLE_CARBS));
-                product.calories.set(resultSet.getInt(Const.TABLE_CALORIES));
+                product.id.set(resultSet.getInt(ProductColumnName.COLUMN_ID.getName()));
+                product.name.set(resultSet.getString(ProductColumnName.COLUMN_NAME.getName()));
+                product.protein.set(resultSet.getDouble(ProductColumnName.COLUMN_PROTEIN.getName()));
+                product.fats.set(resultSet.getDouble("fat"));
+                product.carbs.set(resultSet.getDouble("carb"));
+                product.calories.set(resultSet.getInt("cal"));
                 obsList.add(product);
             }
             System.out.println("-----------------=Таблица выведена=-----------------");
-        }catch (SQLException | ClassNotFoundException e){
+        } catch (SQLException | ClassNotFoundException e){
             e.getStackTrace();
         }
     }
 
-    public static void addLineToTableDB(String table, TextField name, TextField protein, TextField fat, TextField carb, TextField cal){
+    public static void addLineToTableDB(String table, TextField name, TextField protein, TextField fat, TextField carb, TextField cal) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "INSERT INTO " + table + " (name,protein,fat,carb,cal,weight) VALUES (?, ?, ?, ?, ?, 100)");
@@ -69,6 +72,7 @@ public class SQLiteClient {
     }
 
     public static void removeLineFromTableDB (TableView<Product> tableView ,String table) {
+
         try {
             int selectedIndex = tableView.getSelectionModel().getSelectedItem().getId();
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + table + " WHERE id = " + selectedIndex );
@@ -78,7 +82,8 @@ public class SQLiteClient {
         }
     }
 
-    public static void editNameFromTableDB(String table, TableView<Product> tableView, String newNameValue){
+    public static void editNameFromTableDB(String table, TableView<Product> tableView, String newNameValue) {
+
         try {
             int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -86,12 +91,13 @@ public class SQLiteClient {
             preparedStatement.setString(1,newNameValue);
             preparedStatement.executeUpdate();
             System.out.println("id = " + selectedCell + " изменено на " + newNameValue);
-        }catch (SQLException e){
+        } catch (SQLException e){
             System.out.println("Error");
             e.printStackTrace(System.err);
         }
     }
-    public static void editProteinFromTableDB(String table, TableView<Product> tableView, double newProtValue){
+    public static void editProteinFromTableDB(String table, TableView<Product> tableView, double newProtValue) {
+
         try {
             int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -99,12 +105,13 @@ public class SQLiteClient {
             preparedStatement.setDouble(1,newProtValue);
             preparedStatement.executeUpdate();
             System.out.println("id = " + selectedCell + " изменено на " + newProtValue);
-        }catch (SQLException e){
+        } catch (SQLException e){
             System.out.println("Error");
             e.printStackTrace(System.err);
         }
     }
-    public static void editFatsFromTableDB(String table, TableView<Product> tableView, double newFatValue){
+    public static void editFatsFromTableDB(String table, TableView<Product> tableView, double newFatValue) {
+
         try {
             int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -112,12 +119,13 @@ public class SQLiteClient {
             preparedStatement.setDouble(1,newFatValue);
             preparedStatement.executeUpdate();
             System.out.println("id = " + selectedCell + " изменено на " + newFatValue);
-        }catch (SQLException e){
+        } catch (SQLException e){
             System.out.println("Error");
             e.printStackTrace(System.err);
         }
     }
-    public static void editCarbFromTableDB(String table, TableView<Product> tableView, double newCarbValue){
+    public static void editCarbFromTableDB(String table, TableView<Product> tableView, double newCarbValue) {
+
         try {
             int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -125,12 +133,13 @@ public class SQLiteClient {
             preparedStatement.setDouble(1,newCarbValue);
             preparedStatement.executeUpdate();
             System.out.println("id = " + selectedCell + " изменено на " + newCarbValue);
-        }catch (SQLException e){
+        } catch (SQLException e){
             System.out.println("Error");
             e.printStackTrace(System.err);
         }
     }
-    public static void editCalFromTableDB(String table, TableView<Product> tableView, double newCalValue){
+    public static void editCalFromTableDB(String table, TableView<Product> tableView, double newCalValue) {
+
         try {
             int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -138,14 +147,15 @@ public class SQLiteClient {
             preparedStatement.setDouble(1,newCalValue);
             preparedStatement.executeUpdate();
             System.out.println("id = " + selectedCell + " изменено на " + newCalValue);
-        }catch (SQLException e){
+        } catch (SQLException e){
             System.out.println("Error");
             e.printStackTrace(System.err);
         }
     }
 
 
-    public static void createNewTable(String tableName){
+    public static void createNewTable(String tableName) {
+
         try {
             connectDB();
             statement = connection.createStatement();
@@ -153,26 +163,28 @@ public class SQLiteClient {
                     "CREATE TABLE if not exists " + tableName + " ('id' INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "'name' STRING, 'protein' DOUBLE, 'fat' DOUBLE, 'carb' DOUBLE, 'cal' INTEGER, 'weight' INTEGER);";
             statement.execute(createTable);
-        }catch (SQLException | ClassNotFoundException e){
+        } catch (SQLException | ClassNotFoundException e){
             e.printStackTrace();
         }
     }
 
-    public static void insertDataInTableFromTable (TableView<Product> tableView ,String newTab, String oldTab){
+    public static void insertDataInTableFromTable (TableView<Product> tableView ,String newTab, String oldTab) {
+
         try {
             int selectedCell = tableView.getSelectionModel().getSelectedItem().getId();
             String insertion = "INSERT INTO " + newTab + " (name,protein,fat,carb,cal,weight) SELECT name,protein, fat, carb, cal, weight FROM " + oldTab + " WHERE id = " + selectedCell;
             PreparedStatement preparedStatement = connection.prepareStatement(insertion);
         preparedStatement.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void deleteTableFromDB (String tabName){
+    public static void deleteTableFromDB (String tabName) {
+
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("DROP TABLE " + tabName);
-        }catch (SQLException e){
+        } catch (SQLException e){
             e.printStackTrace();
         }
     }

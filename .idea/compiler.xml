@@ -9,7 +9,7 @@
         <module name="Calorizator" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="8">
+    <bytecodeTargetLevel target="11">
       <module name="Calorizator" target="1.8" />
     </bytecodeTargetLevel>
   </component>

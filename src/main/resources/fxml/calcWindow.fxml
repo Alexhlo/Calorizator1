@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<TabPane fx:id="tpCalorizator" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" stylesheets="@../btn1style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controllers.CalculateController">
+<TabPane fx:id="tpCalorizator" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" stylesheets="@../btn1style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.CalculateController">
   <tabs>
     <Tab fx:id="tabCalcKCal" text="Расчет калорий">
       <content>
@@ -424,7 +424,7 @@
                         <Font name="Times New Roman" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnBerriers" layoutX="170.0" layoutY="470.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="120.0" text="Ягоды" textAlignment="CENTER">
+                  <Button fx:id="btnBerries" layoutX="170.0" layoutY="470.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="120.0" text="Ягоды" textAlignment="CENTER">
                      <font>
                         <Font name="Times New Roman" size="14.0" />
                      </font>

@@ -1,6 +1,6 @@
-package main.java.controllers.interfaces;
+package main.service;
 
-public interface productInterface {
+public interface ProductService {
 
     void setUpTableColumns();
 
