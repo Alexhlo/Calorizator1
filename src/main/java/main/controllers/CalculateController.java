@@ -16,7 +16,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.entity.IndexMassBody;
 import main.entity.Product;
-import main.entity.enums.TableProductName;
 import main.entity.enums.WindowPath;
 import main.utils.PopupMenu;
 import main.utils.SQLiteClient;
@@ -24,7 +23,10 @@ import main.utils.animations.Shaker;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.Optional;
+import java.util.ResourceBundle;
+
+import static javafx.collections.FXCollections.observableArrayList;
 
 public class CalculateController implements Initializable {
 
@@ -114,13 +116,10 @@ public class CalculateController implements Initializable {
     private final ToggleGroup TOGGLE_GROUP_COA = new ToggleGroup();
     private double RESULT;
     private final String EMPTY = "";
-    public ObservableList<Product> tableMealData1 = FXCollections.observableArrayList();
-    public ObservableList<TableView<Product>> tableViewList = FXCollections.observableArrayList();
-    public TableView<Product> meal1 = new TableView<>();
-    public TableView<Product> meal2 = new TableView<>();
-    public TableView<Product> meal3 = new TableView<>();
-    public TableView<Product> meal4 = new TableView<>();
-    public TableView<Product> meal5 = new TableView<>();
+    public ObservableList<Product> tableMealData = observableArrayList();
+    public final ObservableList<TableView<Product>> tableViewList = FXCollections.observableArrayList(
+            new TableView<>(), new TableView<>(), new TableView<>(), new TableView<>(), new TableView<>());
+
     public static final String NUMBER_MASK = "^(0|[1-9][0-9]*)$";
     public static final String FORMULA_MIFFLIN = "Формула Миффлина-Сан Жеора (2005г)";
     public static final String FORMULA_HARRISON = "Формула Гарриса-Бенедикта (ВОО на основе общей массы тела)";
@@ -139,10 +138,17 @@ public class CalculateController implements Initializable {
 
         setToggleGroupsRadioButton();
         setupImbTable();
-        popupAction();
+
+        PopupMenu popupMenu = new PopupMenu();
+        popupMenu.popupTableAction(rationVBox);
+
+        createMealTable(popupMenu);
+        deleteMealTable(popupMenu);
+        refreshMealTable(popupMenu);
+        setupTableMealColumns();
+
         allActions();
         openNewProductWindow(btnBurgerKing, WindowPath.BURGER_KING_WINDOW.getPath(),"Burger King menu", false);
-        setupTableMealColumns();
     }
 
     private void setupTableMealColumns() {
@@ -155,11 +161,6 @@ public class CalculateController implements Initializable {
         TableColumn<Product, Integer> tableColCal = new TableColumn<>("Калории");
         TableColumn<Product, Integer> tableColWeight = new TableColumn<>("Вес");
 
-        meal1.getSelectionModel().setCellSelectionEnabled(true);
-        meal1.setEditable(true);
-
-        meal1.getColumns().addAll(tableColId, tabColName, tabColProtein, tableColFat, tableColCarbs, tableColCal, tableColWeight);
-
         tableColId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tabColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tabColProtein.setCellValueFactory(new PropertyValueFactory<>("protein"));
@@ -168,22 +169,18 @@ public class CalculateController implements Initializable {
         tableColCal.setCellValueFactory(new PropertyValueFactory<>("calories"));
         tableColWeight.setCellValueFactory(new PropertyValueFactory<>("weight"));
 
-        meal1.setItems(tableMealData1);
 
+
+        tableViewList.get(mealCount).getSelectionModel().setCellSelectionEnabled(true);
+        tableViewList.get(mealCount).setEditable(true);
+
+        tableViewList.get(mealCount).getColumns().addAll(tableColId, tabColName, tabColProtein, tableColFat,
+                tableColCarbs, tableColCal, tableColWeight);
+
+        tableViewList.get(mealCount).setItems(tableMealData);
     }
-    private void popupAction() {
 
-        PopupMenu popupMenu = new PopupMenu();
-
-        popupMenu.popupTableAction(rationVBox);
-
-        popupMenu.createTable.setOnAction(event -> {
-            tableViewList.add(meal1);
-            rationVBox.getChildren().addAll(tableViewList);
-            mealName = String.format("%s%s", mealName, ++mealCount);
-            SQLiteClient.createNewTable(mealName);
-            SQLiteClient.executeTableFromDB(String.format("%s%s", mealName, mealCount), tableMealData1);
-        });
+    private void deleteMealTable(PopupMenu popupMenu) {
 
         popupMenu.deleteTable.setOnAction(event -> {
             Alert alert = new Alert(
@@ -194,16 +191,34 @@ public class CalculateController implements Initializable {
 
             if (result.orElse(null) == ButtonType.YES) {
                 SQLiteClient.deleteTableFromDB(mealName);
-                refreshTable();
+                refreshTable(mealName, tableMealData);
             } else {
                 alert.close();
             }
         });
     }
-    private void refreshTable() {
 
-        tableMealData1.clear();
-        SQLiteClient.executeTableFromDB(TableProductName.BURGER_KING.getName(),tableMealData1);
+    private void createMealTable(PopupMenu popupMenu) {
+
+        popupMenu.createTable.setOnAction(event -> {
+
+                mealName = String.format("%s%s", mealName, ++mealCount);
+                rationVBox.getChildren().addAll(tableViewList.get(mealCount));
+            if (rationVBox.getChildren().size() < tableViewList.size()) {
+                SQLiteClient.createNewTable(mealName);
+                SQLiteClient.executeTableFromDB(String.format("%s%s", mealName, mealCount), tableMealData);
+            }
+        });
+    }
+
+    private void refreshMealTable(PopupMenu popupMenu) {
+        popupMenu.refresh.setOnAction(event -> refreshTable(mealName, tableMealData));
+    }
+
+    private void refreshTable(String tableName, ObservableList<Product> tableData) {
+
+        tableMealData.clear();
+        SQLiteClient.executeTableFromDB(tableName, tableData);
     }
 
     private void allActions () {
@@ -383,7 +398,7 @@ public class CalculateController implements Initializable {
 
     private void setupImbTable() {
 
-        ObservableList<IndexMassBody> tableImbData = FXCollections.observableArrayList();
+        ObservableList<IndexMassBody> tableImbData = observableArrayList();
 
         columnHeight.setCellValueFactory(new PropertyValueFactory<>("height"));
         column1.setCellValueFactory(new PropertyValueFactory<>("col_1"));

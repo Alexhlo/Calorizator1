@@ -14,7 +14,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <lombok.version>1.18.12</lombok.version>
         <sqlite-jdbc.version>3.32.3.2</sqlite-jdbc.version>
-        <javafx-components.version>11</javafx-components.version>
+        <javafx-components.version>13</javafx-components.version>
         <org.apache.commons.version>4.4</org.apache.commons.version>
     </properties>
 
@@ -27,11 +27,11 @@
         </dependency>
 
         <!--    lombok    -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.projectlombok</groupId>-->
+<!--            <artifactId>lombok</artifactId>-->
+<!--            <version>${lombok.version}</version>-->
+<!--        </dependency>-->
 
         <!--    Database    -->
         <dependency>
@@ -39,6 +39,7 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>${sqlite-jdbc.version}</version>
         </dependency>
+
         <!--javafx components-->
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -60,21 +61,21 @@
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx-components.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.openjfx</groupId>-->
-<!--            <artifactId>javafx-web</artifactId>-->
-<!--            <version>${javafx-components.version}</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.openjfx</groupId>-->
-<!--            <artifactId>javafx-swing</artifactId>-->
-<!--            <version>${javafx-components.version}</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.openjfx</groupId>-->
-<!--            <artifactId>javafx-media</artifactId>-->
-<!--            <version>${javafx-components.version}</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>${javafx-components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>${javafx-components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>${javafx-components.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
