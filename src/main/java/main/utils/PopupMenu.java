@@ -51,7 +51,7 @@ public class PopupMenu {
 
     public void popupRationMenu(TableView<Product> tableView) {
 
-        addRation.getItems().addAll(mealMenuItem1,mealMenuItem2,mealMenuItem3,mealMenuItem4,mealMenuItem5);
+        addRation.getItems().addAll(mealMenuItem1, mealMenuItem2, mealMenuItem3, mealMenuItem4, mealMenuItem5);
         tableView.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, event ->
                 contextMenu.show(tableView, event.getScreenX(), event.getScreenY()));
 

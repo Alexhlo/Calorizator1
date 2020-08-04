@@ -7,7 +7,8 @@ public enum ProductColumnName {
     COLUMN_PROTEIN("protein"),
     COLUMN_FATS("fats"),
     COLUMN_CARBS("carbs"),
-    COLUMN_CAL("calories");
+    COLUMN_CALORIES("calories"),
+    COLUMN_WEIGHT("weight");
 
     private final String name;
 
@@ -15,7 +16,7 @@ public enum ProductColumnName {
         return this.name;
     }
 
-    private ProductColumnName(String name) {
+    ProductColumnName(String name) {
         this.name = name;
     }
 }

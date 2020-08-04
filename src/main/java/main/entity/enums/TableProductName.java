@@ -37,7 +37,7 @@ public enum TableProductName {
         return this.name;
     }
 
-    private TableProductName(String name) {
+    TableProductName(String name) {
         this.name = name;
     }
 }

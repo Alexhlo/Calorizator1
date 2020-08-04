@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
+import main.entity.enums.TableColumnId;
 import main.service.ProductControlService;
 import main.entity.Product;
 import main.utils.PopupMenu;
@@ -20,11 +21,10 @@ public class ProductControlServiceImpl implements ProductControlService {
 
     public void setupTableColumnInTable(TableColumn<Product, Object> tableColumn, String columnName,
                                         String tableName, TableView<Product> tableView, boolean setVisible, ObservableList<Product> productData) {
-        //TODO придётся вернуть StringConverter для каждого типа (string, integer, double) сейчас не даёт исправлять внутри таблицы значения
 
         tableColumn.setVisible(setVisible);
         tableColumn.setCellValueFactory(new PropertyValueFactory<>(columnName));
-        tableColumn.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Object>() {
+        tableColumn.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<>() {
             @Override
             public String toString(Object object) {
                 return String.valueOf(object);
@@ -32,16 +32,37 @@ public class ProductControlServiceImpl implements ProductControlService {
 
             @Override
             public Object fromString(String string) {
-                return null;
+                return string;
             }
         }));
 
         tableColumn.setOnEditCommit(event -> {
-            Product product = event.getRowValue(); // NPE возникает тут без StringConverter
-            product.setName(event.getNewValue().toString());
-            SQLiteClient.editNameFromTableDB(tableName, tableView, event.getNewValue().toString());
+            Product product = event.getRowValue();
+            if (tableColumn.getId().equals(TableColumnId.COLUMN_NAME.getId())) {
+                String name = event.getNewValue().toString();
+                product.setName(name);
+                SQLiteClient.editNameFromTableDB(tableName, tableView, name);
+            } else if (tableColumn.getId().equals(TableColumnId.COLUMN_PROTEIN.getId())) {
+                double protein = Double.parseDouble(event.getNewValue().toString());
+                product.setProtein(protein);
+                SQLiteClient.editProteinFromTableDB(tableName, tableView, protein);
+            } else if (tableColumn.getId().equals(TableColumnId.COLUMN_FATS.getId())) {
+                double fats = Double.parseDouble(event.getNewValue().toString());
+                product.setFats(fats);
+                SQLiteClient.editFatsFromTableDB(tableName, tableView, fats);
+            } else if (tableColumn.getId().equals(TableColumnId.COLUMN_CARBS.getId())) {
+                double carbs = Double.parseDouble(event.getNewValue().toString());
+                product.setCarbs(carbs);
+                SQLiteClient.editCarbsFromTableDB(tableName, tableView, carbs);
+            } else if (tableColumn.getId().equals(TableColumnId.COLUMN_CALORIES.getId())) {
+                int calories = Integer.parseInt(event.getNewValue().toString());
+                product.setCalories(calories);
+                SQLiteClient.editCaloriesFromTableDB(tableName, tableView, calories);
+            }
+
             refreshTable(productData, tableName);
         });
+
     }
 
     public void searchDataInTable(ObservableList<Product> tableProductData, TextField searchField, TableView<Product> tableView) {
@@ -60,42 +81,12 @@ public class ProductControlServiceImpl implements ProductControlService {
         tableView.setItems(sortedData);
     }
 
-    public boolean shakeAddTextFields(TextField textField) {
-
-        Shaker shaker = new Shaker(textField);
-        String redStyle = "-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;";
-        String silverStyle = "-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;";
-
-        if (textField.getText() == null || textField.getText().trim().isEmpty() || Double.parseDouble(textField.getText()) <= 0) {
-            textField.setStyle(redStyle);
-            shaker.playAnim();
-            return true;
-        } else {
-            textField.setStyle(silverStyle);
-            return false;
-        }
-    }
-
-    public void popupMenuActions(TableView<Product> tableView, String tableName, String newTableName,ObservableList<Product> productData, TableColumn<Product, Object> tableIdColumn) {
-
-        PopupMenu popupMenu = new PopupMenu();
-        popupMenu.popupProductMenu(tableView);
-
-        popupActionDeleteRow(popupMenu, tableView, tableName, productData);
-
-        popupActionEditTableView(popupMenu, tableView, tableName, productData);
-
-        popupActionShowIdColumn(popupMenu, tableIdColumn, tableName, productData);
-
-        popupActionRefreshTableView(popupMenu,tableName, productData);
-
-        popupActionAddMealMenu(popupMenu, tableView, newTableName, tableName);
-    }
-
-    public void popupActionAddMealMenu(PopupMenu popupMenu, TableView<Product> tableView, String nameNewTable, String tableName) {
+    public void popupActionAddMealMenu(PopupMenu popupMenu, TableView<Product> tableView, String tableName) {
         popupMenu.mealMenuItem1.setOnAction(event -> {
+            int countMealTables = 0;
+            String createdTableName = String.format("Meal_%s", ++countMealTables);
             //TODO сделать счетчик добавленных таблиц приемов пищи Meal + 1 при условии что такой таблицы еще нет
-            SQLiteClient.insertDataInTableFromTable(tableView, nameNewTable, tableName);
+            SQLiteClient.insertDataInTableFromTable(tableView, createdTableName, tableName);
         });
     }
 
@@ -104,31 +95,23 @@ public class ProductControlServiceImpl implements ProductControlService {
     }
 
     public void popupActionShowIdColumn(PopupMenu popupMenu, TableColumn<Product, Object> tableColId, String tableName, ObservableList<Product> productData) {
-        popupMenu.showIdCol.setOnAction(event -> {
-            if (popupMenu.showIdCol.isSelected()) {
-                tableColId.setVisible(true);
-                refreshTable(productData, tableName);
-            } else {
-                tableColId.setVisible(false);
-                refreshTable(productData, tableName);
-            }
 
+        popupMenu.showIdCol.setOnAction(event -> {
+            tableColId.setVisible(popupMenu.showIdCol.isSelected());
+            refreshTable(productData, tableName);
         });
     }
 
     public void popupActionEditTableView(PopupMenu popupMenu, TableView<Product> tableView, String tableName, ObservableList<Product> productData) {
+
         popupMenu.editTabView.setOnAction(event -> {
-            if (popupMenu.editTabView.isSelected()) {
-                tableView.setEditable(true);
-                refreshTable(productData, tableName);
-            } else {
-                tableView.setEditable(false);
-                refreshTable(productData, tableName);
-            }
+            tableView.setEditable(popupMenu.editTabView.isSelected());
+            refreshTable(productData, tableName);
         });
     }
 
     public void popupActionDeleteRow(PopupMenu popupMenu, TableView<Product> tableView, String tableName, ObservableList<Product> productData) {
+
         popupMenu.delRow.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Удалить содержимое ячейки?", ButtonType.YES, ButtonType.NO);
             alert.setTitle("Внимание!");
@@ -155,13 +138,31 @@ public class ProductControlServiceImpl implements ProductControlService {
                 boolean shake = needShakeAll || needShakeEachOne;
 
                 if (!shake) {
-                    SQLiteClient.addLineToTableDB(tableName, textFieldList.get(0), textFieldList.get(1), textFieldList.get(2), textFieldList.get(3), textFieldList.get(4));
+                    SQLiteClient.addLineToTableDB(tableName, textFieldList.get(0).getText(), textFieldList.get(1).getText(),
+                            textFieldList.get(2).getText(), textFieldList.get(3).getText(), textFieldList.get(4).getText());
+                    textFieldList.forEach(TextInputControl::clear);
                     refreshTable(productData, tableName);
                 }
         });
     }
 
-    public void refreshTable(ObservableList<Product> productData, String tableName) {
+    private boolean shakeAddTextFields(TextField textField) {
+
+        Shaker shaker = new Shaker(textField);
+        String redStyle = "-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;";
+        String silverStyle = "-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;";
+
+        if (textField.getText() == null || textField.getText().trim().isEmpty() || Double.parseDouble(textField.getText()) <= 0) {
+            textField.setStyle(redStyle);
+            shaker.playAnim();
+            return true;
+        } else {
+            textField.setStyle(silverStyle);
+            return false;
+        }
+    }
+
+    private void refreshTable(ObservableList<Product> productData, String tableName) {
 
         productData.clear();
         SQLiteClient.executeTableFromDB(tableName, productData);

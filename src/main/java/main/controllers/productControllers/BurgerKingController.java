@@ -13,6 +13,7 @@ import main.service.impls.ProductControlServiceImpl;
 import main.entity.Product;
 import main.entity.enums.ProductColumnName;
 import main.entity.enums.TableProductName;
+import main.utils.PopupMenu;
 import main.utils.SQLiteClient;
 
 import java.net.URL;
@@ -29,11 +30,11 @@ public class BurgerKingController implements Initializable {
     @FXML private TextField txtFldAddFat;
     @FXML private TextField txtFldAddCarbs;
     @FXML private TextField txtFldAddCal;
-    @FXML private TableColumn<Product, Object> tableColCal;
+    @FXML private TableColumn<Product, Object> tableColCalories;
     @FXML private TableColumn<Product, Object> tableColId;
     @FXML private TableColumn<Product, Object> tabColProtein;
     @FXML private TableColumn<Product, Object> tableColCarbs;
-    @FXML private TableColumn<Product, Object> tableColFat;
+    @FXML private TableColumn<Product, Object> tableColFats;
     @FXML private TableColumn<Product, Object> tabColName;
     @FXML private TableView<Product> tableViewProducts;
 
@@ -50,9 +51,9 @@ public class BurgerKingController implements Initializable {
         productControlService.setupTableColumnInTable(tableColId, ProductColumnName.COLUMN_ID.getName(), TableProductName.BURGER_KING.getName(), tableViewProducts, false, TABLE_PRODUCT_DATA);
         productControlService.setupTableColumnInTable(tabColName, ProductColumnName.COLUMN_NAME.getName(), TableProductName.BURGER_KING.getName(), tableViewProducts, true, TABLE_PRODUCT_DATA);
         productControlService.setupTableColumnInTable(tabColProtein, ProductColumnName.COLUMN_PROTEIN.getName(), TableProductName.BURGER_KING.getName(), tableViewProducts, true, TABLE_PRODUCT_DATA);
-        productControlService.setupTableColumnInTable(tableColFat, ProductColumnName.COLUMN_FATS.getName(), TableProductName.BURGER_KING.getName(), tableViewProducts, true, TABLE_PRODUCT_DATA);
+        productControlService.setupTableColumnInTable(tableColFats, ProductColumnName.COLUMN_FATS.getName(), TableProductName.BURGER_KING.getName(), tableViewProducts, true, TABLE_PRODUCT_DATA);
         productControlService.setupTableColumnInTable(tableColCarbs, ProductColumnName.COLUMN_CARBS.getName(), TableProductName.BURGER_KING.getName(), tableViewProducts, true, TABLE_PRODUCT_DATA);
-        productControlService.setupTableColumnInTable(tableColCal, ProductColumnName.COLUMN_CAL.getName(), TableProductName.BURGER_KING.getName(), tableViewProducts, true, TABLE_PRODUCT_DATA);
+        productControlService.setupTableColumnInTable(tableColCalories, ProductColumnName.COLUMN_CALORIES.getName(), TableProductName.BURGER_KING.getName(), tableViewProducts, true, TABLE_PRODUCT_DATA);
         tableViewProducts.setItems(TABLE_PRODUCT_DATA);
 
         SQLiteClient.executeTableFromDB(TableProductName.BURGER_KING.getName(), TABLE_PRODUCT_DATA);
@@ -60,7 +61,14 @@ public class BurgerKingController implements Initializable {
 
         productControlService.addRowInTable(btnAdd, TableProductName.BURGER_KING.getName(), TABLE_PRODUCT_DATA, textFieldList);
 
-        productControlService.popupMenuActions(tableViewProducts, TableProductName.BURGER_KING.getName(), "newMeal_1", TABLE_PRODUCT_DATA, tableColId);
+        PopupMenu popupMenu = new PopupMenu();
+        popupMenu.popupProductMenu(tableViewProducts);
+
+        productControlService.popupActionDeleteRow(popupMenu, tableViewProducts, TableProductName.BURGER_KING.getName(), TABLE_PRODUCT_DATA);
+        productControlService.popupActionEditTableView(popupMenu, tableViewProducts, TableProductName.BURGER_KING.getName(), TABLE_PRODUCT_DATA);
+        productControlService.popupActionShowIdColumn(popupMenu, tableColId, TableProductName.BURGER_KING.getName(), TABLE_PRODUCT_DATA);
+        productControlService.popupActionRefreshTableView(popupMenu, TableProductName.BURGER_KING.getName(), TABLE_PRODUCT_DATA);
+        productControlService.popupActionAddMealMenu(popupMenu, tableViewProducts, TableProductName.BURGER_KING.getName());
     }
 }
 

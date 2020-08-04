@@ -24,8 +24,7 @@ import main.utils.animations.Shaker;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class CalculateController implements Initializable {
 
@@ -118,13 +117,22 @@ public class CalculateController implements Initializable {
     public ObservableList<Product> tableMealData1 = FXCollections.observableArrayList();
     public ObservableList<TableView<Product>> tableViewList = FXCollections.observableArrayList();
     public TableView<Product> meal1 = new TableView<>();
+    public TableView<Product> meal2 = new TableView<>();
+    public TableView<Product> meal3 = new TableView<>();
+    public TableView<Product> meal4 = new TableView<>();
+    public TableView<Product> meal5 = new TableView<>();
+    public static final String NUMBER_MASK = "^(0|[1-9][0-9]*)$";
     public static final String FORMULA_MIFFLIN = "Формула Миффлина-Сан Жеора (2005г)";
     public static final String FORMULA_HARRISON = "Формула Гарриса-Бенедикта (ВОО на основе общей массы тела)";
     public static final String FORMULA_KETCH = "Формула Кетча-МакАрдла (ВОО на основе мышечной массы тела)";
     public static final double MUSCLE_MASS = 500;
     public static final double WEIGHT_LOSS = 300;
 
+    private int mealCount = 0;
+    private String mealName = "Meal_";
+
     @FXML public void initialize(URL location, ResourceBundle resources) {
+
         Platform.runLater(() -> menuFormula.requestFocus());
         menuFormula.getItems().addAll(FORMULA_MIFFLIN, FORMULA_HARRISON, FORMULA_KETCH);
         menuFormula.setValue(FORMULA_MIFFLIN);
@@ -133,24 +141,24 @@ public class CalculateController implements Initializable {
         setupImbTable();
         popupAction();
         allActions();
-        openNewProductWindow(btnBurgerKing, WindowPath.BURGER_KING_WINDOW.getPath(),"Burger King menu");
+        openNewProductWindow(btnBurgerKing, WindowPath.BURGER_KING_WINDOW.getPath(),"Burger King menu", false);
         setupTableMealColumns();
     }
 
     private void setupTableMealColumns() {
 
         TableColumn<Product, Integer> tableColId = new TableColumn<>("id");
+        TableColumn<Product, String> tabColName = new TableColumn<>("Наименование");
+        TableColumn<Product, Double> tabColProtein = new TableColumn<>("Белки, г");
+        TableColumn<Product, Double> tableColFat = new TableColumn<>("Жиры, г");
+        TableColumn<Product, Double> tableColCarbs = new TableColumn<>("Углеводы, г");
         TableColumn<Product, Integer> tableColCal = new TableColumn<>("Калории");
         TableColumn<Product, Integer> tableColWeight = new TableColumn<>("Вес");
-        TableColumn<Product, Double> tabColProtein = new TableColumn<>("Белки, г");
-        TableColumn<Product, Double> tableColCarbs = new TableColumn<>("Углеводы, г");
-        TableColumn<Product, Double> tableColFat = new TableColumn<>("Жиры, г");
-        TableColumn<Product, String> tabColName = new TableColumn<>("Наименование");
 
         meal1.getSelectionModel().setCellSelectionEnabled(true);
         meal1.setEditable(true);
 
-        meal1.getColumns().addAll(tableColId,tabColName,tabColProtein,tableColFat,tableColCarbs,tableColCal, tableColWeight);
+        meal1.getColumns().addAll(tableColId, tabColName, tabColProtein, tableColFat, tableColCarbs, tableColCal, tableColWeight);
 
         tableColId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tabColName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -162,6 +170,40 @@ public class CalculateController implements Initializable {
 
         meal1.setItems(tableMealData1);
 
+    }
+    private void popupAction() {
+
+        PopupMenu popupMenu = new PopupMenu();
+
+        popupMenu.popupTableAction(rationVBox);
+
+        popupMenu.createTable.setOnAction(event -> {
+            tableViewList.add(meal1);
+            rationVBox.getChildren().addAll(tableViewList);
+            mealName = String.format("%s%s", mealName, ++mealCount);
+            SQLiteClient.createNewTable(mealName);
+            SQLiteClient.executeTableFromDB(String.format("%s%s", mealName, mealCount), tableMealData1);
+        });
+
+        popupMenu.deleteTable.setOnAction(event -> {
+            Alert alert = new Alert(
+                    Alert.AlertType.WARNING, "Удалить таблицу?", ButtonType.YES, ButtonType.NO);
+            alert.setTitle("Внимание!");
+            alert.setHeaderText("Если вы удалите таблицу, вернуть её обратно уже будет нельзя!");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.orElse(null) == ButtonType.YES) {
+                SQLiteClient.deleteTableFromDB(mealName);
+                refreshTable();
+            } else {
+                alert.close();
+            }
+        });
+    }
+    private void refreshTable() {
+
+        tableMealData1.clear();
+        SQLiteClient.executeTableFromDB(TableProductName.BURGER_KING.getName(),tableMealData1);
     }
 
     private void allActions () {
@@ -183,7 +225,9 @@ public class CalculateController implements Initializable {
 
         btnCalc.setOnAction(event -> {
             try {
-                if (!shakeTextFields()) conditionMenuFormulaBMRCoA();
+                if (!shakeTextFields()) {
+                    conditionMenuFormulaBMRCoA();
+                }
             } catch (NumberFormatException ex) {
                 ex.getStackTrace();
             }
@@ -198,40 +242,6 @@ public class CalculateController implements Initializable {
                 ex.getStackTrace();
             }
         });
-    }
-
-    private void popupAction() {
-
-        PopupMenu popupMenu = new PopupMenu();
-
-        popupMenu.popupTableAction(rationVBox);
-        popupMenu.createTable.setOnAction(event -> {
-            tableViewList.add(meal1);
-            rationVBox.getChildren().addAll(tableViewList);
-            SQLiteClient.createNewTable("Meal_1");
-            SQLiteClient.executeTableFromDB("Meal_1",tableMealData1);
-        });
-
-        popupMenu.deleteTable.setOnAction(event -> {
-            Alert alert = new Alert(
-                    Alert.AlertType.WARNING, "Удалить таблицу?", ButtonType.YES, ButtonType.NO);
-            alert.setTitle("Внимание!");
-            alert.setHeaderText("Если вы удалите таблицу, вернуть её обратно уже будет нельзя!");
-            Optional<ButtonType> result = alert.showAndWait();
-
-            if (result.orElse(null) == ButtonType.YES) {
-                SQLiteClient.deleteTableFromDB("Meal_1");
-                refreshTable();
-            } else {
-                alert.close();
-            }
-        });
-    }
-
-    private void refreshTable() {
-
-        tableMealData1.clear();
-        SQLiteClient.executeTableFromDB(TableProductName.BURGER_KING.getName(),tableMealData1);
     }
 
     private void setToggleGroupsRadioButton() {
@@ -260,40 +270,30 @@ public class CalculateController implements Initializable {
         double weight = Double.parseDouble(txtFldWeight.getText());
         int height = Integer.parseInt(txtFldHeight.getText());
         int age = Integer.parseInt(txtFldAge.getText());
+
         if (menuFormula.getValue().equals(FORMULA_MIFFLIN)) {
             if (rbMale.isSelected()) {
                 RESULT = 10 * weight + 6.25 * height - 5 * age + 5;
-                txtFldBMR.setText(EMPTY + Math.rint(RESULT));
-                conditionCoA();
-                txtFldBKA.setText(EMPTY + Math.rint(RESULT));
-                txtFldMM.setText(EMPTY + (Math.rint(RESULT) + MUSCLE_MASS));
-                txtFldWL.setText(EMPTY + (Math.rint(RESULT) - WEIGHT_LOSS));
-            }
-            if (rbFemale.isSelected()) {
+            } else  {
                 RESULT = 10 * weight + 6.25 * height - 5 * age - 161;
-                txtFldBMR.setText(EMPTY + Math.rint(RESULT));
-                conditionCoA();
-                txtFldBKA.setText(EMPTY + Math.rint(RESULT));
-                txtFldMM.setText(EMPTY + (Math.rint(RESULT) + MUSCLE_MASS));
-                txtFldWL.setText(EMPTY + (Math.rint(RESULT) - WEIGHT_LOSS));
             }
+            txtFldBMR.setText(EMPTY + Math.rint(RESULT));
+            conditionCoA();
+            txtFldBKA.setText(EMPTY + Math.rint(RESULT));
+            txtFldMM.setText(EMPTY + (Math.rint(RESULT) + MUSCLE_MASS));
+            txtFldWL.setText(EMPTY + (Math.rint(RESULT) - WEIGHT_LOSS));
         }
         if (menuFormula.getValue().equals(FORMULA_HARRISON)) {
             if (rbMale.isSelected()) {
                 RESULT = 66 + (13.7 * weight) + (5 * height) - (6.8 * age);
-                txtFldBMR.setText(EMPTY + Math.rint(RESULT));
-                conditionCoA();
-                txtFldBKA.setText(EMPTY + Math.rint(RESULT));
-                txtFldMM.setText(EMPTY + (Math.rint(RESULT) + MUSCLE_MASS));
-                txtFldWL.setText(EMPTY + (Math.rint(RESULT) - WEIGHT_LOSS));
             } else {
                 RESULT = 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
-                txtFldBMR.setText(EMPTY + Math.rint(RESULT));
-                conditionCoA();
-                txtFldBKA.setText(EMPTY + Math.rint(RESULT));
-                txtFldMM.setText(EMPTY + (Math.rint(RESULT) + MUSCLE_MASS));
-                txtFldWL.setText(EMPTY + (Math.rint(RESULT) - WEIGHT_LOSS));
             }
+            txtFldBMR.setText(EMPTY + Math.rint(RESULT));
+            conditionCoA();
+            txtFldBKA.setText(EMPTY + Math.rint(RESULT));
+            txtFldMM.setText(EMPTY + (Math.rint(RESULT) + MUSCLE_MASS));
+            txtFldWL.setText(EMPTY + (Math.rint(RESULT) - WEIGHT_LOSS));
         }
         if (menuFormula.getValue().equals(FORMULA_KETCH)) {
             double fat = Double.parseDouble(txtFldFat.getText());
@@ -338,6 +338,7 @@ public class CalculateController implements Initializable {
         if (txtFldWeight.getText() == null
                 || txtFldWeight.getText().trim().isEmpty()
                 || Double.parseDouble(txtFldWeight.getText()) <= 0) {
+
             txtFldWeight.setStyle(redStyle);
             fldWeight.playAnim();
             clearSupportTextFields();
@@ -396,18 +397,18 @@ public class CalculateController implements Initializable {
         columnImb.setCellValueFactory(new PropertyValueFactory<>("imb"));
 
         tableImbData.add(new IndexMassBody("Вес,кг", null, null, null, null, null, null, null, null, "ИМТ"));
-        tableImbData.add(new IndexMassBody("", 40, 43, 46, 49, 52, 55, 58, 62, "18"));
-        tableImbData.add(new IndexMassBody("", 43, 46, 49, 52, 52, 58, 62, 65, "19"));
-        tableImbData.add(new IndexMassBody("", 45, 48, 51, 54, 52, 61, 65, 68, "20"));
-        tableImbData.add(new IndexMassBody("", 47, 50, 54, 57, 52, 64, 68, 72, "21"));
-        tableImbData.add(new IndexMassBody("", 50, 53, 56, 60, 52, 67, 71, 75, "22"));
-        tableImbData.add(new IndexMassBody("", 52, 55, 59, 63, 52, 70, 75, 79, "23"));
-        tableImbData.add(new IndexMassBody("", 54, 57, 61, 65, 52, 73, 78, 82, "24"));
-        tableImbData.add(new IndexMassBody("", 56, 60, 64, 68, 52, 77, 81, 86, "25"));
-        tableImbData.add(new IndexMassBody("", 63, 67, 72, 76, 52, 86, 91, 96, "28"));
-        tableImbData.add(new IndexMassBody("", 67, 72, 77, 82, 52, 92, 97, 103, "30"));
-        tableImbData.add(new IndexMassBody("", 80, 84, 90, 95, 52, 107, 113, 120, "35"));
-        tableImbData.add(new IndexMassBody("", 90, 96, 102, 109, 116, 122, 130, 137, "40"));
+        tableImbData.add(new IndexMassBody(EMPTY, 40, 43, 46, 49, 52, 55, 58, 62, "18"));
+        tableImbData.add(new IndexMassBody(EMPTY, 43, 46, 49, 52, 52, 58, 62, 65, "19"));
+        tableImbData.add(new IndexMassBody(EMPTY, 45, 48, 51, 54, 52, 61, 65, 68, "20"));
+        tableImbData.add(new IndexMassBody(EMPTY, 47, 50, 54, 57, 52, 64, 68, 72, "21"));
+        tableImbData.add(new IndexMassBody(EMPTY, 50, 53, 56, 60, 52, 67, 71, 75, "22"));
+        tableImbData.add(new IndexMassBody(EMPTY, 52, 55, 59, 63, 52, 70, 75, 79, "23"));
+        tableImbData.add(new IndexMassBody(EMPTY, 54, 57, 61, 65, 52, 73, 78, 82, "24"));
+        tableImbData.add(new IndexMassBody(EMPTY, 56, 60, 64, 68, 52, 77, 81, 86, "25"));
+        tableImbData.add(new IndexMassBody(EMPTY, 63, 67, 72, 76, 52, 86, 91, 96, "28"));
+        tableImbData.add(new IndexMassBody(EMPTY, 67, 72, 77, 82, 52, 92, 97, 103, "30"));
+        tableImbData.add(new IndexMassBody(EMPTY, 80, 84, 90, 95, 52, 107, 113, 120, "35"));
+        tableImbData.add(new IndexMassBody(EMPTY, 90, 96, 102, 109, 116, 122, 130, 137, "40"));
 
         tableViewIMB.setItems(tableImbData);
     }
@@ -455,7 +456,7 @@ public class CalculateController implements Initializable {
         txtFldResultImb.setText(EMPTY + (Math.round(resultImb * 100d) / 100d));
     }
 
-    private void openNewProductWindow(Button btn, String productWindow, String windowTitle) {
+    private void openNewProductWindow(Button btn, String productWindow, String windowTitle, boolean modality) {
 
         btn.setOnAction(event -> {
             FXMLLoader loader = new FXMLLoader();
@@ -467,10 +468,13 @@ public class CalculateController implements Initializable {
             }
             Parent root = loader.getRoot();
             Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
+            if (modality) {
+                stage.initModality(Modality.APPLICATION_MODAL);
+            }
             stage.setTitle(windowTitle);
             stage.setScene(new Scene(root));
             stage.showAndWait();
+
         });
     }
 }

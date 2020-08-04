@@ -17,11 +17,7 @@ public interface ProductControlService {
 
     void searchDataInTable(ObservableList<Product> tableProductData, TextField searchField, TableView<Product> tableView);
 
-    boolean shakeAddTextFields(TextField textField);
-
-    void popupMenuActions(TableView<Product> tableView, String tableName, String newTableName,ObservableList<Product> productData, TableColumn<Product, Object> tableColumn);
-
-    void popupActionAddMealMenu(PopupMenu popupMenu, TableView<Product> tableView, String nameNewTable, String tableName);
+    void popupActionAddMealMenu(PopupMenu popupMenu, TableView<Product> tableView, String tableName);
 
     void popupActionRefreshTableView(PopupMenu popupMenu, String tableName, ObservableList<Product> productData);
 
@@ -32,7 +28,5 @@ public interface ProductControlService {
     void popupActionDeleteRow(PopupMenu popupMenu, TableView<Product> tableView, String tableName, ObservableList<Product> productData);
 
     void addRowInTable(Button btn, String tableName, ObservableList<Product> productData, List<TextField> textFieldList);
-
-    void refreshTable(ObservableList<Product> productData, String tableName);
 
 }

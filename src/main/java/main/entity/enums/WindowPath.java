@@ -11,7 +11,7 @@ public enum WindowPath {
         return this.path;
     }
 
-    private WindowPath(String path) {
+    WindowPath(String path) {
         this.path = path;
     }
 }

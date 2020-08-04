@@ -17,9 +17,7 @@ public class Shaker {
             translateTransition.setFromX(0f); // отступ от Х = 0;
             translateTransition.setByX(10f); // насколько он передвинется относительно его позиции = 10 юнитов
             translateTransition.setCycleCount(4); // 4 раза будет трястись
-            translateTransition.setAutoReverse(true);
-
-            //когда мы перетаскиваем поле на 10 единиц вправо, то что бы оно возвращалось
+            translateTransition.setAutoReverse(true);//когда мы перетаскиваем поле на 10 единиц вправо, то что бы оно возвращалось
     }
 
     public void playAnim(){

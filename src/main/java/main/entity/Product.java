@@ -12,11 +12,11 @@ public class Product {
     public SimpleDoubleProperty fats = new SimpleDoubleProperty();
     public SimpleDoubleProperty carbs = new SimpleDoubleProperty();
     public SimpleIntegerProperty calories = new SimpleIntegerProperty();
+    public SimpleStringProperty weight = new SimpleStringProperty();
 
     public int getId() {
         return id.get();
     }
-
     public void setId(int id) {
         this.calories.set(id);
     }
@@ -54,5 +54,12 @@ public class Product {
     }
     public void setCalories(int calories) {
         this.calories.set(calories);
+    }
+
+    public String getWeight() {
+        return weight.get();
+    }
+    public void setWeight(String weight) {
+        this.weight.set(weight);
     }
 }
