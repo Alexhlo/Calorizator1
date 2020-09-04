@@ -7,12 +7,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
+import main.entity.Product;
 import main.entity.enums.TableColumnId;
 import main.service.ProductControlService;
-import main.entity.Product;
+import main.service.VerifyService;
 import main.utils.PopupMenu;
 import main.utils.SQLiteClient;
-import main.utils.animations.Shaker;
 
 import java.util.List;
 import java.util.Optional;
@@ -128,38 +128,20 @@ public class ProductControlServiceImpl implements ProductControlService {
 
     public void addRowInTable(Button btn, String tableName, ObservableList<Product> productData, List<TextField> textFieldList) {
 
+        VerifyService verifyService = new VerifyServiceImpl();
+
         btn.setOnAction(event -> {
-
-                boolean needShakeAll = shakeAddTextFields(textFieldList.get(0)) && shakeAddTextFields(textFieldList.get(1)) && shakeAddTextFields(textFieldList.get(2))
-                        && shakeAddTextFields(textFieldList.get(3)) && shakeAddTextFields(textFieldList.get(4));
-                boolean needShakeEachOne = shakeAddTextFields(textFieldList.get(0)) || shakeAddTextFields(textFieldList.get(1)) || shakeAddTextFields(textFieldList.get(2))
-                        || shakeAddTextFields(textFieldList.get(3)) || shakeAddTextFields(textFieldList.get(4)) ;
-
-                boolean shake = needShakeAll || needShakeEachOne;
-
-                if (!shake) {
-                    SQLiteClient.addLineToTableDB(tableName, textFieldList.get(0).getText(), textFieldList.get(1).getText(),
-                            textFieldList.get(2).getText(), textFieldList.get(3).getText(), textFieldList.get(4).getText());
-                    textFieldList.forEach(TextInputControl::clear);
-                    refreshTable(productData, tableName);
-                }
+            if (!verifyService.shakeTextFields(textFieldList)) {
+                String name = textFieldList.get(0).getText();
+                String protein = textFieldList.get(1).getText();
+                String fats = textFieldList.get(2).getText();
+                String carbs = textFieldList.get(3).getText();
+                String calories = textFieldList.get(4).getText();
+                SQLiteClient.addLineToTableDB(tableName, name, protein, fats, carbs, calories);
+                textFieldList.forEach(TextInputControl::clear);
+                refreshTable(productData, tableName);
+            }
         });
-    }
-
-    private boolean shakeAddTextFields(TextField textField) {
-
-        Shaker shaker = new Shaker(textField);
-        String redStyle = "-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;";
-        String silverStyle = "-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;";
-
-        if (textField.getText() == null || textField.getText().trim().isEmpty() || Double.parseDouble(textField.getText()) <= 0) {
-            textField.setStyle(redStyle);
-            shaker.playAnim();
-            return true;
-        } else {
-            textField.setStyle(silverStyle);
-            return false;
-        }
     }
 
     private void refreshTable(ObservableList<Product> productData, String tableName) {

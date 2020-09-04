@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Shaker {
 
-    private final TranslateTransition translateTransition;
+    private TranslateTransition translateTransition;
 
     public Shaker(Node node) {
 

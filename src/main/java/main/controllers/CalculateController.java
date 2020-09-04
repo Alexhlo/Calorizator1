@@ -4,25 +4,24 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import main.entity.IndexMassBody;
 import main.entity.Product;
+import main.entity.enums.WindowMenuName;
 import main.entity.enums.WindowPath;
+import main.service.VerifyService;
+import main.service.impls.VerifyServiceImpl;
 import main.utils.PopupMenu;
+import main.utils.ProductWindowLoader;
 import main.utils.SQLiteClient;
-import main.utils.animations.Shaker;
 
-import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -115,31 +114,37 @@ public class CalculateController implements Initializable {
     private final ToggleGroup TOGGLE_GROUP_GENDER = new ToggleGroup();
     private final ToggleGroup TOGGLE_GROUP_COA = new ToggleGroup();
     private double RESULT;
-    private final String EMPTY = "";
+    private static final String EMPTY = "";
     public ObservableList<Product> tableMealData = observableArrayList();
     public final ObservableList<TableView<Product>> tableViewList = FXCollections.observableArrayList(
             new TableView<>(), new TableView<>(), new TableView<>(), new TableView<>(), new TableView<>());
-
-    public static final String NUMBER_MASK = "^(0|[1-9][0-9]*)$";
     public static final String FORMULA_MIFFLIN = "Формула Миффлина-Сан Жеора (2005г)";
     public static final String FORMULA_HARRISON = "Формула Гарриса-Бенедикта (ВОО на основе общей массы тела)";
     public static final String FORMULA_KETCH = "Формула Кетча-МакАрдла (ВОО на основе мышечной массы тела)";
+    public static final String SILVER_STYLE ="-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;";
     public static final double MUSCLE_MASS = 500;
     public static final double WEIGHT_LOSS = 300;
+    public static final int HUNDRED = 100;
 
     private int mealCount = 0;
     private String mealName = "Meal_";
 
     @FXML public void initialize(URL location, ResourceBundle resources) {
 
+        VerifyService verifyService = new VerifyServiceImpl();
+        PopupMenu popupMenu = new PopupMenu();
+
+        List<TextField> textFieldList = Arrays.asList(txtFldWeight, txtFldHeight, txtFldAge, txtFldFat);
+        List<TextField> imbTextFieldList = Arrays.asList(txtFldWeightImb, txtFldHeightImb);
+
         Platform.runLater(() -> menuFormula.requestFocus());
         menuFormula.getItems().addAll(FORMULA_MIFFLIN, FORMULA_HARRISON, FORMULA_KETCH);
         menuFormula.setValue(FORMULA_MIFFLIN);
+        menuFormulaAction();
 
         setToggleGroupsRadioButton();
-        setupImbTable();
+        tableViewIMB = setupImbTable();
 
-        PopupMenu popupMenu = new PopupMenu();
         popupMenu.popupTableAction(rationVBox);
 
         createMealTable(popupMenu);
@@ -147,8 +152,23 @@ public class CalculateController implements Initializable {
         refreshMealTable(popupMenu);
         setupTableMealColumns();
 
-        allActions();
-        openNewProductWindow(btnBurgerKing, WindowPath.BURGER_KING_WINDOW.getPath(),"Burger King menu", false);
+        btnCancel.setOnAction(event ->  clearAllTextFields());
+        btnCancelImb.setOnAction(event -> clearImbTextFields());
+
+        btnCalc.setOnAction(event -> {
+            if (!verifyService.shakeTextFields(textFieldList)) conditionMenuFormulaBMRCoA();
+        });
+
+        btnCalcImb.setOnAction(event -> {
+            if (!verifyService.shakeTextFields(imbTextFieldList)) {
+                double weight = Double.parseDouble(txtFldWeightImb.getText());
+                double height = Double.parseDouble(txtFldHeightImb.getText());
+                double resultImb = weight / ((height / HUNDRED) * (height / HUNDRED));
+                txtFldResultImb.setText(EMPTY + (Math.round(resultImb * (double) HUNDRED) / (double) HUNDRED));
+            }
+        });
+
+        ProductWindowLoader.openNewProductWindow(btnBurgerKing, WindowPath.BURGER_KING_WINDOW.getPath(), WindowMenuName.BURGER_KING.getName(), false);
     }
 
     private void setupTableMealColumns() {
@@ -169,22 +189,16 @@ public class CalculateController implements Initializable {
         tableColCal.setCellValueFactory(new PropertyValueFactory<>("calories"));
         tableColWeight.setCellValueFactory(new PropertyValueFactory<>("weight"));
 
-
-
         tableViewList.get(mealCount).getSelectionModel().setCellSelectionEnabled(true);
         tableViewList.get(mealCount).setEditable(true);
-
-        tableViewList.get(mealCount).getColumns().addAll(tableColId, tabColName, tabColProtein, tableColFat,
-                tableColCarbs, tableColCal, tableColWeight);
-
+        tableViewList.get(mealCount).getColumns().addAll(tableColId, tabColName, tabColProtein, tableColFat, tableColCarbs, tableColCal, tableColWeight);
         tableViewList.get(mealCount).setItems(tableMealData);
     }
 
     private void deleteMealTable(PopupMenu popupMenu) {
 
         popupMenu.deleteTable.setOnAction(event -> {
-            Alert alert = new Alert(
-                    Alert.AlertType.WARNING, "Удалить таблицу?", ButtonType.YES, ButtonType.NO);
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Удалить таблицу?", ButtonType.YES, ButtonType.NO);
             alert.setTitle("Внимание!");
             alert.setHeaderText("Если вы удалите таблицу, вернуть её обратно уже будет нельзя!");
             Optional<ButtonType> result = alert.showAndWait();
@@ -201,9 +215,8 @@ public class CalculateController implements Initializable {
     private void createMealTable(PopupMenu popupMenu) {
 
         popupMenu.createTable.setOnAction(event -> {
-
-                mealName = String.format("%s%s", mealName, ++mealCount);
-                rationVBox.getChildren().addAll(tableViewList.get(mealCount));
+            mealName = String.format("%s%s", mealName, ++mealCount);
+            rationVBox.getChildren().addAll(tableViewList.get(mealCount));
             if (rationVBox.getChildren().size() < tableViewList.size()) {
                 SQLiteClient.createNewTable(mealName);
                 SQLiteClient.executeTableFromDB(String.format("%s%s", mealName, mealCount), tableMealData);
@@ -221,7 +234,7 @@ public class CalculateController implements Initializable {
         SQLiteClient.executeTableFromDB(tableName, tableData);
     }
 
-    private void allActions () {
+    private void menuFormulaAction() {
 
         apCalcKCal.setOnMouseEntered(event -> {
             if (menuFormula.getValue().equals(FORMULA_MIFFLIN)) {
@@ -235,28 +248,6 @@ public class CalculateController implements Initializable {
             if (menuFormula.getValue().equals(FORMULA_KETCH)) {
                 txtFldFat.setDisable(false);
             }});
-
-        btnCancel.setOnAction(event ->  clearAllTextFields());
-
-        btnCalc.setOnAction(event -> {
-            try {
-                if (!shakeTextFields()) {
-                    conditionMenuFormulaBMRCoA();
-                }
-            } catch (NumberFormatException ex) {
-                ex.getStackTrace();
-            }
-        });
-
-        btnCancelImb.setOnAction(event -> clearImbTextFields());
-
-        btnCalcImb.setOnAction(event -> {
-            try {
-                if (!shakeTextImbFields()) resultImb();
-            } catch (NumberFormatException ex) {
-                ex.getStackTrace();
-            }
-        });
     }
 
     private void setToggleGroupsRadioButton() {
@@ -312,7 +303,7 @@ public class CalculateController implements Initializable {
         }
         if (menuFormula.getValue().equals(FORMULA_KETCH)) {
             double fat = Double.parseDouble(txtFldFat.getText());
-            RESULT = 370 + (21.6 * (weight - (weight * fat / 100)));
+            RESULT = 370 + (21.6 * (weight - (weight * fat / HUNDRED)));
             txtFldBMR.setText(EMPTY + Math.rint(RESULT));
             conditionCoA();
             txtFldBKA.setText(EMPTY + Math.rint(RESULT));
@@ -321,82 +312,7 @@ public class CalculateController implements Initializable {
         }
     }
 
-    private void clearAllTextFields() {
-
-        txtFldWeight.clear();
-        txtFldHeight.clear();
-        txtFldAge.clear();
-        txtFldFat.clear();
-        txtFldBMR.clear();
-        txtFldBKA.clear();
-        txtFldMM.clear();
-        txtFldWL.clear();
-    }
-
-    private void clearSupportTextFields() {
-
-        txtFldBMR.clear();
-        txtFldBKA.clear();
-        txtFldMM.clear();
-        txtFldWL.clear();
-    }
-
-    private boolean shakeTextFields() {
-
-        Shaker fldWeight = new Shaker(txtFldWeight);
-        Shaker fldHeight = new Shaker(txtFldHeight);
-        Shaker fldAge = new Shaker(txtFldAge);
-        Shaker fldFat = new Shaker(txtFldFat);
-        String redStyle = "-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;";
-        String silverStyle ="-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;";
-
-        if (txtFldWeight.getText() == null
-                || txtFldWeight.getText().trim().isEmpty()
-                || Double.parseDouble(txtFldWeight.getText()) <= 0) {
-
-            txtFldWeight.setStyle(redStyle);
-            fldWeight.playAnim();
-            clearSupportTextFields();
-        } else {
-            txtFldWeight.setStyle(silverStyle);
-        }
-
-        if (txtFldHeight.getText() == null
-                || txtFldHeight.getText().trim().isEmpty()
-                || Double.parseDouble(txtFldHeight.getText()) <= 0) {
-            txtFldHeight.setStyle(redStyle);
-            fldHeight.playAnim();
-            clearSupportTextFields();
-        } else {
-            txtFldHeight.setStyle(silverStyle);
-        }
-
-        if (txtFldAge.getText() == null
-                || txtFldAge.getText().trim().isEmpty()
-                || Double.parseDouble(txtFldAge.getText()) <= 0) {
-            txtFldAge.setStyle(redStyle);
-            fldAge.playAnim();
-            clearSupportTextFields();
-        } else {
-            txtFldAge.setStyle(silverStyle);
-        }
-
-        if (menuFormula.getValue().equals(FORMULA_KETCH)) {
-            if (txtFldFat.getText() == null
-                    || txtFldFat.getText().trim().isEmpty()
-                    || Double.parseDouble(txtFldFat.getText()) <= 0) {
-                txtFldFat.setStyle(redStyle);
-                fldFat.playAnim();
-                clearSupportTextFields();
-            } else {
-                txtFldFat.setStyle(silverStyle);
-            }
-        }
-
-        return false;
-    }
-
-    private void setupImbTable() {
+    private TableView<IndexMassBody> setupImbTable() {
 
         ObservableList<IndexMassBody> tableImbData = observableArrayList();
 
@@ -424,72 +340,32 @@ public class CalculateController implements Initializable {
         tableImbData.add(new IndexMassBody(EMPTY, 67, 72, 77, 82, 52, 92, 97, 103, "30"));
         tableImbData.add(new IndexMassBody(EMPTY, 80, 84, 90, 95, 52, 107, 113, 120, "35"));
         tableImbData.add(new IndexMassBody(EMPTY, 90, 96, 102, 109, 116, 122, 130, 137, "40"));
-
         tableViewIMB.setItems(tableImbData);
+        return tableViewIMB;
     }
 
     private void clearImbTextFields() {
 
         txtFldWeightImb.clear();
+        txtFldWeightImb.setStyle(SILVER_STYLE);
         txtFldHeightImb.clear();
+        txtFldHeightImb.setStyle(SILVER_STYLE);
         txtFldResultImb.clear();
     }
 
-    private boolean shakeTextImbFields() {
+    private void clearAllTextFields() {
 
-        Shaker fldWeight = new Shaker(txtFldWeightImb);
-        Shaker fldHeight = new Shaker(txtFldHeightImb);
-        String redStyle = "-fx-border-color: red; -fx-border-radius: 3; -fx-text-fill: black;";
-        String silverStyle ="-fx-border-color: silver; -fx-border-radius: 3; -fx-text-fill: black;";
-
-        if (txtFldWeightImb.getText() == null || txtFldWeightImb.getText().trim().isEmpty()
-                || Double.parseDouble(txtFldWeightImb.getText()) <= 0) {
-            txtFldWeightImb.setStyle(redStyle);
-            fldWeight.playAnim();
-            txtFldResultImb.clear();
-        } else {
-            txtFldWeightImb.setStyle(silverStyle);
-        }
-
-        if (txtFldHeightImb.getText() == null || txtFldHeightImb.getText().trim().isEmpty()
-                || Double.parseDouble(txtFldHeightImb.getText()) <= 0) {
-            txtFldHeightImb.setStyle(redStyle);
-            fldHeight.playAnim();
-            txtFldResultImb.clear();
-        } else {
-            txtFldHeightImb.setStyle(silverStyle);
-        }
-
-        return false;
-    }
-
-    private void resultImb() {
-
-        double weight = Double.parseDouble(txtFldWeightImb.getText());
-        double height = Double.parseDouble(txtFldHeightImb.getText());
-        double resultImb = weight / ((height / 100) * (height / 100));
-        txtFldResultImb.setText(EMPTY + (Math.round(resultImb * 100d) / 100d));
-    }
-
-    private void openNewProductWindow(Button btn, String productWindow, String windowTitle, boolean modality) {
-
-        btn.setOnAction(event -> {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource(productWindow));
-            try {
-                loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Parent root = loader.getRoot();
-            Stage stage = new Stage();
-            if (modality) {
-                stage.initModality(Modality.APPLICATION_MODAL);
-            }
-            stage.setTitle(windowTitle);
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-
-        });
+        txtFldWeight.clear();
+        txtFldWeight.setStyle(SILVER_STYLE);
+        txtFldHeight.clear();
+        txtFldHeight.setStyle(SILVER_STYLE);
+        txtFldAge.clear();
+        txtFldAge.setStyle(SILVER_STYLE);
+        txtFldFat.clear();
+        txtFldFat.setStyle(SILVER_STYLE);
+        txtFldBMR.clear();
+        txtFldBKA.clear();
+        txtFldMM.clear();
+        txtFldWL.clear();
     }
 }

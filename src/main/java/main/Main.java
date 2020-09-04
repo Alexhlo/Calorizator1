@@ -19,7 +19,7 @@ public class Main extends Application {
         Scene cal = new Scene(root);
         stage.setScene(cal);
         stage.setResizable(false);
-        stage.setAlwaysOnTop(true);
+        stage.setAlwaysOnTop(false);
 
         javafx.scene.image.Image image = new javafx.scene.image.Image("griff.png");
         ObservableList<javafx.scene.image.Image> images = FXCollections.observableArrayList(Collections.singletonList(image));
